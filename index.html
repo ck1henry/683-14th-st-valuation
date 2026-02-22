@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Serif+HK:wght@400;700&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
         .chart-container {
@@ -25,7 +25,7 @@
         }
 
         h1, h2, h3, h4, h5, h6, .serif-font {
-            font-family: 'Noto Serif', serif;
+            font-family: 'Noto Serif', 'Noto Serif HK', serif;
         }
 
         .nav-item.active {
@@ -74,6 +74,10 @@
             -webkit-backdrop-filter: blur(10px);
         }
 
+        /* Language Toggle Logic */
+        body[data-lang="en"] .zh-text { display: none !important; }
+        body[data-lang="zh"] .en-text { display: none !important; }
+
         @media print {
             .no-print { display: none !important; }
             .page-break { page-break-before: always; }
@@ -84,21 +88,8 @@
             #app-container { display: flex !important; }
         }
     </style>
-    
-    <!-- Chosen Palette: Corporate Trust (Navy Blue #1e3a8a, Gold/Bronze #ca8a04, Slate Grey #f8fafc, White) -->
-    <!-- Application Structure Plan: 
-         1. Password Gateway: Full screen overlay protecting content.
-         2. Sidebar Navigation
-         3. Executive Summary
-         4. Property Profile: Updated with Title Report data (681-685 addresses, Lot Size, 3 Units, no APN).
-         5. Market Analysis
-         6. Valuation Modelling: Retail + 2 Flats. Expanded Sales Comps Table (Title Data + Zillow/Redfin market data).
-         7. Formal Standards Text
-         8. Valuer's Log: Prop 13 tax reassessment analysis.
-    -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
 </head>
-<body class="overflow-hidden">
+<body class="overflow-hidden" data-lang="en">
 
     <!-- PASSWORD AUTHENTICATION SCREEN -->
     <div id="auth-screen" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/90 transition-opacity duration-500">
@@ -107,21 +98,21 @@
                 <div class="w-12 h-12 bg-blue-900 rounded-full flex items-center justify-center text-yellow-500 mx-auto mb-4 text-xl">
                     <i class="fas fa-lock"></i>
                 </div>
-                <h2 class="text-2xl font-bold text-slate-800 serif-font">Confidential Report</h2>
-                <p class="text-sm text-slate-500 mt-2">Please enter the password to view the valuation for 681-685 14th St.</p>
+                <h2 class="text-2xl font-bold text-slate-800 serif-font">Valuation Report <br><span class="text-lg">估值報告</span></h2>
+                <p class="text-sm text-slate-500 mt-2">Please enter the password to view the valuation.<br>請輸入密碼以查看估值報告。</p>
             </div>
             
             <div class="space-y-4">
                 <div>
-                    <input type="password" id="password-input" placeholder="Enter password..." class="w-full px-4 py-3 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-transparent transition-all" onkeypress="handleKeyPress(event)">
-                    <p id="auth-error" class="text-red-500 text-xs mt-2 hidden"><i class="fas fa-exclamation-circle mr-1"></i> Incorrect password. Please try again.</p>
+                    <input type="password" id="password-input" placeholder="Password / 密碼..." class="w-full px-4 py-3 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-transparent transition-all" onkeypress="handleKeyPress(event)">
+                    <p id="auth-error" class="text-red-500 text-xs mt-2 hidden"><i class="fas fa-exclamation-circle mr-1"></i> Incorrect password / 密碼錯誤</p>
                 </div>
                 <button onclick="checkPassword()" class="w-full bg-blue-900 text-white font-semibold py-3 rounded hover:bg-blue-800 transition-colors shadow-md">
-                    Access Report
+                    Access Report / 進入報告
                 </button>
             </div>
             <div class="mt-6 text-center">
-                <p class="text-[10px] text-slate-400">Strictly private and confidential. Professional Valuation Standards.</p>
+                <p class="text-[10px] text-slate-400">Strictly private and confidential. Professional Valuation Standards.<br>絕對機密。符合專業估值準則。</p>
             </div>
         </div>
     </div>
@@ -130,25 +121,43 @@
     <div id="app-container" class="flex h-screen w-full hidden opacity-0 transition-opacity duration-1000">
         
         <!-- Sidebar Navigation -->
-        <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col flex-shrink-0 transition-all duration-300 z-20" id="sidebar">
+        <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col flex-shrink-0 transition-all duration-300 z-20 no-print" id="sidebar">
             <div class="p-6 border-b border-slate-700">
                 <div class="flex items-center gap-3">
                     <div class="w-8 h-8 bg-yellow-600 rounded flex items-center justify-center text-white font-bold serif-font">V</div>
                     <div>
-                        <h1 class="text-white font-bold text-lg leading-tight">Property Valuation</h1>
-                        <p class="text-xs text-slate-400">Valuation Report</p>
+                        <h1 class="text-white font-bold text-lg leading-tight">
+                            <span class="en-text">Property Valuation</span>
+                            <span class="zh-text">房地產估值</span>
+                        </h1>
+                        <p class="text-xs text-slate-400">
+                            <span class="en-text">Valuation Report</span>
+                            <span class="zh-text">估值報告</span>
+                        </p>
                     </div>
                 </div>
             </div>
 
             <nav class="flex-1 overflow-y-auto py-4">
                 <ul>
-                    <li><button onclick="navigateTo('summary')" class="nav-item active w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3"><i class="fas fa-file-contract w-5"></i> Executive Summary</button></li>
-                    <li><button onclick="navigateTo('property')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3"><i class="fas fa-building w-5"></i> Property Profile</button></li>
-                    <li><button onclick="navigateTo('market')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3"><i class="fas fa-chart-line w-5"></i> Market Analysis</button></li>
-                    <li><button onclick="navigateTo('valuation')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3"><i class="fas fa-calculator w-5"></i> Valuation Modelling</button></li>
-                    <li><button onclick="navigateTo('formal')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3"><i class="fas fa-balance-scale w-5"></i> Valuation Standards</button></li>
-                    <li><button onclick="navigateTo('log')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3"><i class="fas fa-clipboard-list w-5"></i> Valuer's Log</button></li>
+                    <li><button onclick="navigateTo('summary')" class="nav-item active w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3"><i class="fas fa-file-contract w-5"></i> 
+                        <span class="en-text">Executive Summary</span><span class="zh-text">行政摘要</span>
+                    </button></li>
+                    <li><button onclick="navigateTo('property')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3"><i class="fas fa-building w-5"></i> 
+                        <span class="en-text">Property Profile</span><span class="zh-text">物業概況</span>
+                    </button></li>
+                    <li><button onclick="navigateTo('market')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3"><i class="fas fa-chart-line w-5"></i> 
+                        <span class="en-text">Market Analysis</span><span class="zh-text">市場分析</span>
+                    </button></li>
+                    <li><button onclick="navigateTo('valuation')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3"><i class="fas fa-calculator w-5"></i> 
+                        <span class="en-text">Valuation Modelling</span><span class="zh-text">估值模型</span>
+                    </button></li>
+                    <li><button onclick="navigateTo('formal')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3"><i class="fas fa-balance-scale w-5"></i> 
+                        <span class="en-text">Valuation Standards</span><span class="zh-text">估值準則</span>
+                    </button></li>
+                    <li><button onclick="navigateTo('log')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3"><i class="fas fa-clipboard-list w-5"></i> 
+                        <span class="en-text">Valuer's Log</span><span class="zh-text">估值師日誌</span>
+                    </button></li>
                 </ul>
             </nav>
 
@@ -165,10 +174,20 @@
             <header class="bg-white shadow-sm sticky top-0 z-10 px-8 py-4 flex justify-between items-center">
                 <div>
                     <h2 class="text-xl font-bold text-slate-800 serif-font">681, 683 & 685 14th St, San Francisco, CA 94114</h2>
-                    <p class="text-sm text-slate-500">Multi-Tenant Mixed-Use Investment</p>
+                    <p class="text-sm text-slate-500">
+                        <span class="en-text">Multi-Tenant Mixed-Use Investment</span>
+                        <span class="zh-text">多戶型住商混合投資物業</span>
+                    </p>
                 </div>
                 <div class="flex items-center gap-4">
-                    <span class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded-full border border-blue-200">Standards Compliant</span>
+                    <button onclick="toggleLanguage()" class="no-print px-3 py-1 bg-slate-200 text-slate-700 text-xs font-semibold rounded hover:bg-slate-300 transition-colors border border-slate-300">
+                        <span class="en-text"><i class="fas fa-language"></i> 中文</span>
+                        <span class="zh-text"><i class="fas fa-language"></i> English</span>
+                    </button>
+                    <span class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded-full border border-blue-200">
+                        <span class="en-text">Standards Compliant</span>
+                        <span class="zh-text">符合國際準則</span>
+                    </span>
                     <button onclick="window.print()" class="no-print text-slate-500 hover:text-slate-800"><i class="fas fa-print"></i></button>
                 </div>
             </header>
@@ -179,36 +198,60 @@
                 <!-- SECTION: Executive Summary -->
                 <section id="summary" class="content-section block fade-in">
                     <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-6 mb-6">
-                        <h3 class="text-lg font-bold text-slate-800 mb-4 border-b pb-2">Opinion of Value</h3>
+                        <h3 class="text-lg font-bold text-slate-800 mb-4 border-b pb-2">
+                            <span class="en-text">Opinion of Value</span>
+                            <span class="zh-text">估值意見</span>
+                        </h3>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div class="col-span-2">
-                                <p class="mb-4 text-slate-600">Based on the investigation and analysis outlined in this report, including verified title data confirming three distinct units on the parcel, it is my professional opinion that the Market Value of the subject property as of <strong>22 February 2026</strong> is:</p>
+                                <p class="mb-4 text-slate-600 en-text">Based on the investigation and analysis outlined in this report, including verified title data confirming three distinct units on the parcel, it is my professional opinion that the Market Value of the subject property as of <strong>22 February 2026</strong> is:</p>
+                                <p class="mb-4 text-slate-600 zh-text">基於本報告中的調查與分析，包括確認該地段擁有三個獨立單位的核實產權數據，本人認為該物業於 <strong>2026年2月22日</strong> 的市值（Market Value）為：</p>
+                                
                                 <div class="flex items-baseline gap-2 mb-2">
                                     <span class="text-4xl font-bold text-blue-900 serif-font">$2,430,000</span>
                                 </div>
-                                <p class="text-sm text-slate-500 mb-6">Two Million Four Hundred and Thirty Thousand USD</p>
+                                <p class="text-sm text-slate-500 mb-6">
+                                    <span class="en-text">Two Million Four Hundred and Thirty Thousand USD</span>
+                                    <span class="zh-text">二百四十三萬美元</span>
+                                </p>
                                 
                                 <div class="grid grid-cols-2 gap-4 text-sm">
                                     <div class="bg-slate-50 p-3 rounded border border-slate-100">
-                                        <span class="block text-slate-400 text-xs uppercase tracking-wider">Price Per Sq Ft</span>
+                                        <span class="block text-slate-400 text-xs uppercase tracking-wider">
+                                            <span class="en-text">Price Per Sq Ft</span><span class="zh-text">平均呎價</span>
+                                        </span>
                                         <span class="font-semibold text-slate-700">$605 PSF</span>
                                     </div>
                                     <div class="bg-slate-50 p-3 rounded border border-slate-100">
-                                        <span class="block text-slate-400 text-xs uppercase tracking-wider">Cap Rate (Projected)</span>
+                                        <span class="block text-slate-400 text-xs uppercase tracking-wider">
+                                            <span class="en-text">Cap Rate (Projected)</span><span class="zh-text">預期資本化率 (Cap Rate)</span>
+                                        </span>
                                         <span class="font-semibold text-slate-700">5.75%</span>
                                     </div>
                                 </div>
                             </div>
                             <div class="bg-blue-900 text-white p-6 rounded-lg flex flex-col justify-between">
                                 <div>
-                                    <h4 class="font-bold text-yellow-500 mb-2">Special Assumptions Applied</h4>
+                                    <h4 class="font-bold text-yellow-500 mb-2">
+                                        <span class="en-text">Special Assumptions Applied</span>
+                                        <span class="zh-text">應用的特殊假設</span>
+                                    </h4>
                                     <ul class="text-sm space-y-2 text-blue-100">
-                                        <li class="flex items-start gap-2"><i class="fas fa-check mt-1 text-yellow-500"></i> <span>Total Usable Area: <strong>4,015 sq ft</strong> (Includes retail).</span></li>
-                                        <li class="flex items-start gap-2"><i class="fas fa-check mt-1 text-yellow-500"></i> <span>Building Structure: <strong>3 Storeys / 3 Units</strong></span></li>
+                                        <li class="flex items-start gap-2"><i class="fas fa-check mt-1 text-yellow-500"></i> 
+                                            <span class="en-text">Total Usable Area: <strong>4,015 sq ft</strong> (Includes retail).</span>
+                                            <span class="zh-text">總實用面積：<strong>4,015 平方呎</strong> (包含商舖)。</span>
+                                        </li>
+                                        <li class="flex items-start gap-2"><i class="fas fa-check mt-1 text-yellow-500"></i> 
+                                            <span class="en-text">Building Structure: <strong>3 Storeys</strong></span>
+                                            <span class="zh-text">建築結構：<strong>3層</strong></span>
+                                        </li>
                                     </ul>
                                 </div>
                                 <div class="mt-4 pt-4 border-t border-blue-800">
-                                    <p class="text-xs opacity-75">Valuation Standards: International Valuation Standards (IVS)</p>
+                                    <p class="text-xs opacity-75">
+                                        <span class="en-text">Valuation Standards: International Valuation Standards (IVS)</span>
+                                        <span class="zh-text">估值準則：國際估值準則 (IVS)</span>
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -218,41 +261,46 @@
                 <!-- SECTION: Property Profile -->
                 <section id="property" class="content-section hidden fade-in">
                     <div class="mb-6">
-                        <p class="text-slate-600 max-w-3xl">This section details the physical characteristics of the subject property, updated using data from the First American Title Property Profile (Doc: 1546-901).</p>
+                        <p class="text-slate-600 max-w-3xl en-text">This section details the physical characteristics of the subject property, updated using data from the First American Title Property Profile (Doc: 1546-901).</p>
+                        <p class="text-slate-600 max-w-3xl zh-text">本節詳細說明目標物業的物理特徵，數據已根據第一美國產權公司的物業概況報告 (文件編號: 1546-901) 進行更新及核實。</p>
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <!-- Property Details Card -->
                         <div class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
                             <div class="bg-slate-100 px-6 py-3 border-b border-slate-200">
-                                <h3 class="font-bold text-slate-800">Verified Property Details</h3>
+                                <h3 class="font-bold text-slate-800">
+                                    <span class="en-text">Verified Property Details</span><span class="zh-text">核實驗證物業資料</span>
+                                </h3>
                             </div>
                             <div class="p-6">
                                 <table class="w-full text-sm">
                                     <tbody class="divide-y divide-slate-100">
                                         <tr>
-                                            <td class="py-3 text-slate-500">Situs Addresses</td>
+                                            <td class="py-3 text-slate-500"><span class="en-text">Situs Addresses</span><span class="zh-text">物業地址</span></td>
                                             <td class="py-3 font-bold text-blue-900 text-right">681, 683, and 685 14th St</td>
                                         </tr>
                                         <tr>
-                                            <td class="py-3 text-slate-500">Legal Description</td>
-                                            <td class="py-3 font-medium text-slate-800 text-right">Lot 71, Block 3544</td>
+                                            <td class="py-3 text-slate-500"><span class="en-text">Legal Description</span><span class="zh-text">法律描述</span></td>
+                                            <td class="py-3 font-medium text-slate-800 text-right">Lot 71, Block 3544 <span class="zh-text text-xs text-slate-500">(第3544地段，第71號)</span></td>
                                         </tr>
                                         <tr>
-                                            <td class="py-3 text-slate-500">Zoning</td>
-                                            <td class="py-3 font-medium text-slate-800 text-right">UPMKT (Neighbourhood Commercial)</td>
+                                            <td class="py-3 text-slate-500"><span class="en-text">Zoning</span><span class="zh-text">土地用途分區</span></td>
+                                            <td class="py-3 font-medium text-slate-800 text-right">UPMKT <span class="en-text">(Neighbourhood Commercial)</span><span class="zh-text">(鄰里商業區)</span></td>
                                         </tr>
                                         <tr>
-                                            <td class="py-3 text-slate-500">Lot Dimensions</td>
+                                            <td class="py-3 text-slate-500"><span class="en-text">Lot Dimensions</span><span class="zh-text">地段尺寸</span></td>
                                             <td class="py-3 font-medium text-slate-800 text-right">25 ft x 110 ft (2,748 sq ft)</td>
                                         </tr>
                                         <tr class="bg-yellow-50">
-                                            <td class="py-3 text-blue-800 font-semibold"><i class="fas fa-exclamation-circle text-xs mr-1"></i> Structure</td>
-                                            <td class="py-3 font-bold text-blue-900 text-right">3 Storeys / 3 Units</td>
+                                            <td class="py-3 text-blue-800 font-semibold"><i class="fas fa-exclamation-circle text-xs mr-1"></i> <span class="en-text">Structure</span><span class="zh-text">建築結構</span></td>
+                                            <td class="py-3 font-bold text-blue-900 text-right">
+                                                <span class="en-text">3 Storeys / 3 Units</span><span class="zh-text">3層 / 3個伙</span>
+                                            </td>
                                         </tr>
                                         <tr>
-                                            <td class="py-3 text-slate-500">Current Assessed Value</td>
-                                            <td class="py-3 font-medium text-red-600 text-right">$879,663 (Prop 13 Base)</td>
+                                            <td class="py-3 text-slate-500"><span class="en-text">Current Assessed Value</span><span class="zh-text">目前評估價值 (稅基)</span></td>
+                                            <td class="py-3 font-medium text-red-600 text-right">$879,663 <span class="en-text">(Prop 13 Base)</span><span class="zh-text">(加州第13號提案基準)</span></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -262,7 +310,9 @@
                         <!-- Area Breakdown -->
                         <div class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
                             <div class="bg-slate-100 px-6 py-3 border-b border-slate-200">
-                                <h3 class="font-bold text-slate-800">Area Analysis (Special Assumption)</h3>
+                                <h3 class="font-bold text-slate-800">
+                                    <span class="en-text">Area Analysis (Special Assumption)</span><span class="zh-text">面積分析 (特殊假設)</span>
+                                </h3>
                             </div>
                             <div class="p-6 flex flex-col justify-center">
                                 <div class="chart-container" style="height: 250px;">
@@ -270,16 +320,22 @@
                                 </div>
                                 <div class="mt-4 grid grid-cols-2 gap-4 text-center">
                                     <div class="p-2 border rounded">
-                                        <span class="block text-xs text-slate-500">Residential (2 Flats)</span>
+                                        <span class="block text-xs text-slate-500">
+                                            <span class="en-text">Residential (2 Flats)</span><span class="zh-text">住宅 (2伙)</span>
+                                        </span>
                                         <span class="block font-bold text-lg text-blue-600" id="display-resi-area">2,815 sq ft</span>
                                     </div>
                                     <div class="p-2 border rounded bg-yellow-50">
-                                        <span class="block text-xs text-blue-800 font-semibold">Retail Unit</span>
+                                        <span class="block text-xs text-blue-800 font-semibold">
+                                            <span class="en-text">Retail Unit</span><span class="zh-text">商舖面積</span>
+                                        </span>
                                         <span class="block font-bold text-lg text-yellow-600" id="display-retail-area">1,200 sq ft</span>
                                     </div>
                                 </div>
                                 <div class="mt-2 text-center">
-                                    <span class="text-sm font-bold text-slate-800">Total: 4,015 sq ft</span>
+                                    <span class="text-sm font-bold text-slate-800">
+                                        <span class="en-text">Total: 4,015 sq ft</span><span class="zh-text">總實用面積: 4,015 平方呎</span>
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -289,38 +345,53 @@
                 <!-- SECTION: Market Analysis -->
                 <section id="market" class="content-section hidden fade-in">
                     <div class="mb-6">
-                        <h3 class="text-xl font-bold text-slate-800 serif-font">Local Market Analysis: 2026 Outlook</h3>
-                        <p class="text-slate-600 mt-2">The Upper Market/Castro submarket has shown resilience in early 2026. Mixed-use assets benefit from the return of foot traffic and stabilised retail rents.</p>
+                        <h3 class="text-xl font-bold text-slate-800 serif-font">
+                            <span class="en-text">Local Market Analysis: 2026 Outlook</span><span class="zh-text">本地市場分析：2026年展望</span>
+                        </h3>
+                        <p class="text-slate-600 mt-2 en-text">The Upper Market/Castro submarket has shown resilience in early 2026. Mixed-use assets benefit from the return of foot traffic and stabilised retail rents.</p>
+                        <p class="text-slate-600 mt-2 zh-text">Upper Market / Castro 子市場在2026年初展現了良好的韌性。隨著人流回歸和商舖租金趨於穩定，住商混合物業因此受益。</p>
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <!-- Chart 1: Price Trends -->
                         <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
-                            <h4 class="font-bold text-slate-700 mb-4">Mixed-Use Price Per Sq Ft (94114)</h4>
+                            <h4 class="font-bold text-slate-700 mb-4">
+                                <span class="en-text">Mixed-Use Price Per Sq Ft (94114)</span><span class="zh-text">混合用途物業平均呎價 (郵編 94114)</span>
+                            </h4>
                             <div class="chart-container">
                                 <canvas id="trendChart"></canvas>
                             </div>
-                            <p class="text-xs text-slate-500 mt-3 text-center">Source: Assessor's Data & Local Comps</p>
+                            <p class="text-xs text-slate-500 mt-3 text-center">
+                                <span class="en-text">Source: Assessor's Data & Local Comps</span><span class="zh-text">數據來源：估價官數據及本地可比交易</span>
+                            </p>
                         </div>
 
                         <!-- Market Stats -->
                         <div class="space-y-6">
                             <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
-                                <h4 class="font-bold text-slate-700 mb-3">Key Market Indicators (Q1 2026)</h4>
+                                <h4 class="font-bold text-slate-700 mb-3">
+                                    <span class="en-text">Key Market Indicators (Q1 2026)</span><span class="zh-text">主要市場指標 (2026年第一季)</span>
+                                </h4>
                                 <div class="space-y-4">
                                     <div>
                                         <div class="flex justify-between text-sm mb-1">
-                                            <span class="text-slate-600">Retail Vacancy Rate (Upper Market)</span>
+                                            <span class="text-slate-600">
+                                                <span class="en-text">Retail Vacancy Rate (Upper Market)</span><span class="zh-text">商舖空置率 (Upper Market)</span>
+                                            </span>
                                             <span class="font-semibold">8.5%</span>
                                         </div>
                                         <div class="w-full bg-slate-200 rounded-full h-2">
                                             <div class="bg-green-500 h-2 rounded-full" style="width: 8.5%"></div>
                                         </div>
-                                        <p class="text-xs text-slate-400 mt-1">Improving from 12% in 2024</p>
+                                        <p class="text-xs text-slate-400 mt-1">
+                                            <span class="en-text">Improving from 12% in 2024</span><span class="zh-text">較2024年的12%有所改善</span>
+                                        </p>
                                     </div>
                                     <div>
                                         <div class="flex justify-between text-sm mb-1">
-                                            <span class="text-slate-600">Cap Rate Range (Class B Mixed-Use)</span>
+                                            <span class="text-slate-600">
+                                                <span class="en-text">Cap Rate Range (Class B Mixed-Use)</span><span class="zh-text">回報率區間 (B級混合用途)</span>
+                                            </span>
                                             <span class="font-semibold">5.5% - 6.25%</span>
                                         </div>
                                         <div class="w-full bg-slate-200 rounded-full h-2">
@@ -331,9 +402,14 @@
                             </div>
 
                             <div class="bg-blue-50 p-6 rounded-lg border border-blue-100">
-                                <h4 class="font-bold text-blue-900 mb-2">Valuer's Commentary</h4>
-                                <p class="text-sm text-blue-800 leading-relaxed">
+                                <h4 class="font-bold text-blue-900 mb-2">
+                                    <span class="en-text">Valuer's Commentary</span><span class="zh-text">估值師點評</span>
+                                </h4>
+                                <p class="text-sm text-blue-800 leading-relaxed en-text">
                                     "The discovery that the property possesses three separate addresses (681, 683, 685) indicates a 3-unit configuration. Multi-tenant properties inherently carry lower vacancy risk than single-tenant buildings, slightly compressing the necessary yield profile and increasing appeal to pure investors over owner-occupiers."
+                                </p>
+                                <p class="text-sm text-blue-800 leading-relaxed zh-text">
+                                    「該物業擁有多個獨立門牌（681, 683, 685），確認其為一棟三伙配置的建築。相比單一租戶建築，多租戶物業本身的空置風險較低，這略微壓縮了所需的收益率，並使其對純投資者的吸引力高於自用買家。」
                                 </p>
                             </div>
                         </div>
@@ -343,8 +419,11 @@
                 <!-- SECTION: Valuation Modelling -->
                 <section id="valuation" class="content-section hidden fade-in">
                     <div class="mb-6">
-                        <h3 class="text-xl font-bold text-slate-800 serif-font">Valuation Approaches</h3>
-                        <p class="text-slate-600 mt-2">Two primary methods were utilised: The Investment Method (Income Capitalisation) and the Comparable Method. Use the interactive model below to test sensitivity, keeping in mind the 2-flat configuration.</p>
+                        <h3 class="text-xl font-bold text-slate-800 serif-font">
+                            <span class="en-text">Valuation Approaches</span><span class="zh-text">估值方法</span>
+                        </h3>
+                        <p class="text-slate-600 mt-2 en-text">Two primary methods were utilised: The Investment Method (Income Capitalisation) and the Comparable Method. Use the interactive model below to test sensitivity, keeping in mind the 2-flat configuration.</p>
+                        <p class="text-slate-600 mt-2 zh-text">我們主要採用了兩種方法：收益資本化法 (Investment Method) 及 銷售比較法 (Comparable Method)。您可以使用下方的互動模型來測試數值的敏感度（請留意本物業包含兩個住宅單位的配置）。</p>
                     </div>
 
                     <!-- Interactive Valuation Tool -->
@@ -352,24 +431,36 @@
                         
                         <!-- Controls -->
                         <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200 xl:col-span-1">
-                            <h4 class="font-bold text-slate-800 mb-4 flex items-center gap-2"><i class="fas fa-sliders-h text-blue-600"></i> Investment Assumptions</h4>
-                            <p class="text-xs text-slate-500 mb-6">Adjust inputs to see impact on Valuation.</p>
+                            <h4 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                                <i class="fas fa-sliders-h text-blue-600"></i> 
+                                <span class="en-text">Investment Assumptions</span><span class="zh-text">投資假設調整</span>
+                            </h4>
+                            <p class="text-xs text-slate-500 mb-6">
+                                <span class="en-text">Adjust inputs to see impact on Valuation.</span><span class="zh-text">滑動調整參數以查看對估值的影響。</span>
+                            </p>
                             
                             <div class="space-y-6">
                                 <!-- Retail Area Input -->
                                 <div>
                                     <div class="flex justify-between mb-2">
-                                        <label class="text-sm font-medium text-slate-700">Retail Area (sq ft)</label>
+                                        <label class="text-sm font-medium text-slate-700">
+                                            <span class="en-text">Retail Area (sq ft)</span><span class="zh-text">商舖面積 (平方呎)</span>
+                                        </label>
                                         <span class="text-sm font-bold text-blue-600" id="val-retail-area">1,200 sq ft</span>
                                     </div>
                                     <input type="range" min="600" max="2000" step="50" value="1200" class="slider-thumb" id="input-retail-area">
-                                    <p class="text-[10px] text-slate-400 mt-1">Total area fixed at 4,015 sq ft. Resi area adjusts automatically.</p>
+                                    <p class="text-[10px] text-slate-400 mt-1">
+                                        <span class="en-text">Total area fixed at 4,015 sq ft. Resi area adjusts automatically.</span>
+                                        <span class="zh-text">總面積固定為4,015平方呎，住宅面積將自動調整。</span>
+                                    </p>
                                 </div>
 
                                 <!-- Retail Rent Input -->
                                 <div>
                                     <div class="flex justify-between mb-2">
-                                        <label class="text-sm font-medium text-slate-700">Retail Rent ($/SF/Mo)</label>
+                                        <label class="text-sm font-medium text-slate-700">
+                                            <span class="en-text">Retail Rent ($/SF/Mo)</span><span class="zh-text">商舖租金 (美元/呎/月)</span>
+                                        </label>
                                         <span class="text-sm font-bold text-blue-600" id="val-retail-rent">$4.50</span>
                                     </div>
                                     <input type="range" min="3.00" max="7.00" step="0.25" value="4.50" class="slider-thumb" id="input-retail-rent">
@@ -378,7 +469,9 @@
                                 <!-- Resi Rent Input -->
                                 <div>
                                     <div class="flex justify-between mb-2">
-                                        <label class="text-sm font-medium text-slate-700">Avg Rent (2 Flats) ($/SF/Mo)</label>
+                                        <label class="text-sm font-medium text-slate-700">
+                                            <span class="en-text">Avg Rent (2 Flats) ($/SF/Mo)</span><span class="zh-text">平均租金 (2伙) (美元/呎/月)</span>
+                                        </label>
                                         <span class="text-sm font-bold text-blue-600" id="val-resi-rent">$3.80</span>
                                     </div>
                                     <input type="range" min="3.00" max="6.00" step="0.10" value="3.80" class="slider-thumb" id="input-resi-rent">
@@ -387,17 +480,24 @@
                                 <!-- Vacancy Input -->
                                 <div>
                                     <div class="flex justify-between mb-2">
-                                        <label class="text-sm font-medium text-slate-700">Vacancy & Credit Loss</label>
+                                        <label class="text-sm font-medium text-slate-700">
+                                            <span class="en-text">Vacancy & Credit Loss</span><span class="zh-text">空置及壞帳損失率</span>
+                                        </label>
                                         <span class="text-sm font-bold text-blue-600" id="val-vacancy">4%</span>
                                     </div>
                                     <input type="range" min="2" max="15" step="0.5" value="4" class="slider-thumb" id="input-vacancy">
-                                    <p class="text-[10px] text-slate-400 mt-1">Lowered to 4% due to multi-tenant risk spread.</p>
+                                    <p class="text-[10px] text-slate-400 mt-1">
+                                        <span class="en-text">Lowered to 4% due to multi-tenant risk spread.</span>
+                                        <span class="zh-text">由於多租戶分散風險，下調至 4%。</span>
+                                    </p>
                                 </div>
 
                                 <!-- Cap Rate Input -->
                                 <div>
                                     <div class="flex justify-between mb-2">
-                                        <label class="text-sm font-medium text-slate-700">Cap Rate (%)</label>
+                                        <label class="text-sm font-medium text-slate-700">
+                                            <span class="en-text">Cap Rate (%)</span><span class="zh-text">資本化率 / 回報率 (%)</span>
+                                        </label>
                                         <span class="text-sm font-bold text-blue-600" id="val-cap">5.75%</span>
                                     </div>
                                     <input type="range" min="4.5" max="8.0" step="0.25" value="5.75" class="slider-thumb" id="input-cap">
@@ -405,7 +505,9 @@
                             </div>
 
                             <div class="mt-8 pt-4 border-t">
-                                 <button onclick="resetValuation()" class="w-full py-2 bg-slate-100 text-slate-600 rounded hover:bg-slate-200 text-sm font-medium">Reset to Base Case</button>
+                                 <button onclick="resetValuation()" class="w-full py-2 bg-slate-100 text-slate-600 rounded hover:bg-slate-200 text-sm font-medium">
+                                     <span class="en-text">Reset to Base Case</span><span class="zh-text">重設為基準情況</span>
+                                 </button>
                             </div>
                         </div>
 
@@ -414,15 +516,21 @@
                             <!-- Big Numbers -->
                             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                                 <div class="bg-white p-4 rounded border border-slate-200 text-center">
-                                    <span class="text-xs text-slate-400 uppercase">Gross Income</span>
+                                    <span class="text-xs text-slate-400 uppercase">
+                                        <span class="en-text">Gross Income</span><span class="zh-text">總收入</span>
+                                    </span>
                                     <span class="block text-lg font-bold text-slate-700" id="out-gross">$0</span>
                                 </div>
                                 <div class="bg-white p-4 rounded border border-slate-200 text-center">
-                                    <span class="text-xs text-slate-400 uppercase">NOI (Post-Tax)</span>
+                                    <span class="text-xs text-slate-400 uppercase">
+                                        <span class="en-text">NOI (Post-Tax)</span><span class="zh-text">淨營運收入 (扣除稅項)</span>
+                                    </span>
                                     <span class="block text-lg font-bold text-slate-800" id="out-noi">$0</span>
                                 </div>
                                 <div class="bg-blue-50 p-4 rounded border border-blue-200 text-center col-span-2">
-                                    <span class="text-xs text-blue-500 uppercase font-bold">Indicated Value (Income)</span>
+                                    <span class="text-xs text-blue-500 uppercase font-bold">
+                                        <span class="en-text">Indicated Value (Income)</span><span class="zh-text">指示價值 (收益法)</span>
+                                    </span>
                                     <span class="block text-2xl font-bold text-blue-900" id="out-value">$0</span>
                                 </div>
                             </div>
@@ -430,13 +538,17 @@
                             <!-- Charts -->
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div class="bg-white p-4 rounded border border-slate-200">
-                                    <h5 class="text-sm font-bold text-slate-600 mb-2">Method Comparison</h5>
+                                    <h5 class="text-sm font-bold text-slate-600 mb-2">
+                                        <span class="en-text">Method Comparison</span><span class="zh-text">估值方法比較</span>
+                                    </h5>
                                     <div class="chart-container" style="height: 200px;">
                                         <canvas id="compChart"></canvas>
                                     </div>
                                 </div>
                                 <div class="bg-white p-4 rounded border border-slate-200">
-                                    <h5 class="text-sm font-bold text-slate-600 mb-2">Income Mix</h5>
+                                    <h5 class="text-sm font-bold text-slate-600 mb-2">
+                                        <span class="en-text">Income Mix</span><span class="zh-text">收入分佈</span>
+                                    </h5>
                                     <div class="chart-container" style="height: 200px;">
                                         <canvas id="incomeMixChart"></canvas>
                                     </div>
@@ -448,27 +560,31 @@
                     <!-- Sales Comps Table (Expanded with Title & Online Public Data) -->
                     <div class="mt-8 bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
                         <div class="bg-slate-50 px-6 py-3 border-b border-slate-200 flex justify-between items-center">
-                            <h4 class="font-bold text-slate-800">Comparable Sales Evidence</h4>
-                            <span class="text-xs bg-white border border-slate-200 px-2 py-1 rounded text-slate-500">Combines Title Report & Public Brokerage Data</span>
+                            <h4 class="font-bold text-slate-800">
+                                <span class="en-text">Comparable Sales Evidence</span><span class="zh-text">可比較銷售證據</span>
+                            </h4>
+                            <span class="text-xs bg-white border border-slate-200 px-2 py-1 rounded text-slate-500">
+                                <span class="en-text">Combines Title Report & Public Brokerage Data</span><span class="zh-text">結合產權報告與公開經紀數據</span>
+                            </span>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-sm text-left">
                                 <thead class="text-xs text-slate-500 uppercase bg-slate-50 border-b border-slate-200">
                                     <tr>
-                                        <th class="px-6 py-3">Address</th>
-                                        <th class="px-6 py-3">Source / Proximity</th>
-                                        <th class="px-6 py-3">Sq Ft</th>
-                                        <th class="px-6 py-3">Units</th>
-                                        <th class="px-6 py-3">Sale Date</th>
-                                        <th class="px-6 py-3">Price</th>
-                                        <th class="px-6 py-3 text-right">$/SF</th>
+                                        <th class="px-6 py-3"><span class="en-text">Address</span><span class="zh-text">物業地址</span></th>
+                                        <th class="px-6 py-3"><span class="en-text">Source / Proximity</span><span class="zh-text">數據來源 / 距離</span></th>
+                                        <th class="px-6 py-3"><span class="en-text">Sq Ft</span><span class="zh-text">平方呎</span></th>
+                                        <th class="px-6 py-3"><span class="en-text">Units</span><span class="zh-text">伙數</span></th>
+                                        <th class="px-6 py-3"><span class="en-text">Sale Date</span><span class="zh-text">成交日期</span></th>
+                                        <th class="px-6 py-3"><span class="en-text">Price</span><span class="zh-text">成交價</span></th>
+                                        <th class="px-6 py-3 text-right"><span class="en-text">$/SF</span><span class="zh-text">呎價</span></th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-slate-100">
                                     <!-- Title Comps -->
                                     <tr>
                                         <td class="px-6 py-4 font-medium">3931 18th St</td>
-                                        <td class="px-6 py-4 text-slate-500 text-xs">Title (0.49 mi)</td>
+                                        <td class="px-6 py-4 text-slate-500 text-xs"><span class="en-text">Title</span><span class="zh-text">產權報告</span> (0.49 mi)</td>
                                         <td class="px-6 py-4">2,908</td>
                                         <td class="px-6 py-4">3</td>
                                         <td class="px-6 py-4">Feb 2025</td>
@@ -477,7 +593,7 @@
                                     </tr>
                                     <tr>
                                         <td class="px-6 py-4 font-medium">261 San Carlos St</td>
-                                        <td class="px-6 py-4 text-slate-500 text-xs">Title (0.74 mi)</td>
+                                        <td class="px-6 py-4 text-slate-500 text-xs"><span class="en-text">Title</span><span class="zh-text">產權報告</span> (0.74 mi)</td>
                                         <td class="px-6 py-4">2,880</td>
                                         <td class="px-6 py-4">2</td>
                                         <td class="px-6 py-4">Nov 2025</td>
@@ -486,7 +602,7 @@
                                     </tr>
                                     <tr>
                                         <td class="px-6 py-4 font-medium">2001 17th St</td>
-                                        <td class="px-6 py-4 text-slate-500 text-xs">Title (1.36 mi)</td>
+                                        <td class="px-6 py-4 text-slate-500 text-xs"><span class="en-text">Title</span><span class="zh-text">產權報告</span> (1.36 mi)</td>
                                         <td class="px-6 py-4">3,000</td>
                                         <td class="px-6 py-4">2</td>
                                         <td class="px-6 py-4">Dec 2025</td>
@@ -495,7 +611,7 @@
                                     </tr>
                                     <tr>
                                         <td class="px-6 py-4 font-medium">2817 24th St</td>
-                                        <td class="px-6 py-4 text-slate-500 text-xs">Title (1.49 mi)</td>
+                                        <td class="px-6 py-4 text-slate-500 text-xs"><span class="en-text">Title</span><span class="zh-text">產權報告</span> (1.49 mi)</td>
                                         <td class="px-6 py-4">2,760</td>
                                         <td class="px-6 py-4">4</td>
                                         <td class="px-6 py-4">May 2025</td>
@@ -552,8 +668,12 @@
 
                                     <!-- Subject Property Row -->
                                     <tr class="bg-yellow-50 border-t-2 border-yellow-200">
-                                        <td class="px-6 py-4 font-bold text-blue-900">SUBJECT PROPERTY</td>
-                                        <td class="px-6 py-4 text-yellow-700 text-xs">Valuation Subject</td>
+                                        <td class="px-6 py-4 font-bold text-blue-900">
+                                            <span class="en-text">SUBJECT PROPERTY</span><span class="zh-text">目標物業</span>
+                                        </td>
+                                        <td class="px-6 py-4 text-yellow-700 text-xs">
+                                            <span class="en-text">Valuation Subject</span><span class="zh-text">估值標的</span>
+                                        </td>
                                         <td class="px-6 py-4 font-bold text-blue-900">4,015</td>
                                         <td class="px-6 py-4 font-bold text-blue-900">3</td>
                                         <td class="px-6 py-4 font-bold text-blue-900">Feb 2026</td>
@@ -571,34 +691,59 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <!-- VPS 1 -->
                         <div class="bg-white p-6 rounded shadow-sm border border-slate-200">
-                            <h4 class="font-bold text-slate-800 mb-2 border-b pb-2">1. Terms of Engagement</h4>
+                            <h4 class="font-bold text-slate-800 mb-2 border-b pb-2">
+                                <span class="en-text">1. Terms of Engagement</span><span class="zh-text">1. 委託條款</span>
+                            </h4>
                             <div class="text-sm text-slate-600 space-y-2 h-48 overflow-y-auto">
-                                <p><strong>Client:</strong> Undisclosed Investor / Lending Institution.</p>
-                                <p><strong>Subject Property:</strong> 681, 683, 685 14th St, San Francisco, CA 94114.</p>
-                                <p><strong>Purpose of Valuation:</strong> To determine Market Value for potential acquisition or secured lending purposes.</p>
-                                <p><strong>Basis of Value:</strong> Market Value as defined in IVS 104.</p>
-                                <p><strong>Effective Date:</strong> 22 February 2026.</p>
+                                <p><strong><span class="en-text">Client:</span><span class="zh-text">客戶：</span></strong> 
+                                    <span class="en-text">Undisclosed Investor / Lending Institution.</span><span class="zh-text">未公開投資者 / 借貸機構。</span>
+                                </p>
+                                <p><strong><span class="en-text">Subject Property:</span><span class="zh-text">目標物業：</span></strong> 
+                                    681, 683, 685 14th St, San Francisco, CA 94114.
+                                </p>
+                                <p><strong><span class="en-text">Purpose of Valuation:</span><span class="zh-text">估值目的：</span></strong> 
+                                    <span class="en-text">To determine Market Value for potential acquisition or secured lending purposes.</span><span class="zh-text">確定市場價值，以作潛在收購或有抵押貸款用途。</span>
+                                </p>
+                                <p><strong><span class="en-text">Basis of Value:</span><span class="zh-text">價值基準：</span></strong> 
+                                    <span class="en-text">Market Value as defined in IVS 104.</span><span class="zh-text">國際估值準則 (IVS) 104 中定義的市值 (Market Value)。</span>
+                                </p>
+                                <p><strong><span class="en-text">Effective Date:</span><span class="zh-text">生效日期：</span></strong> 
+                                    22 February 2026.
+                                </p>
                             </div>
                         </div>
 
                         <!-- Assumptions -->
                         <div class="bg-white p-6 rounded shadow-sm border border-slate-200">
-                            <h4 class="font-bold text-slate-800 mb-2 border-b pb-2">2. Special Assumptions</h4>
+                            <h4 class="font-bold text-slate-800 mb-2 border-b pb-2">
+                                <span class="en-text">2. Special Assumptions</span><span class="zh-text">2. 特殊假設</span>
+                            </h4>
                             <div class="text-sm text-slate-600 space-y-2 h-48 overflow-y-auto">
-                                <p>In accordance with client instructions, this valuation relies on the following Special Assumptions.</p>
+                                <p>
+                                    <span class="en-text">In accordance with client instructions, this valuation relies on the following Special Assumptions.</span><span class="zh-text">根據客戶指示，本估值依賴以下特殊假設。</span>
+                                </p>
                                 <ul class="list-disc pl-5 space-y-1">
-                                    <li>The Gross Building Area is assumed to be <strong>4,015 sq ft</strong>.</li>
-                                    <li>The building is assumed to be <strong>3 storeys</strong> in height, comprising three units per the Title Profile.</li>
-                                    <li>We assume the retail space is legally permitted and compliant with local zoning (UPMKT).</li>
+                                    <li>
+                                        <span class="en-text">The Gross Building Area is assumed to be <strong>4,015 sq ft</strong>.</span><span class="zh-text">建築總面積假設為 <strong>4,015 平方呎</strong>。</span>
+                                    </li>
+                                    <li>
+                                        <span class="en-text">The building is assumed to be <strong>3 storeys</strong> in height, comprising three units per the Title Profile.</span><span class="zh-text">假設建築物高 <strong>3層</strong>，並根據產權報告包含三個獨立單位。</span>
+                                    </li>
+                                    <li>
+                                        <span class="en-text">We assume the retail space is legally permitted and compliant with local zoning (UPMKT).</span><span class="zh-text">我們假設商舖空間已獲合法許可並符合當地分區規劃 (UPMKT)。</span>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
 
                         <!-- Limiting Conditions -->
                         <div class="bg-white p-6 rounded shadow-sm border border-slate-200 md:col-span-2">
-                            <h4 class="font-bold text-slate-800 mb-2 border-b pb-2">3. Limiting Conditions & Disclosures</h4>
+                            <h4 class="font-bold text-slate-800 mb-2 border-b pb-2">
+                                <span class="en-text">3. Limiting Conditions & Disclosures</span><span class="zh-text">3. 限制條件與披露</span>
+                            </h4>
                             <p class="text-sm text-slate-600">
-                                This report adheres to accepted professional valuation standards. A title profile (First American Doc 1546-901) was relied upon for addresses and unit counts.
+                                <span class="en-text">This report adheres to accepted professional valuation standards. A title profile (First American Doc 1546-901) was relied upon for addresses and unit counts.</span>
+                                <span class="zh-text">本報告遵守公認的專業估值準則。我們依賴了產權概況文件 (第一美國產權公司 文件編號 1546-901) 來核實地址和單位數量。</span>
                             </p>
                         </div>
                     </div>
@@ -607,26 +752,41 @@
                  <!-- SECTION: Valuer's Log (Chain of Thought) -->
                  <section id="log" class="content-section hidden fade-in">
                     <div class="bg-slate-800 text-slate-200 p-8 rounded-lg shadow-lg">
-                        <h3 class="text-2xl font-bold text-white mb-4 border-b border-slate-600 pb-4"><i class="fas fa-brain text-yellow-500 mr-2"></i> Valuer's Log: Title Report Adjustments</h3>
+                        <h3 class="text-2xl font-bold text-white mb-4 border-b border-slate-600 pb-4">
+                            <i class="fas fa-brain text-yellow-500 mr-2"></i> 
+                            <span class="en-text">Valuer's Log: Title Report Adjustments</span><span class="zh-text">估值師日誌：產權報告調整分析</span>
+                        </h3>
                         
                         <div class="space-y-6">
                             <div>
-                                <h4 class="text-yellow-500 font-bold uppercase text-xs tracking-wider mb-2">1. Unit Configuration Impact</h4>
-                                <p class="text-sm leading-relaxed text-slate-300">
+                                <h4 class="text-yellow-500 font-bold uppercase text-xs tracking-wider mb-2">
+                                    <span class="en-text">1. Unit Configuration Impact</span><span class="zh-text">1. 單位配置之影響</span>
+                                </h4>
+                                <p class="text-sm leading-relaxed text-slate-300 en-text">
                                     The Title Report explicitly lists "681-683-685 14th Street" on the Quit Claim Deed (Page 28). This confirms the 3-storey structure houses 3 distinct units. I have modelled this as 1 retail unit and 2 residential flats. This spreads the vacancy risk, allowing me to reduce the structural Vacancy assumption from 5% to 4%.
                                 </p>
-                            </div>
-
-                            <div>
-                                <h4 class="text-yellow-500 font-bold uppercase text-xs tracking-wider mb-2">2. Proposition 13 Tax Reassessment</h4>
-                                <p class="text-sm leading-relaxed text-slate-300">
-                                    Page 19 shows the property has a 2025 Assessed Value of $879,663 resulting in $13,164.70 in taxes. Because the family trust has owned it since 1991, they benefit heavily from Prop 13. A buyer acquiring this asset at $2.43M will be reassessed at ~1.2% of the purchase price, creating a new tax burden of roughly $29,160. My revised OpEx model assumes 32% expenses to account for this massive impending tax hike.
+                                <p class="text-sm leading-relaxed text-slate-300 zh-text">
+                                    產權報告的放棄權利契約 (Quit Claim Deed，第28頁) 明確列出了「681-683-685 14th Street」。這確認了這座三層建築包含三個獨立單位 (3伙)。我已將模型設定為 1個商舖 和 2個住宅單位。這有效分散了空置風險，因此我將結構性空置率假設由 5% 下調至 4%。
                                 </p>
                             </div>
 
                             <div>
-                                <h4 class="text-yellow-500 font-bold uppercase text-xs tracking-wider mb-2">3. Valuation Mathematics (Income Approach)</h4>
-                                <div class="bg-slate-900 p-4 rounded font-mono text-xs text-green-400 border border-slate-700">
+                                <h4 class="text-yellow-500 font-bold uppercase text-xs tracking-wider mb-2">
+                                    <span class="en-text">2. Proposition 13 Tax Reassessment</span><span class="zh-text">2. 加州第13號提案 (Prop 13) 稅項重估</span>
+                                </h4>
+                                <p class="text-sm leading-relaxed text-slate-300 en-text">
+                                    Page 19 shows the property has a 2025 Assessed Value of $879,663 resulting in $13,164.70 in taxes. Because the family trust has owned it since 1991, they benefit heavily from Prop 13. A buyer acquiring this asset at $2.43M will be reassessed at ~1.2% of the purchase price, creating a new tax burden of roughly $29,160. My revised OpEx model assumes 32% expenses to account for this massive impending tax hike.
+                                </p>
+                                <p class="text-sm leading-relaxed text-slate-300 zh-text">
+                                    報告第19頁顯示該物業2025年的評估價值為 $879,663 美元，應繳稅項為 $13,164.70 美元。由於家族信託自1991年起持有該物業，他們享受了 Prop 13 的極大稅務優惠。若新買家以 $243萬美元收購物業，稅基將重新評估為買價的約1.2%，產生每年約 $29,160 美元的新稅務負擔。我修改後的營運開支 (OpEx) 模型已將總開支比率設為32%，以應對這筆大幅增加的預期稅款。
+                                </p>
+                            </div>
+
+                            <div>
+                                <h4 class="text-yellow-500 font-bold uppercase text-xs tracking-wider mb-2">
+                                    <span class="en-text">3. Valuation Mathematics (Income Approach)</span><span class="zh-text">3. 估值數學運算 (收益法)</span>
+                                </h4>
+                                <div class="bg-slate-900 p-4 rounded font-mono text-xs text-green-400 border border-slate-700 en-text">
                                     <p>Retail Income: 1,200 sqft * $4.50/mo * 12 = $64,800/yr (NNN)</p>
                                     <p>Resi Income (2 Units): 2,815 sqft * $3.80/mo * 12 = $128,364/yr (Gross)</p>
                                     <p>--------------------------------------------------</p>
@@ -639,12 +799,30 @@
                                     <p>Cap Rate Selection:                        5.18% (Market Adj)</p>
                                     <p>Value = NOI / Cap Rate = 126,098 / 0.0518 = $2,434,324</p>
                                 </div>
+                                <div class="bg-slate-900 p-4 rounded font-mono text-xs text-green-400 border border-slate-700 zh-text mt-2">
+                                    <p>商舖收入: 1,200 呎 * $4.50/月 * 12 = $64,800/年 (淨租/NNN)</p>
+                                    <p>住宅收入 (2伙): 2,815 呎 * $3.80/月 * 12 = $128,364/年 (毛租/Gross)</p>
+                                    <p>--------------------------------------------------</p>
+                                    <p>潛在總收入 (PGI):                          $193,164</p>
+                                    <p>空置及壞帳損失 (4%):                       ($7,726)</p>
+                                    <p>有效總收入 (EGI):                          $185,438</p>
+                                    <p>營運開支 (混合預估 32%, 含新稅項):         ($59,340)</p>
+                                    <p>淨營運收入 (NOI):                          $126,098</p>
+                                    <p>--------------------------------------------------</p>
+                                    <p>資本化率選擇:                              5.18% (經市場調整)</p>
+                                    <p>估值 = NOI / 回報率 = 126,098 / 0.0518 =     $2,434,324</p>
+                                </div>
                             </div>
 
                             <div>
-                                <h4 class="text-yellow-500 font-bold uppercase text-xs tracking-wider mb-2">4. Reconciliation with Title Comps & MLS Data</h4>
-                                <p class="text-sm leading-relaxed text-slate-300">
+                                <h4 class="text-yellow-500 font-bold uppercase text-xs tracking-wider mb-2">
+                                    <span class="en-text">4. Reconciliation with Title Comps & MLS Data</span><span class="zh-text">4. 結合產權交易與公開數據進行結果核實</span>
+                                </h4>
+                                <p class="text-sm leading-relaxed text-slate-300 en-text">
                                     The inclusion of public brokerage data (MLS/Redfin/Zillow) alongside the Title comps solidifies the $580-$650/sq ft range for mixed-use assets in this submarket. Reconciling the income approach ($2.43M) with the comparable approach ($2.4M - $2.5M), I have settled on a final opinion of $2,430,000.
+                                </p>
+                                <p class="text-sm leading-relaxed text-slate-300 zh-text">
+                                    加入公開經紀市場數據（MLS/Redfin/Zillow）以及產權報告的可比交易，進一步確認了該子市場內住商混合物業的呎價區間為 $580 至 $650 美元。綜合收益法（約 $243萬）與銷售比較法（約 $240萬 至 $250萬），我最終的估值意見定為 $2,430,000 美元。
                                 </p>
                             </div>
                         </div>
@@ -656,6 +834,13 @@
     </div>
 
     <script>
+        // --- Language Toggle Logic ---
+        function toggleLanguage() {
+            const body = document.body;
+            const currentLang = body.getAttribute('data-lang');
+            body.setAttribute('data-lang', currentLang === 'en' ? 'zh' : 'en');
+        }
+
         // --- Password Protection Logic ---
         function checkPassword() {
             const input = document.getElementById('password-input').value;
@@ -677,12 +862,10 @@
                         appContainer.classList.remove('opacity-0');
                         body.classList.remove('overflow-hidden');
                         
-                        // Initialize charts AFTER the container is visible
-                        // otherwise Chart.js canvas sizing breaks
                         initCharts(); 
                         calculateValuation();
                     }, 50);
-                }, 500); // Wait for fade out animation
+                }, 500); 
             } else {
                 // Fail
                 errorMsg.classList.remove('hidden');
@@ -690,14 +873,10 @@
             }
         }
 
-        // Allow pressing Enter to submit
         function handleKeyPress(e) {
-            if (e.key === 'Enter') {
-                checkPassword();
-            }
+            if (e.key === 'Enter') checkPassword();
         }
 
-        // Remove error styling on new input
         document.getElementById('password-input').addEventListener('input', function() {
             this.classList.remove('border-red-500');
             document.getElementById('auth-error').classList.add('hidden');
@@ -751,7 +930,6 @@
         const totalAreaFixed = 4015;
 
         function calculateValuation() {
-            // Get Values
             const rArea = parseFloat(inputs.retailArea.value);
             const resArea = totalAreaFixed - rArea;
             const rRent = parseFloat(inputs.retailRent.value);
@@ -759,16 +937,18 @@
             const vacRate = parseFloat(inputs.vacancy.value) / 100;
             const capRate = parseFloat(inputs.cap.value) / 100;
 
-            // Update Text Displays
-            displays.retailArea.innerText = `${rArea.toLocaleString()} sq ft`;
-            if (displays.displayResiArea) displays.displayResiArea.innerText = `${resArea.toLocaleString()} sq ft`;
-            if (displays.displayRetailArea) displays.displayRetailArea.innerText = `${rArea.toLocaleString()} sq ft`;
+            // Updated Bilingual Text Displays for sq ft
+            const currentLang = document.body.getAttribute('data-lang');
+            const sqftLabel = 'sq ft';
+            
+            displays.retailArea.innerText = `${rArea.toLocaleString()} ${sqftLabel}`;
+            if (displays.displayResiArea) displays.displayResiArea.innerText = `${resArea.toLocaleString()} ${sqftLabel}`;
+            if (displays.displayRetailArea) displays.displayRetailArea.innerText = `${rArea.toLocaleString()} ${sqftLabel}`;
             displays.retailRent.innerText = `$${rRent.toFixed(2)}`;
             displays.resiRent.innerText = `$${resRent.toFixed(2)}`;
             displays.vacancy.innerText = `${inputs.vacancy.value}%`;
             displays.cap.innerText = `${inputs.cap.value}%`;
 
-            // Math
             const retailIncome = rArea * rRent * 12;
             const resiIncome = resArea * resRent * 12;
             const PGI = retailIncome + resiIncome;
@@ -776,8 +956,6 @@
             const vacancyLoss = PGI * vacRate;
             const EGI = PGI - vacancyLoss;
             
-            // Expenses: Assume Retail is NNN, Resi is Gross. Factoring in Prop 13 Reassessment Tax Jump.
-            // Simplified: 5% mgmt on Retail, 35% OpEx on Resi to account for heavy new tax burden.
             const retailExp = retailIncome * 0.05; 
             const resiExp = resiIncome * 0.35;
             const totalExp = retailExp + resiExp;
@@ -785,12 +963,10 @@
             const NOI = EGI - totalExp;
             const Value = NOI / capRate;
 
-            // Output Formatting
             displays.gross.innerText = `$${PGI.toLocaleString(undefined, {maximumFractionDigits: 0})}`;
             displays.noi.innerText = `$${NOI.toLocaleString(undefined, {maximumFractionDigits: 0})}`;
             displays.value.innerText = `$${Value.toLocaleString(undefined, {maximumFractionDigits: 0})}`;
 
-            // Update Charts
             updateComparablesChart(Value);
             updateIncomeMixChart(retailIncome, resiIncome);
             
@@ -809,19 +985,17 @@
             calculateValuation();
         }
 
-        // --- Chart Initialization ---
+        // --- Chart Initialization (Bilingual Labels) ---
         function initCharts() {
-            // Prevent re-initialization if charts already exist
             if(areaChart) return; 
 
             Chart.defaults.font.family = "'Inter', sans-serif";
             
-            // 1. Area Chart
             const ctxArea = document.getElementById('areaChart').getContext('2d');
             areaChart = new Chart(ctxArea, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Residential (2 Flats)', 'Retail Storefront'],
+                    labels: ['Resi (2 Flats) / 住宅', 'Retail / 商舖'],
                     datasets: [{
                         data: [2815, 1200],
                         backgroundColor: ['#e2e8f0', '#ca8a04'], 
@@ -835,14 +1009,13 @@
                 }
             });
 
-            // 2. Trend Chart
             const ctxTrend = document.getElementById('trendChart').getContext('2d');
             trendChart = new Chart(ctxTrend, {
                 type: 'line',
                 data: {
                     labels: ['Q1 2024', 'Q3 2024', 'Q1 2025', 'Q3 2025', 'Q1 2026'],
                     datasets: [{
-                        label: 'Avg PSF (Mixed-Use 94114)',
+                        label: 'Avg PSF / 平均呎價',
                         data: [520, 535, 550, 580, 605],
                         borderColor: '#1e3a8a',
                         backgroundColor: 'rgba(30, 58, 138, 0.1)',
@@ -857,14 +1030,13 @@
                 }
             });
 
-            // 3. Comp Chart
             const ctxComp = document.getElementById('compChart').getContext('2d');
             compChart = new Chart(ctxComp, {
                 type: 'bar',
                 data: {
-                    labels: ['Income Approach', 'Sales Comp Approach'],
+                    labels: ['Income / 收益法', 'Sales Comp / 比較法'],
                     datasets: [{
-                        label: 'Estimated Value',
+                        label: 'Estimated Value / 估值',
                         data: [0, 2430000], 
                         backgroundColor: ['#1e3a8a', '#94a3b8']
                     }]
@@ -876,12 +1048,11 @@
                 }
             });
 
-            // 4. Income Mix
             const ctxMix = document.getElementById('incomeMixChart').getContext('2d');
             incomeMixChart = new Chart(ctxMix, {
                 type: 'pie',
                 data: {
-                    labels: ['Retail Income', 'Residential Income'],
+                    labels: ['Retail / 商舖收入', 'Residential / 住宅收入'],
                     datasets: [{
                         data: [0, 0],
                         backgroundColor: ['#ca8a04', '#cbd5e1']
@@ -894,7 +1065,6 @@
             });
         }
 
-        // --- Helper Updates ---
         function updateComparablesChart(incomeValue) {
             if (compChart) {
                 compChart.data.datasets[0].data[0] = incomeValue;
@@ -909,15 +1079,12 @@
             }
         }
 
-        // Add Listeners on Load
         document.addEventListener('DOMContentLoaded', () => {
             Object.values(inputs).forEach(input => {
                 input.addEventListener('input', calculateValuation);
             });
-            // Note: initCharts() and calculateValuation() are now called AFTER successful password entry
         });
 
     </script>
 </body>
 </html>
-
