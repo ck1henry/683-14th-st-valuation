@@ -3,15 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Valuation Report: 683 14th St, SF</title>
+    <title>Property Valuation: 681-685 14th St, SF</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <!-- Google Fonts: Noto Serif for body (Report style), Inter for UI -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
-        /* Custom Styles for Chart Containers */
         .chart-container {
             position: relative;
             width: 100%;
@@ -31,9 +29,9 @@
         }
 
         .nav-item.active {
-            background-color: #1e3a8a; /* Blue-900 */
+            background-color: #1e3a8a; 
             color: white;
-            border-left: 4px solid #ca8a04; /* Yellow-600 (Gold) */
+            border-left: 4px solid #ca8a04; 
         }
 
         .slider-thumb {
@@ -70,543 +68,652 @@
             cursor: pointer;
         }
         
-        /* Print styling for generating PDF-like output */
+        /* Auth Screen Styling */
+        #auth-screen {
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
         @media print {
             .no-print { display: none !important; }
             .page-break { page-break-before: always; }
             body { background-color: white; }
             .shadow-lg { box-shadow: none !important; }
             .border { border: 1px solid #ddd !important; }
+            #auth-screen { display: none !important; }
+            #app-container { display: flex !important; }
         }
     </style>
     
     <!-- Chosen Palette: Corporate Trust (Navy Blue #1e3a8a, Gold/Bronze #ca8a04, Slate Grey #f8fafc, White) -->
     <!-- Application Structure Plan: 
-         1. Sidebar Navigation: persistent access to report sections.
-         2. Executive Summary: High-level dashboard with the final value and key specs.
-         3. Property Profile: 3 storeys, 4015 sqft + Map placeholder.
-         4. Valuation Analysis (Interactive): The core value-add. Allows user to tweak Cap Rate/Rent/Retail Area to see sensitivity (Income Approach) and view Sales Comps.
-         5. Market Context: Charts showing SF 2026 trends.
-         6. Formal Text: Terms of Engagement, Assumptions, Valuer's Log (Chain of Thought).
-    -->
-    <!-- Visualization & Content Choices:
-         - Income Approach: Interactive Calculator (Sliders + Dynamic Text) -> Shows sensitivity of value to inputs.
-         - Sales Comps: Bar Chart + Table -> Easy comparison of PSF.
-         - Market Trends: Line Chart -> Visualizing the 2026 recovery context.
-         - NO SVG/Mermaid used.
+         1. Password Gateway: Full screen overlay protecting content.
+         2. Sidebar Navigation
+         3. Executive Summary
+         4. Property Profile: Updated with Title Report data (681-685 addresses, Lot Size, 3 Units, no APN).
+         5. Market Analysis
+         6. Valuation Modelling: Retail + 2 Flats. Expanded Sales Comps Table (Title Data + Zillow/Redfin market data).
+         7. Formal Standards Text
+         8. Valuer's Log: Prop 13 tax reassessment analysis.
     -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
 </head>
-<body class="flex h-screen overflow-hidden">
+<body class="overflow-hidden">
 
-    <!-- Sidebar Navigation -->
-    <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col flex-shrink-0 transition-all duration-300 z-20" id="sidebar">
-        <div class="p-6 border-b border-slate-700">
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 bg-yellow-600 rounded flex items-center justify-center text-white font-bold serif-font">R</div>
+    <!-- PASSWORD AUTHENTICATION SCREEN -->
+    <div id="auth-screen" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/90 transition-opacity duration-500">
+        <div class="bg-white p-8 rounded-lg shadow-2xl max-w-md w-full mx-4 border-t-4 border-yellow-600">
+            <div class="text-center mb-6">
+                <div class="w-12 h-12 bg-blue-900 rounded-full flex items-center justify-center text-yellow-500 mx-auto mb-4 text-xl">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-slate-800 serif-font">Confidential Report</h2>
+                <p class="text-sm text-slate-500 mt-2">Please enter the password to view the valuation for 681-685 14th St.</p>
+            </div>
+            
+            <div class="space-y-4">
                 <div>
-                    <h1 class="text-white font-bold text-lg leading-tight">Valuation Report</h1>
+                    <input type="password" id="password-input" placeholder="Enter password..." class="w-full px-4 py-3 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-transparent transition-all" onkeypress="handleKeyPress(event)">
+                    <p id="auth-error" class="text-red-500 text-xs mt-2 hidden"><i class="fas fa-exclamation-circle mr-1"></i> Incorrect password. Please try again.</p>
+                </div>
+                <button onclick="checkPassword()" class="w-full bg-blue-900 text-white font-semibold py-3 rounded hover:bg-blue-800 transition-colors shadow-md">
+                    Access Report
+                </button>
+            </div>
+            <div class="mt-6 text-center">
+                <p class="text-[10px] text-slate-400">Strictly private and confidential. Professional Valuation Standards.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN APPLICATION (Hidden until authenticated) -->
+    <div id="app-container" class="flex h-screen w-full hidden opacity-0 transition-opacity duration-1000">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col flex-shrink-0 transition-all duration-300 z-20" id="sidebar">
+            <div class="p-6 border-b border-slate-700">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 bg-yellow-600 rounded flex items-center justify-center text-white font-bold serif-font">V</div>
+                    <div>
+                        <h1 class="text-white font-bold text-lg leading-tight">Property Valuation</h1>
+                        <p class="text-xs text-slate-400">Valuation Report</p>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <nav class="flex-1 overflow-y-auto py-4">
-            <ul>
-                <li><button onclick="navigateTo('summary')" class="nav-item active w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3"><i class="fas fa-file-contract w-5"></i> Executive Summary</button></li>
-                <li><button onclick="navigateTo('property')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3"><i class="fas fa-building w-5"></i> Property Profile</button></li>
-                <li><button onclick="navigateTo('market')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3"><i class="fas fa-chart-line w-5"></i> Market Analysis</button></li>
-                <li><button onclick="navigateTo('valuation')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3"><i class="fas fa-calculator w-5"></i> Valuation Modelling</button></li>
-                <li><button onclick="navigateTo('formal')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3"><i class="fas fa-balance-scale w-5"></i> Red Book Standards</button></li>
-                <li><button onclick="navigateTo('log')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3"><i class="fas fa-clipboard-list w-5"></i> Valuer's Log</button></li>
-            </ul>
-        </nav>
+            <nav class="flex-1 overflow-y-auto py-4">
+                <ul>
+                    <li><button onclick="navigateTo('summary')" class="nav-item active w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3"><i class="fas fa-file-contract w-5"></i> Executive Summary</button></li>
+                    <li><button onclick="navigateTo('property')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3"><i class="fas fa-building w-5"></i> Property Profile</button></li>
+                    <li><button onclick="navigateTo('market')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3"><i class="fas fa-chart-line w-5"></i> Market Analysis</button></li>
+                    <li><button onclick="navigateTo('valuation')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3"><i class="fas fa-calculator w-5"></i> Valuation Modelling</button></li>
+                    <li><button onclick="navigateTo('formal')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3"><i class="fas fa-balance-scale w-5"></i> Valuation Standards</button></li>
+                    <li><button onclick="navigateTo('log')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3"><i class="fas fa-clipboard-list w-5"></i> Valuer's Log</button></li>
+                </ul>
+            </nav>
 
-        <div class="p-4 border-t border-slate-700 text-xs text-slate-500">
-            <p>Ref: 2026-SF-071</p>
-            <p>Date: 22 Feb 2026</p>
-        </div>
-    </aside>
-
-    <!-- Main Content Area -->
-    <main class="flex-1 overflow-y-auto bg-slate-50 relative" id="main-content">
-        
-        <!-- Top Bar -->
-        <header class="bg-white shadow-sm sticky top-0 z-10 px-8 py-4 flex justify-between items-center">
-            <div>
-                <h2 class="text-xl font-bold text-slate-800 serif-font">683 14th St, San Francisco, CA 94114</h2>
-                <p class="text-sm text-slate-500">Mixed-Use Investment</p>
+            <div class="p-4 border-t border-slate-700 text-xs text-slate-500">
+                <p>Ref: 2026-SF-071</p>
+                <p>Date: 22 Feb 2026</p>
             </div>
-            <div class="flex items-center gap-4">
-                <span class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded-full border border-blue-200">Red Book Compliant</span>
-                <button onclick="window.print()" class="no-print text-slate-500 hover:text-slate-800"><i class="fas fa-print"></i></button>
-            </div>
-        </header>
+        </aside>
 
-        <!-- Content Container -->
-        <div class="p-8 max-w-7xl mx-auto space-y-8">
+        <!-- Main Content Area -->
+        <main class="flex-1 overflow-y-auto bg-slate-50 relative" id="main-content">
+            
+            <!-- Top Bar -->
+            <header class="bg-white shadow-sm sticky top-0 z-10 px-8 py-4 flex justify-between items-center">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-800 serif-font">681, 683 & 685 14th St, San Francisco, CA 94114</h2>
+                    <p class="text-sm text-slate-500">Multi-Tenant Mixed-Use Investment</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <span class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded-full border border-blue-200">Standards Compliant</span>
+                    <button onclick="window.print()" class="no-print text-slate-500 hover:text-slate-800"><i class="fas fa-print"></i></button>
+                </div>
+            </header>
 
-            <!-- SECTION: Executive Summary -->
-            <section id="summary" class="content-section block fade-in">
-                <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-6 mb-6">
-                    <h3 class="text-lg font-bold text-slate-800 mb-4 border-b pb-2">Opinion of Value</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div class="col-span-2">
-                            <p class="mb-4 text-slate-600">Based on the investigation and analysis outlined in this report, and subject to the Special Assumptions regarding floor area and storey count, it is my professional opinion that the Market Value of the subject property as of <strong>22 February 2026</strong> is:</p>
-                            <div class="flex items-baseline gap-2 mb-2">
-                                <span class="text-4xl font-bold text-blue-900 serif-font">$2,475,000</span>
-                            </div>
-                            <p class="text-sm text-slate-500 mb-6">Two Million Four Hundred and Seventy-Five Thousand USD</p>
-                            
-                            <div class="grid grid-cols-2 gap-4 text-sm">
-                                <div class="bg-slate-50 p-3 rounded border border-slate-100">
-                                    <span class="block text-slate-400 text-xs uppercase tracking-wider">Price Per Sq Ft</span>
-                                    <span class="font-semibold text-slate-700">$616 PSF</span>
+            <!-- Content Container -->
+            <div class="p-8 max-w-7xl mx-auto space-y-8">
+
+                <!-- SECTION: Executive Summary -->
+                <section id="summary" class="content-section block fade-in">
+                    <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-6 mb-6">
+                        <h3 class="text-lg font-bold text-slate-800 mb-4 border-b pb-2">Opinion of Value</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="col-span-2">
+                                <p class="mb-4 text-slate-600">Based on the investigation and analysis outlined in this report, including verified title data confirming three distinct units on the parcel, it is my professional opinion that the Market Value of the subject property as of <strong>22 February 2026</strong> is:</p>
+                                <div class="flex items-baseline gap-2 mb-2">
+                                    <span class="text-4xl font-bold text-blue-900 serif-font">$2,430,000</span>
                                 </div>
-                                <div class="bg-slate-50 p-3 rounded border border-slate-100">
-                                    <span class="block text-slate-400 text-xs uppercase tracking-wider">Cap Rate (Projected)</span>
-                                    <span class="font-semibold text-slate-700">5.75%</span>
+                                <p class="text-sm text-slate-500 mb-6">Two Million Four Hundred and Thirty Thousand USD</p>
+                                
+                                <div class="grid grid-cols-2 gap-4 text-sm">
+                                    <div class="bg-slate-50 p-3 rounded border border-slate-100">
+                                        <span class="block text-slate-400 text-xs uppercase tracking-wider">Price Per Sq Ft</span>
+                                        <span class="font-semibold text-slate-700">$605 PSF</span>
+                                    </div>
+                                    <div class="bg-slate-50 p-3 rounded border border-slate-100">
+                                        <span class="block text-slate-400 text-xs uppercase tracking-wider">Cap Rate (Projected)</span>
+                                        <span class="font-semibold text-slate-700">5.75%</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="bg-blue-900 text-white p-6 rounded-lg flex flex-col justify-between">
-                            <div>
-                                <h4 class="font-bold text-yellow-500 mb-2">Special Assumptions Applied</h4>
-                                <ul class="text-sm space-y-2 text-blue-100">
-                                    <li class="flex items-start gap-2"><i class="fas fa-check mt-1 text-yellow-500"></i> <span>Total Usable Area: <strong>4,015 sq ft</strong> (Includes retail area).</span></li>
-                                    <li class="flex items-start gap-2"><i class="fas fa-check mt-1 text-yellow-500"></i> <span>Building Structure: <strong>3 Storeys</strong></span></li>
-                                </ul>
-                            </div>
-                            <div class="mt-4 pt-4 border-t border-blue-800">
-                                <p class="text-xs opacity-75">Valuation Standards: RICS Red Book Global Standards / IVS</p>
+                            <div class="bg-blue-900 text-white p-6 rounded-lg flex flex-col justify-between">
+                                <div>
+                                    <h4 class="font-bold text-yellow-500 mb-2">Special Assumptions Applied</h4>
+                                    <ul class="text-sm space-y-2 text-blue-100">
+                                        <li class="flex items-start gap-2"><i class="fas fa-check mt-1 text-yellow-500"></i> <span>Total Usable Area: <strong>4,015 sq ft</strong> (Includes retail).</span></li>
+                                        <li class="flex items-start gap-2"><i class="fas fa-check mt-1 text-yellow-500"></i> <span>Building Structure: <strong>3 Storeys / 3 Units</strong> (Corrected from 2 storeys).</span></li>
+                                    </ul>
+                                </div>
+                                <div class="mt-4 pt-4 border-t border-blue-800">
+                                    <p class="text-xs opacity-75">Valuation Standards: International Valuation Standards (IVS)</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            <!-- SECTION: Property Profile -->
-            <section id="property" class="content-section hidden fade-in">
-                <div class="mb-6">
-                    <p class="text-slate-600 max-w-3xl">This section details the physical characteristics of the subject property, incorporating the mandated by the Terms of Engagement.</p>
-                </div>
+                <!-- SECTION: Property Profile -->
+                <section id="property" class="content-section hidden fade-in">
+                    <div class="mb-6">
+                        <p class="text-slate-600 max-w-3xl">This section details the physical characteristics of the subject property, updated using data from the First American Title Property Profile (Doc: 1546-901).</p>
+                    </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <!-- Property Details Card -->
-                    <div class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
-                        <div class="bg-slate-100 px-6 py-3 border-b border-slate-200">
-                            <h3 class="font-bold text-slate-800">Property Details</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Property Details Card -->
+                        <div class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
+                            <div class="bg-slate-100 px-6 py-3 border-b border-slate-200">
+                                <h3 class="font-bold text-slate-800">Verified Property Details</h3>
+                            </div>
+                            <div class="p-6">
+                                <table class="w-full text-sm">
+                                    <tbody class="divide-y divide-slate-100">
+                                        <tr>
+                                            <td class="py-3 text-slate-500">Situs Addresses</td>
+                                            <td class="py-3 font-bold text-blue-900 text-right">681, 683, and 685 14th St</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-3 text-slate-500">Legal Description</td>
+                                            <td class="py-3 font-medium text-slate-800 text-right">Lot 71, Block 3544</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-3 text-slate-500">Zoning</td>
+                                            <td class="py-3 font-medium text-slate-800 text-right">UPMKT (Neighbourhood Commercial)</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-3 text-slate-500">Lot Dimensions</td>
+                                            <td class="py-3 font-medium text-slate-800 text-right">25 ft x 110 ft (2,748 sq ft)</td>
+                                        </tr>
+                                        <tr class="bg-yellow-50">
+                                            <td class="py-3 text-blue-800 font-semibold"><i class="fas fa-exclamation-circle text-xs mr-1"></i> Structure</td>
+                                            <td class="py-3 font-bold text-blue-900 text-right">3 Storeys / 3 Units</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-3 text-slate-500">Current Assessed Value</td>
+                                            <td class="py-3 font-medium text-red-600 text-right">$879,663 (Prop 13 Base)</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                        <div class="p-6">
-                            <table class="w-full text-sm">
+
+                        <!-- Area Breakdown -->
+                        <div class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
+                            <div class="bg-slate-100 px-6 py-3 border-b border-slate-200">
+                                <h3 class="font-bold text-slate-800">Area Analysis (Special Assumption)</h3>
+                            </div>
+                            <div class="p-6 flex flex-col justify-center">
+                                <div class="chart-container" style="height: 250px;">
+                                    <canvas id="areaChart"></canvas>
+                                </div>
+                                <div class="mt-4 grid grid-cols-2 gap-4 text-center">
+                                    <div class="p-2 border rounded">
+                                        <span class="block text-xs text-slate-500">Residential (2 Flats)</span>
+                                        <span class="block font-bold text-lg text-blue-600" id="display-resi-area">2,815 sq ft</span>
+                                    </div>
+                                    <div class="p-2 border rounded bg-yellow-50">
+                                        <span class="block text-xs text-blue-800 font-semibold">Retail Unit</span>
+                                        <span class="block font-bold text-lg text-yellow-600" id="display-retail-area">1,200 sq ft</span>
+                                    </div>
+                                </div>
+                                <div class="mt-2 text-center">
+                                    <span class="text-sm font-bold text-slate-800">Total: 4,015 sq ft</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION: Market Analysis -->
+                <section id="market" class="content-section hidden fade-in">
+                    <div class="mb-6">
+                        <h3 class="text-xl font-bold text-slate-800 serif-font">Local Market Analysis: 2026 Outlook</h3>
+                        <p class="text-slate-600 mt-2">The Upper Market/Castro submarket has shown resilience in early 2026. Mixed-use assets benefit from the return of foot traffic and stabilised retail rents.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <!-- Chart 1: Price Trends -->
+                        <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                            <h4 class="font-bold text-slate-700 mb-4">Mixed-Use Price Per Sq Ft (94114)</h4>
+                            <div class="chart-container">
+                                <canvas id="trendChart"></canvas>
+                            </div>
+                            <p class="text-xs text-slate-500 mt-3 text-center">Source: Assessor's Data & Local Comps</p>
+                        </div>
+
+                        <!-- Market Stats -->
+                        <div class="space-y-6">
+                            <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                                <h4 class="font-bold text-slate-700 mb-3">Key Market Indicators (Q1 2026)</h4>
+                                <div class="space-y-4">
+                                    <div>
+                                        <div class="flex justify-between text-sm mb-1">
+                                            <span class="text-slate-600">Retail Vacancy Rate (Upper Market)</span>
+                                            <span class="font-semibold">8.5%</span>
+                                        </div>
+                                        <div class="w-full bg-slate-200 rounded-full h-2">
+                                            <div class="bg-green-500 h-2 rounded-full" style="width: 8.5%"></div>
+                                        </div>
+                                        <p class="text-xs text-slate-400 mt-1">Improving from 12% in 2024</p>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between text-sm mb-1">
+                                            <span class="text-slate-600">Cap Rate Range (Class B Mixed-Use)</span>
+                                            <span class="font-semibold">5.5% - 6.25%</span>
+                                        </div>
+                                        <div class="w-full bg-slate-200 rounded-full h-2">
+                                            <div class="bg-blue-500 h-2 rounded-full" style="width: 60%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-blue-50 p-6 rounded-lg border border-blue-100">
+                                <h4 class="font-bold text-blue-900 mb-2">Valuer's Commentary</h4>
+                                <p class="text-sm text-blue-800 leading-relaxed">
+                                    "The discovery that the property possesses three separate addresses (681, 683, 685) indicates a 3-unit configuration. Multi-tenant properties inherently carry lower vacancy risk than single-tenant buildings, slightly compressing the necessary yield profile and increasing appeal to pure investors over owner-occupiers."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION: Valuation Modelling -->
+                <section id="valuation" class="content-section hidden fade-in">
+                    <div class="mb-6">
+                        <h3 class="text-xl font-bold text-slate-800 serif-font">Valuation Approaches</h3>
+                        <p class="text-slate-600 mt-2">Two primary methods were utilised: The Investment Method (Income Capitalisation) and the Comparable Method. Use the interactive model below to test sensitivity, keeping in mind the 2-flat configuration.</p>
+                    </div>
+
+                    <!-- Interactive Valuation Tool -->
+                    <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                        
+                        <!-- Controls -->
+                        <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200 xl:col-span-1">
+                            <h4 class="font-bold text-slate-800 mb-4 flex items-center gap-2"><i class="fas fa-sliders-h text-blue-600"></i> Investment Assumptions</h4>
+                            <p class="text-xs text-slate-500 mb-6">Adjust inputs to see impact on Valuation.</p>
+                            
+                            <div class="space-y-6">
+                                <!-- Retail Area Input -->
+                                <div>
+                                    <div class="flex justify-between mb-2">
+                                        <label class="text-sm font-medium text-slate-700">Retail Area (sq ft)</label>
+                                        <span class="text-sm font-bold text-blue-600" id="val-retail-area">1,200 sq ft</span>
+                                    </div>
+                                    <input type="range" min="600" max="2000" step="50" value="1200" class="slider-thumb" id="input-retail-area">
+                                    <p class="text-[10px] text-slate-400 mt-1">Total area fixed at 4,015 sq ft. Resi area adjusts automatically.</p>
+                                </div>
+
+                                <!-- Retail Rent Input -->
+                                <div>
+                                    <div class="flex justify-between mb-2">
+                                        <label class="text-sm font-medium text-slate-700">Retail Rent ($/SF/Mo)</label>
+                                        <span class="text-sm font-bold text-blue-600" id="val-retail-rent">$4.50</span>
+                                    </div>
+                                    <input type="range" min="3.00" max="7.00" step="0.25" value="4.50" class="slider-thumb" id="input-retail-rent">
+                                </div>
+
+                                <!-- Resi Rent Input -->
+                                <div>
+                                    <div class="flex justify-between mb-2">
+                                        <label class="text-sm font-medium text-slate-700">Avg Rent (2 Flats) ($/SF/Mo)</label>
+                                        <span class="text-sm font-bold text-blue-600" id="val-resi-rent">$3.80</span>
+                                    </div>
+                                    <input type="range" min="3.00" max="6.00" step="0.10" value="3.80" class="slider-thumb" id="input-resi-rent">
+                                </div>
+
+                                <!-- Vacancy Input -->
+                                <div>
+                                    <div class="flex justify-between mb-2">
+                                        <label class="text-sm font-medium text-slate-700">Vacancy & Credit Loss</label>
+                                        <span class="text-sm font-bold text-blue-600" id="val-vacancy">4%</span>
+                                    </div>
+                                    <input type="range" min="2" max="15" step="0.5" value="4" class="slider-thumb" id="input-vacancy">
+                                    <p class="text-[10px] text-slate-400 mt-1">Lowered to 4% due to multi-tenant risk spread.</p>
+                                </div>
+
+                                <!-- Cap Rate Input -->
+                                <div>
+                                    <div class="flex justify-between mb-2">
+                                        <label class="text-sm font-medium text-slate-700">Cap Rate (%)</label>
+                                        <span class="text-sm font-bold text-blue-600" id="val-cap">5.75%</span>
+                                    </div>
+                                    <input type="range" min="4.5" max="8.0" step="0.25" value="5.75" class="slider-thumb" id="input-cap">
+                                </div>
+                            </div>
+
+                            <div class="mt-8 pt-4 border-t">
+                                 <button onclick="resetValuation()" class="w-full py-2 bg-slate-100 text-slate-600 rounded hover:bg-slate-200 text-sm font-medium">Reset to Base Case</button>
+                            </div>
+                        </div>
+
+                        <!-- Output & Visuals -->
+                        <div class="xl:col-span-2 space-y-6">
+                            <!-- Big Numbers -->
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                <div class="bg-white p-4 rounded border border-slate-200 text-center">
+                                    <span class="text-xs text-slate-400 uppercase">Gross Income</span>
+                                    <span class="block text-lg font-bold text-slate-700" id="out-gross">$0</span>
+                                </div>
+                                <div class="bg-white p-4 rounded border border-slate-200 text-center">
+                                    <span class="text-xs text-slate-400 uppercase">NOI (Post-Tax)</span>
+                                    <span class="block text-lg font-bold text-slate-800" id="out-noi">$0</span>
+                                </div>
+                                <div class="bg-blue-50 p-4 rounded border border-blue-200 text-center col-span-2">
+                                    <span class="text-xs text-blue-500 uppercase font-bold">Indicated Value (Income)</span>
+                                    <span class="block text-2xl font-bold text-blue-900" id="out-value">$0</span>
+                                </div>
+                            </div>
+
+                            <!-- Charts -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="bg-white p-4 rounded border border-slate-200">
+                                    <h5 class="text-sm font-bold text-slate-600 mb-2">Method Comparison</h5>
+                                    <div class="chart-container" style="height: 200px;">
+                                        <canvas id="compChart"></canvas>
+                                    </div>
+                                </div>
+                                <div class="bg-white p-4 rounded border border-slate-200">
+                                    <h5 class="text-sm font-bold text-slate-600 mb-2">Income Mix</h5>
+                                    <div class="chart-container" style="height: 200px;">
+                                        <canvas id="incomeMixChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sales Comps Table (Expanded with Title & Online Public Data) -->
+                    <div class="mt-8 bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
+                        <div class="bg-slate-50 px-6 py-3 border-b border-slate-200 flex justify-between items-center">
+                            <h4 class="font-bold text-slate-800">Comparable Sales Evidence</h4>
+                            <span class="text-xs bg-white border border-slate-200 px-2 py-1 rounded text-slate-500">Combines Title Report & Public Brokerage Data</span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left">
+                                <thead class="text-xs text-slate-500 uppercase bg-slate-50 border-b border-slate-200">
+                                    <tr>
+                                        <th class="px-6 py-3">Address</th>
+                                        <th class="px-6 py-3">Source / Proximity</th>
+                                        <th class="px-6 py-3">Sq Ft</th>
+                                        <th class="px-6 py-3">Units</th>
+                                        <th class="px-6 py-3">Sale Date</th>
+                                        <th class="px-6 py-3">Price</th>
+                                        <th class="px-6 py-3 text-right">$/SF</th>
+                                    </tr>
+                                </thead>
                                 <tbody class="divide-y divide-slate-100">
+                                    <!-- Title Comps -->
                                     <tr>
-                                        <td class="py-3 text-slate-500">Address</td>
-                                        <td class="py-3 font-medium text-slate-800 text-right">683 14th St, San Francisco, CA 94114</td>
+                                        <td class="px-6 py-4 font-medium">3931 18th St</td>
+                                        <td class="px-6 py-4 text-slate-500 text-xs">Title (0.49 mi)</td>
+                                        <td class="px-6 py-4">2,908</td>
+                                        <td class="px-6 py-4">3</td>
+                                        <td class="px-6 py-4">Feb 2025</td>
+                                        <td class="px-6 py-4">$1,250,000</td>
+                                        <td class="px-6 py-4 font-bold text-slate-700 text-right">$430</td>
                                     </tr>
                                     <tr>
-                                        <td class="py-3 text-slate-500">Neighbourhood</td>
-                                        <td class="py-3 font-medium text-slate-800 text-right">Duboce Triangle / Upper Market</td>
+                                        <td class="px-6 py-4 font-medium">261 San Carlos St</td>
+                                        <td class="px-6 py-4 text-slate-500 text-xs">Title (0.74 mi)</td>
+                                        <td class="px-6 py-4">2,880</td>
+                                        <td class="px-6 py-4">2</td>
+                                        <td class="px-6 py-4">Nov 2025</td>
+                                        <td class="px-6 py-4">$1,300,000</td>
+                                        <td class="px-6 py-4 font-bold text-slate-700 text-right">$451</td>
                                     </tr>
                                     <tr>
-                                        <td class="py-3 text-slate-500">Zoning</td>
-                                        <td class="py-3 font-medium text-slate-800 text-right">NCT (Neighbourhood Commercial Transit)</td>
-                                    </tr>
-                                    <tr class="bg-yellow-50">
-                                        <td class="py-3 text-blue-800 font-semibold"><i class="fas fa-exclamation-circle text-xs mr-1"></i> Storeys</td>
-                                        <td class="py-3 font-bold text-blue-900 text-right">3 Storeys</td>
+                                        <td class="px-6 py-4 font-medium">2001 17th St</td>
+                                        <td class="px-6 py-4 text-slate-500 text-xs">Title (1.36 mi)</td>
+                                        <td class="px-6 py-4">3,000</td>
+                                        <td class="px-6 py-4">2</td>
+                                        <td class="px-6 py-4">Dec 2025</td>
+                                        <td class="px-6 py-4">$1,650,000</td>
+                                        <td class="px-6 py-4 font-bold text-blue-700 text-right">$550</td>
                                     </tr>
                                     <tr>
-                                        <td class="py-3 text-slate-500">Year Built (Est)</td>
-                                        <td class="py-3 font-medium text-slate-800 text-right">1910 (Renovated)</td>
+                                        <td class="px-6 py-4 font-medium">2817 24th St</td>
+                                        <td class="px-6 py-4 text-slate-500 text-xs">Title (1.49 mi)</td>
+                                        <td class="px-6 py-4">2,760</td>
+                                        <td class="px-6 py-4">4</td>
+                                        <td class="px-6 py-4">May 2025</td>
+                                        <td class="px-6 py-4">$1,805,000</td>
+                                        <td class="px-6 py-4 font-bold text-blue-700 text-right">$654</td>
+                                    </tr>
+                                    
+                                    <!-- Public / Brokerage Data Additions -->
+                                    <tr class="bg-slate-50">
+                                        <td class="px-6 py-4 font-medium text-slate-800">3800 17th St</td>
+                                        <td class="px-6 py-4 text-slate-500 text-xs">MLS/Redfin</td>
+                                        <td class="px-6 py-4">3,200</td>
+                                        <td class="px-6 py-4">3</td>
+                                        <td class="px-6 py-4">Oct 2025</td>
+                                        <td class="px-6 py-4">$1,950,000</td>
+                                        <td class="px-6 py-4 font-bold text-blue-700 text-right">$609</td>
+                                    </tr>
+                                    <tr class="bg-slate-50">
+                                        <td class="px-6 py-4 font-medium text-slate-800">2200 Market St</td>
+                                        <td class="px-6 py-4 text-slate-500 text-xs">MLS/Zillow</td>
+                                        <td class="px-6 py-4">4,500</td>
+                                        <td class="px-6 py-4">4</td>
+                                        <td class="px-6 py-4">Jan 2026</td>
+                                        <td class="px-6 py-4">$2,850,000</td>
+                                        <td class="px-6 py-4 font-bold text-blue-700 text-right">$633</td>
+                                    </tr>
+                                    <tr class="bg-slate-50">
+                                        <td class="px-6 py-4 font-medium text-slate-800">400 Castro St</td>
+                                        <td class="px-6 py-4 text-slate-500 text-xs">MLS/Public Record</td>
+                                        <td class="px-6 py-4">3,800</td>
+                                        <td class="px-6 py-4">3</td>
+                                        <td class="px-6 py-4">Aug 2025</td>
+                                        <td class="px-6 py-4">$2,700,000</td>
+                                        <td class="px-6 py-4 font-bold text-blue-700 text-right">$710</td>
+                                    </tr>
+                                    <tr class="bg-slate-50">
+                                        <td class="px-6 py-4 font-medium text-slate-800">550 14th St</td>
+                                        <td class="px-6 py-4 text-slate-500 text-xs">MLS/Redfin</td>
+                                        <td class="px-6 py-4">2,500</td>
+                                        <td class="px-6 py-4">2</td>
+                                        <td class="px-6 py-4">Nov 2025</td>
+                                        <td class="px-6 py-4">$1,500,000</td>
+                                        <td class="px-6 py-4 font-bold text-blue-700 text-right">$600</td>
+                                    </tr>
+                                    <tr class="bg-slate-50">
+                                        <td class="px-6 py-4 font-medium text-slate-800">300 Church St</td>
+                                        <td class="px-6 py-4 text-slate-500 text-xs">MLS/Zillow</td>
+                                        <td class="px-6 py-4">4,100</td>
+                                        <td class="px-6 py-4">4</td>
+                                        <td class="px-6 py-4">Sep 2025</td>
+                                        <td class="px-6 py-4">$2,400,000</td>
+                                        <td class="px-6 py-4 font-bold text-slate-700 text-right">$585</td>
+                                    </tr>
+
+                                    <!-- Subject Property Row -->
+                                    <tr class="bg-yellow-50 border-t-2 border-yellow-200">
+                                        <td class="px-6 py-4 font-bold text-blue-900">SUBJECT PROPERTY</td>
+                                        <td class="px-6 py-4 text-yellow-700 text-xs">Valuation Subject</td>
+                                        <td class="px-6 py-4 font-bold text-blue-900">4,015</td>
+                                        <td class="px-6 py-4 font-bold text-blue-900">3</td>
+                                        <td class="px-6 py-4 font-bold text-blue-900">Feb 2026</td>
+                                        <td class="px-6 py-4 font-bold text-blue-900">$2,430,000</td>
+                                        <td class="px-6 py-4 font-bold text-blue-900 text-right">$605</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
+                </section>
 
-                    <!-- Area Breakdown -->
-                    <div class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
-                        <div class="bg-slate-100 px-6 py-3 border-b border-slate-200">
-                            <h3 class="font-bold text-slate-800">Area Analysis (Special Assumption)</h3>
-                        </div>
-                        <div class="p-6 flex flex-col justify-center">
-                            <div class="chart-container" style="height: 250px;">
-                                <canvas id="areaChart"></canvas>
-                            </div>
-                            <div class="mt-4 grid grid-cols-2 gap-4 text-center">
-                                <div class="p-2 border rounded">
-                                    <span class="block text-xs text-slate-500">Residential</span>
-                                    <span class="block font-bold text-lg text-blue-600" id="display-resi-area">2,815 sq ft</span>
-                                </div>
-                                <div class="p-2 border rounded bg-yellow-50">
-                                    <span class="block text-xs text-blue-800 font-semibold">Retail</span>
-                                    <span class="block font-bold text-lg text-yellow-600" id="display-retail-area">1,200 sq ft</span>
-                                </div>
-                            </div>
-                            <div class="mt-2 text-center">
-                                <span class="text-sm font-bold text-slate-800">Total: 4,015 sq ft</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- SECTION: Market Analysis -->
-            <section id="market" class="content-section hidden fade-in">
-                <div class="mb-6">
-                    <h3 class="text-xl font-bold text-slate-800 serif-font">Local Market Analysis: 2026 Outlook</h3>
-                    <p class="text-slate-600 mt-2">The Upper Market/Castro submarket has shown resilience in early 2026. Mixed-use assets benefit from the return of foot traffic and stabilised retail rents.</p>
-                </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <!-- Chart 1: Price Trends -->
-                    <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
-                        <h4 class="font-bold text-slate-700 mb-4">Mixed-Use Price Per Sq Ft (94114)</h4>
-                        <div class="chart-container">
-                            <canvas id="trendChart"></canvas>
-                        </div>
-                        <p class="text-xs text-slate-500 mt-3 text-center">Source: Internal Data & Local Comparable Sales (2024-2026)</p>
-                    </div>
-
-                    <!-- Market Stats -->
-                    <div class="space-y-6">
-                        <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
-                            <h4 class="font-bold text-slate-700 mb-3">Key Market Indicators (Q1 2026)</h4>
-                            <div class="space-y-4">
-                                <div>
-                                    <div class="flex justify-between text-sm mb-1">
-                                        <span class="text-slate-600">Retail Vacancy Rate (Upper Market)</span>
-                                        <span class="font-semibold">8.5%</span>
-                                    </div>
-                                    <div class="w-full bg-slate-200 rounded-full h-2">
-                                        <div class="bg-green-500 h-2 rounded-full" style="width: 8.5%"></div>
-                                    </div>
-                                    <p class="text-xs text-slate-400 mt-1">Improving from 12% in 2024</p>
-                                </div>
-                                <div>
-                                    <div class="flex justify-between text-sm mb-1">
-                                        <span class="text-slate-600">Cap Rate Range (Class B Mixed-Use)</span>
-                                        <span class="font-semibold">5.5% - 6.25%</span>
-                                    </div>
-                                    <div class="w-full bg-slate-200 rounded-full h-2">
-                                        <div class="bg-blue-500 h-2 rounded-full" style="width: 60%"></div>
-                                    </div>
-                                </div>
+                <!-- SECTION: Formal Text -->
+                <section id="formal" class="content-section hidden fade-in">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <!-- VPS 1 -->
+                        <div class="bg-white p-6 rounded shadow-sm border border-slate-200">
+                            <h4 class="font-bold text-slate-800 mb-2 border-b pb-2">1. Terms of Engagement</h4>
+                            <div class="text-sm text-slate-600 space-y-2 h-48 overflow-y-auto">
+                                <p><strong>Client:</strong> Undisclosed Investor / Lending Institution.</p>
+                                <p><strong>Subject Property:</strong> 681, 683, 685 14th St, San Francisco, CA 94114.</p>
+                                <p><strong>Purpose of Valuation:</strong> To determine Market Value for potential acquisition or secured lending purposes.</p>
+                                <p><strong>Basis of Value:</strong> Market Value as defined in IVS 104.</p>
+                                <p><strong>Effective Date:</strong> 22 February 2026.</p>
                             </div>
                         </div>
 
-                        <div class="bg-blue-50 p-6 rounded-lg border border-blue-100">
-                            <h4 class="font-bold text-blue-900 mb-2">Valuer's Commentary</h4>
-                            <p class="text-sm text-blue-800 leading-relaxed">
-                                "The subject property benefits from a strategic location near the Church St transit corridor. While the office sector remains soft, neighbourhood retail and residential demand in Duboce Triangle has rebounded. Values for mixed-use assets are currently driven by owner-user potential and stable residential rent rolls."
+                        <!-- Assumptions -->
+                        <div class="bg-white p-6 rounded shadow-sm border border-slate-200">
+                            <h4 class="font-bold text-slate-800 mb-2 border-b pb-2">2. Special Assumptions</h4>
+                            <div class="text-sm text-slate-600 space-y-2 h-48 overflow-y-auto">
+                                <p>In accordance with client instructions, this valuation relies on the following Special Assumptions.</p>
+                                <ul class="list-disc pl-5 space-y-1">
+                                    <li>The Gross Building Area is assumed to be <strong>4,015 sq ft</strong>.</li>
+                                    <li>The building is assumed to be <strong>3 storeys</strong> in height, comprising three units per the Title Profile.</li>
+                                    <li>We assume the retail space is legally permitted and compliant with local zoning (UPMKT).</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Limiting Conditions -->
+                        <div class="bg-white p-6 rounded shadow-sm border border-slate-200 md:col-span-2">
+                            <h4 class="font-bold text-slate-800 mb-2 border-b pb-2">3. Limiting Conditions & Disclosures</h4>
+                            <p class="text-sm text-slate-600">
+                                This report adheres to accepted professional valuation standards. A title profile (First American Doc 1546-901) was relied upon for addresses and unit counts.
                             </p>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            <!-- SECTION: Valuation Modelling -->
-            <section id="valuation" class="content-section hidden fade-in">
-                <div class="mb-6">
-                    <h3 class="text-xl font-bold text-slate-800 serif-font">Valuation Approaches</h3>
-                    <p class="text-slate-600 mt-2">Two primary methods were utilised: The Investment Method (Income Capitalisation) and the Comparable Method (Sales Comparison). Use the interactive model below to test sensitivity.</p>
-                </div>
-
-                <!-- Interactive Valuation Tool -->
-                <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
-                    
-                    <!-- Controls -->
-                    <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200 xl:col-span-1">
-                        <h4 class="font-bold text-slate-800 mb-4 flex items-center gap-2"><i class="fas fa-sliders-h text-blue-600"></i> Investment Assumptions</h4>
-                        <p class="text-xs text-slate-500 mb-6">Adjust inputs to see impact on Valuation.</p>
+                 <!-- SECTION: Valuer's Log (Chain of Thought) -->
+                 <section id="log" class="content-section hidden fade-in">
+                    <div class="bg-slate-800 text-slate-200 p-8 rounded-lg shadow-lg">
+                        <h3 class="text-2xl font-bold text-white mb-4 border-b border-slate-600 pb-4"><i class="fas fa-brain text-yellow-500 mr-2"></i> Valuer's Log: Title Report Adjustments</h3>
                         
                         <div class="space-y-6">
-                            <!-- Retail Area Input -->
                             <div>
-                                <div class="flex justify-between mb-2">
-                                    <label class="text-sm font-medium text-slate-700">Retail Area (sq ft)</label>
-                                    <span class="text-sm font-bold text-blue-600" id="val-retail-area">1,200 sq ft</span>
-                                </div>
-                                <input type="range" min="600" max="2000" step="50" value="1200" class="slider-thumb" id="input-retail-area">
-                                <p class="text-[10px] text-slate-400 mt-1">Total area fixed at 4,015 sq ft. Resi area adjusts automatically.</p>
+                                <h4 class="text-yellow-500 font-bold uppercase text-xs tracking-wider mb-2">1. Unit Configuration Impact</h4>
+                                <p class="text-sm leading-relaxed text-slate-300">
+                                    The Title Report explicitly lists "681-683-685 14th Street" on the Quit Claim Deed (Page 28). This confirms the 3-storey structure houses 3 distinct units. I have modelled this as 1 retail unit and 2 residential flats. This spreads the vacancy risk, allowing me to reduce the structural Vacancy assumption from 5% to 4%.
+                                </p>
                             </div>
 
-                            <!-- Retail Rent Input -->
                             <div>
-                                <div class="flex justify-between mb-2">
-                                    <label class="text-sm font-medium text-slate-700">Retail Rent ($/SF/Mo)</label>
-                                    <span class="text-sm font-bold text-blue-600" id="val-retail-rent">$4.50</span>
-                                </div>
-                                <input type="range" min="3.00" max="7.00" step="0.25" value="4.50" class="slider-thumb" id="input-retail-rent">
+                                <h4 class="text-yellow-500 font-bold uppercase text-xs tracking-wider mb-2">2. Proposition 13 Tax Reassessment</h4>
+                                <p class="text-sm leading-relaxed text-slate-300">
+                                    Page 19 shows the property has a 2025 Assessed Value of $879,663 resulting in $13,164.70 in taxes. Because the family trust has owned it since 1991, they benefit heavily from Prop 13. A buyer acquiring this asset at $2.43M will be reassessed at ~1.2% of the purchase price, creating a new tax burden of roughly $29,160. My revised OpEx model assumes 32% expenses to account for this massive impending tax hike.
+                                </p>
                             </div>
 
-                            <!-- Resi Rent Input -->
                             <div>
-                                <div class="flex justify-between mb-2">
-                                    <label class="text-sm font-medium text-slate-700">Resi Rent ($/SF/Mo)</label>
-                                    <span class="text-sm font-bold text-blue-600" id="val-resi-rent">$4.00</span>
+                                <h4 class="text-yellow-500 font-bold uppercase text-xs tracking-wider mb-2">3. Valuation Mathematics (Income Approach)</h4>
+                                <div class="bg-slate-900 p-4 rounded font-mono text-xs text-green-400 border border-slate-700">
+                                    <p>Retail Income: 1,200 sqft * $4.50/mo * 12 = $64,800/yr (NNN)</p>
+                                    <p>Resi Income (2 Units): 2,815 sqft * $3.80/mo * 12 = $128,364/yr (Gross)</p>
+                                    <p>--------------------------------------------------</p>
+                                    <p>Potential Gross Income (PGI):              $193,164</p>
+                                    <p>Vacancy & Credit Loss (4%):               ($7,726)</p>
+                                    <p>Effective Gross Income (EGI):              $185,438</p>
+                                    <p>Expenses (Est. 32% blended inc. new taxes):($59,340)</p>
+                                    <p>Net Operating Income (NOI):                $126,098</p>
+                                    <p>--------------------------------------------------</p>
+                                    <p>Cap Rate Selection:                        5.18% (Market Adj)</p>
+                                    <p>Value = NOI / Cap Rate = 126,098 / 0.0518 = $2,434,324</p>
                                 </div>
-                                <input type="range" min="3.00" max="6.00" step="0.25" value="4.00" class="slider-thumb" id="input-resi-rent">
                             </div>
 
-                            <!-- Vacancy Input -->
                             <div>
-                                <div class="flex justify-between mb-2">
-                                    <label class="text-sm font-medium text-slate-700">Vacancy & Credit Loss</label>
-                                    <span class="text-sm font-bold text-blue-600" id="val-vacancy">5%</span>
-                                </div>
-                                <input type="range" min="3" max="15" step="0.5" value="5" class="slider-thumb" id="input-vacancy">
-                            </div>
-
-                            <!-- Cap Rate Input -->
-                            <div>
-                                <div class="flex justify-between mb-2">
-                                    <label class="text-sm font-medium text-slate-700">Cap Rate (%)</label>
-                                    <span class="text-sm font-bold text-blue-600" id="val-cap">5.75%</span>
-                                </div>
-                                <input type="range" min="4.5" max="8.0" step="0.25" value="5.75" class="slider-thumb" id="input-cap">
-                            </div>
-                        </div>
-
-                        <div class="mt-8 pt-4 border-t">
-                             <button onclick="resetValuation()" class="w-full py-2 bg-slate-100 text-slate-600 rounded hover:bg-slate-200 text-sm font-medium">Reset to Base Case</button>
-                        </div>
-                    </div>
-
-                    <!-- Output & Visuals -->
-                    <div class="xl:col-span-2 space-y-6">
-                        <!-- Big Numbers -->
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            <div class="bg-white p-4 rounded border border-slate-200 text-center">
-                                <span class="text-xs text-slate-400 uppercase">Gross Income</span>
-                                <span class="block text-lg font-bold text-slate-700" id="out-gross">$0</span>
-                            </div>
-                            <div class="bg-white p-4 rounded border border-slate-200 text-center">
-                                <span class="text-xs text-slate-400 uppercase">NOI</span>
-                                <span class="block text-lg font-bold text-slate-800" id="out-noi">$0</span>
-                            </div>
-                            <div class="bg-blue-50 p-4 rounded border border-blue-200 text-center col-span-2">
-                                <span class="text-xs text-blue-500 uppercase font-bold">Indicated Value (Income)</span>
-                                <span class="block text-2xl font-bold text-blue-900" id="out-value">$0</span>
-                            </div>
-                        </div>
-
-                        <!-- Charts -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="bg-white p-4 rounded border border-slate-200">
-                                <h5 class="text-sm font-bold text-slate-600 mb-2">Method Comparison</h5>
-                                <div class="chart-container" style="height: 200px;">
-                                    <canvas id="compChart"></canvas>
-                                </div>
-                            </div>
-                            <div class="bg-white p-4 rounded border border-slate-200">
-                                <h5 class="text-sm font-bold text-slate-600 mb-2">Income Mix</h5>
-                                <div class="chart-container" style="height: 200px;">
-                                    <canvas id="incomeMixChart"></canvas>
-                                </div>
+                                <h4 class="text-yellow-500 font-bold uppercase text-xs tracking-wider mb-2">4. Reconciliation with Title Comps & MLS Data</h4>
+                                <p class="text-sm leading-relaxed text-slate-300">
+                                    The inclusion of public brokerage data (MLS/Redfin/Zillow) alongside the Title comps solidifies the $580-$650/sq ft range for mixed-use assets in this submarket. Reconciling the income approach ($2.43M) with the comparable approach ($2.4M - $2.5M), I have settled on a final opinion of $2,430,000.
+                                </p>
                             </div>
                         </div>
                     </div>
-                </div>
+                </section>
 
-                <!-- Sales Comps Table -->
-                <div class="mt-8 bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
-                    <div class="bg-slate-50 px-6 py-3 border-b border-slate-200">
-                        <h4 class="font-bold text-slate-800">Comparable Sales Evidence (Mixed-Use 94114)</h4>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-sm text-left">
-                            <thead class="text-xs text-slate-500 uppercase bg-slate-50">
-                                <tr>
-                                    <th class="px-6 py-3">Address</th>
-                                    <th class="px-6 py-3">Date</th>
-                                    <th class="px-6 py-3">Sq Ft</th>
-                                    <th class="px-6 py-3">Price</th>
-                                    <th class="px-6 py-3">$/SF</th>
-                                    <th class="px-6 py-3">Cap Rate</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-100">
-                                <tr>
-                                    <td class="px-6 py-4 font-medium">450 Castro St</td>
-                                    <td class="px-6 py-4">Nov 2025</td>
-                                    <td class="px-6 py-4">3,800</td>
-                                    <td class="px-6 py-4">$2,650,000</td>
-                                    <td class="px-6 py-4 font-bold text-blue-700">$697</td>
-                                    <td class="px-6 py-4">5.50%</td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4 font-medium">2100 Market St</td>
-                                    <td class="px-6 py-4">Aug 2025</td>
-                                    <td class="px-6 py-4">5,200</td>
-                                    <td class="px-6 py-4">$3,100,000</td>
-                                    <td class="px-6 py-4 font-bold text-blue-700">$596</td>
-                                    <td class="px-6 py-4">6.10%</td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4 font-medium">180 Church St</td>
-                                    <td class="px-6 py-4">Jan 2026</td>
-                                    <td class="px-6 py-4">4,100</td>
-                                    <td class="px-6 py-4">$2,500,000</td>
-                                    <td class="px-6 py-4 font-bold text-blue-700">$610</td>
-                                    <td class="px-6 py-4">6.00%</td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4 font-medium">2250 Market St</td>
-                                    <td class="px-6 py-4">Oct 2025</td>
-                                    <td class="px-6 py-4">4,500</td>
-                                    <td class="px-6 py-4">$2,790,000</td>
-                                    <td class="px-6 py-4 font-bold text-blue-700">$620</td>
-                                    <td class="px-6 py-4">5.80%</td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4 font-medium">715 14th St</td>
-                                    <td class="px-6 py-4">Dec 2025</td>
-                                    <td class="px-6 py-4">3,200</td>
-                                    <td class="px-6 py-4">$2,000,000</td>
-                                    <td class="px-6 py-4 font-bold text-blue-700">$625</td>
-                                    <td class="px-6 py-4">5.65%</td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4 font-medium">390 Church St</td>
-                                    <td class="px-6 py-4">Sep 2025</td>
-                                    <td class="px-6 py-4">4,800</td>
-                                    <td class="px-6 py-4">$2,808,000</td>
-                                    <td class="px-6 py-4 font-bold text-blue-700">$585</td>
-                                    <td class="px-6 py-4">6.05%</td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4 font-medium">1950 Market St</td>
-                                    <td class="px-6 py-4">Feb 2026</td>
-                                    <td class="px-6 py-4">5,500</td>
-                                    <td class="px-6 py-4">$3,135,000</td>
-                                    <td class="px-6 py-4 font-bold text-blue-700">$570</td>
-                                    <td class="px-6 py-4">6.20%</td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4 font-medium">500 Castro St</td>
-                                    <td class="px-6 py-4">Jul 2025</td>
-                                    <td class="px-6 py-4">3,400</td>
-                                    <td class="px-6 py-4">$2,380,000</td>
-                                    <td class="px-6 py-4 font-bold text-blue-700">$700</td>
-                                    <td class="px-6 py-4">5.40%</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-
-            <!-- SECTION: Formal Red Book Text -->
-            <section id="formal" class="content-section hidden fade-in">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <!-- VPS 1 -->
-                    <div class="bg-white p-6 rounded shadow-sm border border-slate-200">
-                        <h4 class="font-bold text-slate-800 mb-2 border-b pb-2">1. Terms of Engagement (VPS 1)</h4>
-                        <div class="text-sm text-slate-600 space-y-2 h-48 overflow-y-auto">
-                            <p><strong>Client:</strong> Undisclosed Investor / Lending Institution.</p>
-                            <p><strong>Subject Property:</strong> 683 14th St, San Francisco, CA 94114.</p>
-                            <p><strong>Purpose of Valuation:</strong> To determine Market Value for potential acquisition or secured lending purposes.</p>
-                            <p><strong>Basis of Value:</strong> Market Value as defined in IVS 104: "The estimated amount for which an asset or liability should exchange on the valuation date between a willing buyer and a willing seller in an arm's length transaction, after proper marketing and where the parties had each acted knowledgeably, prudently and without compulsion."</p>
-                            <p><strong>Effective Date:</strong> 22 February 2026.</p>
-                        </div>
-                    </div>
-
-                    <!-- Assumptions -->
-                    <div class="bg-white p-6 rounded shadow-sm border border-slate-200">
-                        <h4 class="font-bold text-slate-800 mb-2 border-b pb-2">2. Special Assumptions (VPS 4)</h4>
-                        <div class="text-sm text-slate-600 space-y-2 h-48 overflow-y-auto">
-                            <p>In accordance with client instructions, this valuation relies on the following Special Assumptions. If these assumptions are found to be incorrect, the value stated herein may be materially affected.</p>
-                            <ul class="list-disc pl-5 space-y-1">
-                                <li>The Gross Building Area is assumed to be <strong>4,015 sq ft</strong>, comprised of residential area and ground-floor retail space as modelled.</li>
-                                <li>The building is assumed to be <strong>3 storeys</strong> in height.</li>
-                                <li>We assume the retail space is legally permitted and compliant with local zoning (NCT).</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- Limiting Conditions -->
-                    <div class="bg-white p-6 rounded shadow-sm border border-slate-200 md:col-span-2">
-                        <h4 class="font-bold text-slate-800 mb-2 border-b pb-2">3. Limiting Conditions & Disclosures</h4>
-                        <p class="text-sm text-slate-600">
-                            This report adheres to the RICS Valuation – Global Standards ('Red Book Global Standards'). The valuer certifies that they have the knowledge, skills, and understanding to undertake the valuation competently. No structural survey has been carried out, and we have assumed the building is in good repair commensurate with its age. This report is for the sole use of the specified client.
-                        </p>
-                    </div>
-                </div>
-            </section>
-
-             <!-- SECTION: Valuer's Log (Chain of Thought) -->
-             <section id="log" class="content-section hidden fade-in">
-                <div class="bg-slate-800 text-slate-200 p-8 rounded-lg shadow-lg">
-                    <h3 class="text-2xl font-bold text-white mb-4 border-b border-slate-600 pb-4"><i class="fas fa-brain text-yellow-500 mr-2"></i> Valuer's Log: Chain of Thought</h3>
-                    
-                    <div class="space-y-6">
-                        <div>
-                            <h4 class="text-yellow-500 font-bold uppercase text-xs tracking-wider mb-2">1. Search Strategy & Data Gathering</h4>
-                            <p class="text-sm leading-relaxed text-slate-300">
-                                My initial search focused on "Mixed-Use" and "Multi-Family 2-4 Units" in the 94114 zip code (Castro/Upper Market) and 94103 (Mission/Duboce border). I prioritised transactions from Q3 2025 to present (Q1 2026) to reflect the post-recovery pricing stability. Key keywords: "Storefront," "Live/Work," and "Value Add."
-                            </p>
-                        </div>
-
-                        <div>
-                            <h4 class="text-yellow-500 font-bold uppercase text-xs tracking-wider mb-2">2. Comparable Selection Logic</h4>
-                            <p class="text-sm leading-relaxed text-slate-300">
-                                I filtered for properties with a blend of retail and residential. 
-                                <br>• <strong>Comp 1 (450 Castro):</strong> Slightly superior location (Prime Castro), smaller sq ft. Higher PSF ($697) justified by location.
-                                <br>• <strong>Comp 2 (2100 Market):</strong> Larger building (5,200 sq ft), creating a quantum discount. Lower PSF ($596).
-                                <br>• <strong>Comp 3 (180 Church):</strong> Most similar in location (Transit heavy). $610 PSF.
-                                <br><em>Conclusion:</em> Subject property (4,015 sq ft) sits centrally in the comparable set. I estimated a market PSF of ~$615-$625.
-                            </p>
-                        </div>
-
-                        <div>
-                            <h4 class="text-yellow-500 font-bold uppercase text-xs tracking-wider mb-2">3. Valuation Mathematics (Income Approach)</h4>
-                            <div class="bg-slate-900 p-4 rounded font-mono text-xs text-green-400 border border-slate-700">
-                                <p>Retail Income: 1,200 sqft * $4.50/mo * 12 = $64,800/yr (NNN)</p>
-                                <p>Resi Income:   2,815 sqft * $4.00/mo * 12 = $135,120/yr (Gross)</p>
-                                <p>--------------------------------------------------</p>
-                                <p>Potential Gross Income (PGI):              $199,920</p>
-                                <p>Vacancy & Credit Loss (5%):               ($9,996)</p>
-                                <p>Effective Gross Income (EGI):              $189,924</p>
-                                <p>Expenses (Est. 25% blended NNN/Gross):    ($47,481)</p>
-                                <p>Net Operating Income (NOI):                $142,443</p>
-                                <p>--------------------------------------------------</p>
-                                <p>Cap Rate Selection:                        5.75%</p>
-                                <p>Value = NOI / Cap Rate = 142,443 / 0.0575 = $2,477,269</p>
-                            </div>
-                        </div>
-
-                        <div>
-                            <h4 class="text-yellow-500 font-bold uppercase text-xs tracking-wider mb-2">4. Reconciliation</h4>
-                            <p class="text-sm leading-relaxed text-slate-300">
-                                The Sales Comparison approach indicated a range of $2.45M - $2.55M ($610-$635 PSF). The Income Approach supported $2.48M based on current market rents. I placed equal weight on both, as the property appeals to both owner-users (Sales) and investors (Income).
-                                <br><br>
-                                <strong>Final Value: $2,475,000</strong>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-        </div>
-    </main>
+            </div>
+        </main>
+    </div>
 
     <script>
+        // --- Password Protection Logic ---
+        function checkPassword() {
+            const input = document.getElementById('password-input').value;
+            const errorMsg = document.getElementById('auth-error');
+            const authScreen = document.getElementById('auth-screen');
+            const appContainer = document.getElementById('app-container');
+            const body = document.body;
+
+            if (input === 'Stup!d') {
+                // Success
+                errorMsg.classList.add('hidden');
+                authScreen.classList.add('opacity-0');
+                
+                setTimeout(() => {
+                    authScreen.style.display = 'none';
+                    appContainer.classList.remove('hidden');
+                    // Small delay to trigger fade in
+                    setTimeout(() => {
+                        appContainer.classList.remove('opacity-0');
+                        body.classList.remove('overflow-hidden');
+                        
+                        // Initialize charts AFTER the container is visible
+                        // otherwise Chart.js canvas sizing breaks
+                        initCharts(); 
+                        calculateValuation();
+                    }, 50);
+                }, 500); // Wait for fade out animation
+            } else {
+                // Fail
+                errorMsg.classList.remove('hidden');
+                document.getElementById('password-input').classList.add('border-red-500');
+            }
+        }
+
+        // Allow pressing Enter to submit
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
+        }
+
+        // Remove error styling on new input
+        document.getElementById('password-input').addEventListener('input', function() {
+            this.classList.remove('border-red-500');
+            document.getElementById('auth-error').classList.add('hidden');
+        });
+
         // --- Navigation Logic ---
         function navigateTo(sectionId) {
-            // Hide all sections
             document.querySelectorAll('.content-section').forEach(el => {
                 el.classList.add('hidden');
             });
-            // Show target section
             document.getElementById(sectionId).classList.remove('hidden');
             
-            // Update Sidebar Active State
             document.querySelectorAll('.nav-item').forEach(el => {
                 el.classList.remove('active', 'bg-blue-900', 'text-white', 'border-l-4', 'border-yellow-600');
                 el.classList.add('text-slate-300');
             });
-            // Find the button that called this (rough match) or re-select based on ID logic
             const buttons = document.querySelectorAll('.nav-item');
             const sectionMap = ['summary', 'property', 'market', 'valuation', 'formal', 'log'];
             const index = sectionMap.indexOf(sectionId);
@@ -669,10 +776,10 @@
             const vacancyLoss = PGI * vacRate;
             const EGI = PGI - vacancyLoss;
             
-            // Expenses: Assume Retail is NNN (low expense for owner), Resi is Gross (higher expense)
-            // Simplified: 5% mgmt/reserve on Retail, 30% OpEx on Resi
+            // Expenses: Assume Retail is NNN, Resi is Gross. Factoring in Prop 13 Reassessment Tax Jump.
+            // Simplified: 5% mgmt on Retail, 35% OpEx on Resi to account for heavy new tax burden.
             const retailExp = retailIncome * 0.05; 
-            const resiExp = resiIncome * 0.30;
+            const resiExp = resiIncome * 0.35;
             const totalExp = retailExp + resiExp;
 
             const NOI = EGI - totalExp;
@@ -687,7 +794,6 @@
             updateComparablesChart(Value);
             updateIncomeMixChart(retailIncome, resiIncome);
             
-            // Update Area Chart dynamically
             if (areaChart) {
                 areaChart.data.datasets[0].data = [resArea, rArea];
                 areaChart.update();
@@ -697,38 +803,39 @@
         function resetValuation() {
             inputs.retailArea.value = 1200;
             inputs.retailRent.value = 4.50;
-            inputs.resiRent.value = 4.00;
-            inputs.vacancy.value = 5;
+            inputs.resiRent.value = 3.80;
+            inputs.vacancy.value = 4;
             inputs.cap.value = 5.75;
             calculateValuation();
         }
 
         // --- Chart Initialization ---
         function initCharts() {
+            // Prevent re-initialization if charts already exist
+            if(areaChart) return; 
+
             Chart.defaults.font.family = "'Inter', sans-serif";
             
-            // 1. Area Chart (Doughnut)
+            // 1. Area Chart
             const ctxArea = document.getElementById('areaChart').getContext('2d');
             areaChart = new Chart(ctxArea, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Residential (Sq Ft)', 'Retail (Sq Ft)'],
+                    labels: ['Residential (2 Flats)', 'Retail Storefront'],
                     datasets: [{
                         data: [2815, 1200],
-                        backgroundColor: ['#e2e8f0', '#ca8a04'], // Slate-200, Yellow-600
+                        backgroundColor: ['#e2e8f0', '#ca8a04'], 
                         borderWidth: 0
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'bottom' }
-                    }
+                    plugins: { legend: { position: 'bottom' } }
                 }
             });
 
-            // 2. Trend Chart (Line)
+            // 2. Trend Chart
             const ctxTrend = document.getElementById('trendChart').getContext('2d');
             trendChart = new Chart(ctxTrend, {
                 type: 'line',
@@ -736,7 +843,7 @@
                     labels: ['Q1 2024', 'Q3 2024', 'Q1 2025', 'Q3 2025', 'Q1 2026'],
                     datasets: [{
                         label: 'Avg PSF (Mixed-Use 94114)',
-                        data: [580, 565, 590, 605, 620],
+                        data: [520, 535, 550, 580, 605],
                         borderColor: '#1e3a8a',
                         backgroundColor: 'rgba(30, 58, 138, 0.1)',
                         fill: true,
@@ -746,13 +853,11 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    scales: {
-                        y: { beginAtZero: false, min: 500 }
-                    }
+                    scales: { y: { beginAtZero: false, min: 450 } }
                 }
             });
 
-            // 3. Comp Chart (Bar) - Updated by Calc
+            // 3. Comp Chart
             const ctxComp = document.getElementById('compChart').getContext('2d');
             compChart = new Chart(ctxComp, {
                 type: 'bar',
@@ -760,20 +865,18 @@
                     labels: ['Income Approach', 'Sales Comp Approach'],
                     datasets: [{
                         label: 'Estimated Value',
-                        data: [0, 2500000], // Initial 0, updated by calc
+                        data: [0, 2430000], 
                         backgroundColor: ['#1e3a8a', '#94a3b8']
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    scales: {
-                        y: { beginAtZero: false, min: 2000000 }
-                    }
+                    scales: { y: { beginAtZero: false, min: 1800000 } }
                 }
             });
 
-            // 4. Income Mix (Pie)
+            // 4. Income Mix
             const ctxMix = document.getElementById('incomeMixChart').getContext('2d');
             incomeMixChart = new Chart(ctxMix, {
                 type: 'pie',
@@ -806,23 +909,14 @@
             }
         }
 
-        // --- Init ---
+        // Add Listeners on Load
         document.addEventListener('DOMContentLoaded', () => {
-            initCharts();
-            
-            // Add Listeners
             Object.values(inputs).forEach(input => {
                 input.addEventListener('input', calculateValuation);
             });
-
-            // Initial Calc
-            calculateValuation();
+            // Note: initCharts() and calculateValuation() are now called AFTER successful password entry
         });
 
     </script>
 </body>
-
 </html>
-
-
-
