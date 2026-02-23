@@ -7,6 +7,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <!-- Add Leaflet Map Library -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Serif+HK:wght@400;700&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
     
@@ -410,10 +413,10 @@
                                     <span class="en-text">Valuer's Commentary</span><span class="zh-text">估值師點評</span>
                                 </h4>
                                 <p class="text-xs md:text-sm text-blue-800 leading-relaxed en-text">
-                                    "Analysis of the 14 comps reveals a sharp divergence in pricing. Demised condos/flats trade at a severe premium ($900-$1,300/sf). The subject is a non-demised, unified 3-storey building. Therefore, we heavily weight the Multi-Family and unified structure comparables (e.g., Church St and Landers St) which establish the $600-$630/sf pricing baseline for this asset class."
+                                    "Analysis of the comps reveals a sharp divergence in pricing. Demised condos/flats trade at a severe premium ($900-$1,300/sf). The subject is a non-demised, unified 3-storey building. Therefore, we heavily weight the Multi-Family and unified structure comparables (e.g., Church St and Landers St) which establish the $600-$630/sf pricing baseline for this asset class."
                                 </p>
                                 <p class="text-xs md:text-sm text-blue-800 leading-relaxed zh-text">
-                                    「分析14個可比物業後發現定價呈兩極分化。已分契的公寓/單位溢價極高 ($900-$1,300/呎)。目標物業為單一業權的三層建築。因此，我們在加權時重注於多戶型及單一結構的可比物業（如 Church St 及 Landers St），為此類資產確立了 $600-$630/呎 的定價基準。」
+                                    「分析可比物業後發現定價呈兩極分化。已分契的公寓/單位溢價極高 ($900-$1,300/呎)。目標物業為單一業權的三層建築。因此，我們在加權時重注於多戶型及單一結構的可比物業（如 Church St 及 Landers St），為此類資產確立了 $600-$630/呎 的定價基準。」
                                 </p>
                             </div>
                         </div>
@@ -430,22 +433,31 @@
                             </span>
                         </div>
                         <div class="overflow-x-auto max-h-[500px] overflow-y-auto relative">
-                            <table class="w-full text-xs md:text-sm text-left min-w-[700px]">
-                                <thead class="text-[10px] md:text-xs text-slate-500 uppercase bg-slate-100 sticky top-0 shadow-sm z-10 border-b border-slate-200">
+                            <table class="w-full text-xs md:text-sm text-left min-w-max" id="latest-tx-table">
+                                <thead id="latest-tx-head" class="text-[10px] md:text-xs text-slate-500 uppercase bg-slate-100 sticky top-0 shadow-sm z-10 border-b border-slate-200">
                                     <tr>
-                                        <th class="px-4 md:px-6 py-3"><span class="en-text">Address</span><span class="zh-text">物業地址</span></th>
-                                        <th class="px-4 md:px-6 py-3"><span class="en-text">Sold Date</span><span class="zh-text">成交日期</span></th>
-                                        <th class="px-4 md:px-6 py-3"><span class="en-text">Price</span><span class="zh-text">成交價</span></th>
-                                        <th class="px-4 md:px-6 py-3"><span class="en-text">SqFt</span><span class="zh-text">平方呎</span></th>
-                                        <th class="px-4 md:px-6 py-3"><span class="en-text">$/SqFt</span><span class="zh-text">呎價</span></th>
-                                        <th class="px-4 md:px-6 py-3"><span class="en-text">Type</span><span class="zh-text">物業類型</span></th>
+                                        <th class="px-4 md:px-6 py-3"><span class="en-text">Loading headers...</span><span class="zh-text">載入中...</span></th>
                                     </tr>
                                 </thead>
                                 <tbody id="latest-tx-body" class="divide-y divide-slate-100">
-                                    <tr><td colspan="6" class="p-6 text-center text-slate-400"><i class="fas fa-spinner fa-spin mr-2"></i>Loading data...</td></tr>
+                                    <tr><td class="p-6 text-center text-slate-400"><i class="fas fa-spinner fa-spin mr-2"></i>Loading data...</td></tr>
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+
+                    <!-- COMPARABLE LOCATIONS MAP -->
+                    <div class="mt-6 md:mt-8 bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
+                        <div class="bg-slate-50 px-4 md:px-6 py-3 border-b border-slate-200 flex justify-between items-center gap-2">
+                            <h4 class="font-bold text-slate-800 text-sm md:text-base">
+                                <span class="en-text">Comparable Locations Map</span><span class="zh-text">可比較物業位置圖</span>
+                            </h4>
+                            <span class="text-[10px] md:text-xs bg-white border border-slate-200 px-2 py-1 rounded text-slate-500 self-start sm:self-auto text-center font-medium">
+                                <span class="en-text">Filtered Data Points</span><span class="zh-text">已篩選數據點</span>
+                            </span>
+                        </div>
+                        <!-- Map Container -->
+                        <div id="comps-map" style="height: 350px; width: 100%; z-index: 1;"></div>
                     </div>
                 </section>
 
@@ -455,8 +467,8 @@
                         <h3 class="text-lg md:text-xl font-bold text-slate-800 serif-font">
                             <span class="en-text">Valuation Approaches</span><span class="zh-text">估值方法</span>
                         </h3>
-                        <p class="text-sm md:text-base text-slate-600 mt-2 en-text">Two primary methods were utilised: The Investment Method (Income Capitalisation) and the Comparable Method. Use the interactive model below to test sensitivity.</p>
-                        <p class="text-sm md:text-base text-slate-600 mt-2 zh-text">我們主要採用了兩種方法：收益資本化法 (Investment Method) 及 銷售比較法 (Comparable Method)。您可以使用下方的互動模型來測試數值的敏感度。</p>
+                        <p class="text-sm md:text-base text-slate-600 mt-2 en-text">The primary method utilised is the Investment Method (Income Capitalisation), supported by Sales Comparables. Use the interactive model below to test sensitivity.</p>
+                        <p class="text-sm md:text-base text-slate-600 mt-2 zh-text">主要採用的方法為收益資本化法 (Investment Method)，並以銷售比較法作支持。您可以使用下方的互動模型來測試數值的敏感度。</p>
                     </div>
 
                     <!-- Interactive Valuation Tool -->
@@ -651,10 +663,10 @@
                                     <span class="en-text">1. Configuration & The "Demised Premium"</span><span class="zh-text">1. 單位配置與「分契溢價」</span>
                                 </h4>
                                 <p class="text-xs md:text-sm leading-relaxed text-slate-300 en-text">
-                                    The dataset highlights a severe pricing bifurcation in the 94114 market. Individually demised Condo/Flat units (e.g., 8 Landers St, 35 Dolores St, 639 14th St) command massive premiums, routinely trading between $900 - $1,300 per sq ft. The subject property, however, is a unified 3-storey structure. As such, these condo comps must be heavily discounted or excluded.
+                                    The dataset highlights a severe pricing bifurcation in the 94114 market. Individually demised Condo/Flat units command massive premiums, routinely trading between $900 - $1,300 per sq ft. The subject property, however, is a unified 3-storey structure. As such, these condo comps must be heavily discounted or excluded.
                                 </p>
                                 <p class="text-xs md:text-sm leading-relaxed text-slate-300 zh-text">
-                                    數據庫顯示 94114 市場的定價出現嚴重兩極化。獨立分契的公寓/單位（如 8 Landers St, 35 Dolores St 等）享有極高的溢價，常以每平方呎 $900 至 $1,300 美元成交。然而，目標物業為一棟統一的三層建築。因此，這些公寓可比數據必須大幅折讓或剔除。
+                                    數據庫顯示 94114 市場的定價出現嚴重兩極化。獨立分契的公寓/單位享有極高的溢價，常以每平方呎 $900 至 $1,300 美元成交。然而，目標物業為一棟統一的三層建築。因此，這些公寓可比數據必須大幅折讓或剔除。
                                 </p>
                             </div>
 
@@ -663,10 +675,10 @@
                                     <span class="en-text">2. Identifying the Golden Comps</span><span class="zh-text">2. 鎖定「黃金可比交易」</span>
                                 </h4>
                                 <p class="text-xs md:text-sm leading-relaxed text-slate-300 en-text">
-                                    The most directly relevant sales are the Multi-Family / Unified blocks. <strong>178-180 Church St</strong> serves as the anchor comparable: it is nearly identical in size (4,100 sq ft vs our 4,015 sq ft) and traded at $609/sf. <strong>32 Landers St</strong> (2,600 sq ft) confirms this baseline at $625/sf. 726-732 14th St ($244/sf) was noted but discounted due to extreme size variance (7,168 sq ft). Applying these weights, I establish a baseline value of <strong>$605/sf</strong> for the subject property.
+                                    The most directly relevant sales are the Multi-Family / Unified blocks. <strong>178-180 Church St</strong> serves as the anchor comparable: it is nearly identical in size (4,100 sq ft vs our 4,015 sq ft) and traded at $609/sf. <strong>32 Landers St</strong> (2,600 sq ft) confirms this baseline at $625/sf. Applying these weights, I establish a baseline value of <strong>$605/sf</strong> for the subject property.
                                 </p>
                                 <p class="text-xs md:text-sm leading-relaxed text-slate-300 zh-text">
-                                    最直接相關的銷售數據是多戶型/統一建築。<strong>178-180 Church St</strong> 作為核心可比物業：其面積與目標物業幾乎相同（4,100 平方呎 vs 4,015 平方呎），成交價為 $609/呎。<strong>32 Landers St</strong> (2,600 平方呎) 以 $625/呎 的價格確認了這個基準。726-732 14th St ($244/呎) 由於面積過大 (7,168 平方呎) 故作折讓。綜合加權後，我將目標物業的基準價值定為 <strong>$605/呎</strong>。
+                                    最直接相關的銷售數據是多戶型/統一建築。<strong>178-180 Church St</strong> 作為核心可比物業：其面積與目標物業幾乎相同（4,100 平方呎 vs 4,015 平方呎），成交價為 $609/呎。<strong>32 Landers St</strong> (2,600 平方呎) 以 $625/呎 的價格確認了這個基準。綜合加權後，我將目標物業的基準價值定為 <strong>$605/呎</strong>。
                                 </p>
                             </div>
 
@@ -713,9 +725,7 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
         </main>
     </div>
 
-    <!-- ================================================================= -->
-    <!-- FALLBACK RAW CSV DATA INJECTION ZONE                              -->
-    <!-- ================================================================= -->
+    <!-- FALLBACK RAW CSV DATA -->
     <script>
         const rawCSVData = `Property Location,Transaction Price,Transaction Date,Property Size,Price psf,Property Type,Beds,Floor,Conditions,Zoning,Land Use,
 "639 14th St, San Francisco, CA 94114",1350639,2025-11-26,1500,900.426,Flat (Condo),2,Top floor,Built 1945; refurbished,Residential,Residential (Flat),https://www.zillow.com/homedetails/639-14th-St-San-Francisco-CA-94114/64971521_zpid/
@@ -733,12 +743,36 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
 "2154 Market St APT A, San Francisco, CA 94114",1330000,2025-05-14,1097,1212.3974475843208,Flat (Condo),2,1st floor,Built 1880; old,Residential,Residential (Flat),https://www.zillow.com/homedetails/2154-Market-St-APT-A-San-Francisco-CA-94114/241586221_zpid/
 "1950 15th St, San Francisco, CA 94114",1685000,2025-11-17,1553,1084.9967804249839,Flat (Condo),3,1st floor,Built 1900; refurbished,Residential,Residential (Flat),https://www.zillow.com/homedetails/1950-15th-St-San-Francisco-CA-94114/184817449_zpid/`;
     </script>
-    <!-- ================================================================= -->
 
     <script>
         function parseAndRenderData(csvText) {
             const isZh = document.body.getAttribute('data-lang') === 'zh';
             
+            // Translation dictionary for dynamic CSV columns
+            const translationDict = {
+                'Property Location': '物業地址',
+                'Street Address': '物業地址',
+                'Unit #': '單位',
+                'Transaction Price': '成交價',
+                'Sold Price ($)': '成交價',
+                'Transaction Date': '成交日期',
+                'Sold Date': '成交日期',
+                'Property Size': '平方呎',
+                'SqFt': '平方呎',
+                'Price psf': '呎價',
+                'Price/SqFt ($)': '呎價',
+                'Property Type': '物業類型',
+                'Beds': '房間',
+                'Baths': '浴室',
+                'Floor': '樓層',
+                'Conditions': '狀況',
+                'Zoning': '分區',
+                'Land Use': '用途',
+                'Latitude': '緯度',
+                'Longitude': '經度',
+                'URL': '連結'
+            };
+
             Papa.parse(csvText, {
                 header: true,
                 skipEmptyLines: true,
@@ -822,7 +856,22 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
                         }
                     });
 
-                    // Populate HTML Table
+                    // Dynamic Headers (Filter out Latitude and Longitude)
+                    let fields = results.meta.fields.filter(f => {
+                        if(!f || f.trim() === '') return false;
+                        let upper = f.toUpperCase();
+                        return upper !== 'LATITUDE' && upper !== 'LONGITUDE';
+                    });
+                    
+                    let theadHtml = '<tr>';
+                    fields.forEach(field => {
+                        let zhText = translationDict[field] || field;
+                        theadHtml += `<th class="px-4 md:px-6 py-3 whitespace-nowrap"><span class="en-text">${field}</span><span class="zh-text">${zhText}</span></th>`;
+                    });
+                    theadHtml += '</tr>';
+                    document.getElementById('latest-tx-head').innerHTML = theadHtml;
+
+                    // Populate HTML Table (already filtered above)
                     let tableData = [...data].sort((a,b) => {
                         let dateA = new Date(a['Sold Date'] || a['Transaction Date']);
                         let dateB = new Date(b['Sold Date'] || b['Transaction Date']);
@@ -833,37 +882,81 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
                     tbody.innerHTML = ''; 
                     
                     if (tableData.length === 0) {
-                        tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-500 italic">No transactions match the selected filters. / 沒有符合篩選條件的交易。</td></tr>`;
+                        tbody.innerHTML = `<tr><td colspan="${fields.length}" class="p-6 text-center text-slate-500 italic">No transactions match the selected filters. / 沒有符合篩選條件的交易。</td></tr>`;
                     } else {
                         tableData.forEach(row => {
-                            let address = row['Property Location'] || row['Street Address'];
-                            let unit = row['Unit #'] && row['Unit #'] !== 'null' && row['Unit #'] !== 'None' ? ` ${row['Unit #']}` : '';
-                            let typeText = row['Property Type'] ? row['Property Type'].replace('_', ' ') : '-';
+                            let trHtml = '<tr class="hover:bg-slate-50 transition-colors">';
                             
-                            let price = row['Transaction Price'] || row['Sold Price ($)'];
-                            let priceText = price ? `$${price.toLocaleString()}` : '-';
+                            fields.forEach(field => {
+                                let val = row[field];
+                                let displayVal = val;
+                                
+                                if (val === null || val === undefined || val === '') {
+                                    displayVal = '-';
+                                } else if (field.toUpperCase() === 'URL' || String(val).startsWith('http')) {
+                                    displayVal = `<a href="${val}" target="_blank" class="text-blue-600 hover:text-blue-800"><i class="fas fa-external-link-alt"></i></a>`;
+                                } else if ((field.includes('Price') && !field.includes('psf') && !field.includes('SqFt')) || field === 'Sold Price ($)' || field === 'Transaction Price') {
+                                    displayVal = `$${parseFloat(val).toLocaleString()}`;
+                                } else if (field.includes('psf') || field.includes('Price/SqFt')) {
+                                    displayVal = `$${Math.round(parseFloat(val)).toLocaleString()}`;
+                                } else if (field === 'SqFt' || field === 'Property Size') {
+                                    displayVal = parseFloat(val).toLocaleString();
+                                } else if (field.includes('Date')) {
+                                    displayVal = String(val).split('T')[0].split(' ')[0];
+                                } else if (field === 'Property Location' || field === 'Street Address') {
+                                    displayVal = String(val).replace(', San Francisco, CA 94114', '').replace(', San Francisco, CA 94103', '').replace(/"/g, '');
+                                } else if (field === 'Property Type') {
+                                    displayVal = String(val).replace(/_/g, ' ');
+                                }
+                                
+                                trHtml += `<td class="px-4 md:px-6 py-3 text-slate-700 whitespace-nowrap">${displayVal}</td>`;
+                            });
                             
-                            let sqft = row['Property Size'] || row['SqFt'];
-                            let sqftText = sqft ? sqft.toLocaleString() : '-';
-                            
-                            let psf = row['Price psf'] || row['Price/SqFt ($)'];
-                            let psqftText = psf ? `$${Math.round(psf).toLocaleString()}` : '-';
-                            
-                            let rDate = row['Transaction Date'] || row['Sold Date'];
-
-                            let cleanAddress = String(address).replace(', San Francisco, CA 94114', '').replace(', San Francisco, CA 94103', '').replace(/"/g, '');
-
-                            tbody.innerHTML += `
-                                <tr class="hover:bg-slate-50 transition-colors">
-                                    <td class="px-4 md:px-6 py-3 font-medium text-slate-800">${cleanAddress}${unit}</td>
-                                    <td class="px-4 md:px-6 py-3 text-slate-500">${String(rDate).split('T')[0].split(' ')[0]}</td>
-                                    <td class="px-4 md:px-6 py-3 text-slate-800">${priceText}</td>
-                                    <td class="px-4 md:px-6 py-3 text-slate-600">${sqftText}</td>
-                                    <td class="px-4 md:px-6 py-3 font-bold text-blue-700">${psqftText}</td>
-                                    <td class="px-4 md:px-6 py-3 text-[10px] md:text-xs text-slate-500">${typeText}</td>
-                                </tr>
-                            `;
+                            trHtml += '</tr>';
+                            tbody.innerHTML += trHtml;
                         });
+                    }
+
+                    // --- Render Map ---
+                    if (!window.map) {
+                        window.map = L.map('comps-map').setView([37.764, -122.433], 14); // Default SF Castro/Upper Market
+                        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                            attribution: '&copy; OpenStreetMap contributors & CARTO'
+                        }).addTo(window.map);
+                        markersLayer = L.featureGroup().addTo(window.map);
+                    } else {
+                        markersLayer.clearLayers();
+                    }
+
+                    let hasValidCoords = false;
+
+                    tableData.forEach(row => {
+                        let lat = parseFloat(row['Latitude']);
+                        let lon = parseFloat(row['Longitude']);
+                        
+                        if (!isNaN(lat) && !isNaN(lon)) {
+                            hasValidCoords = true;
+                            let address = row['Property Location'] || row['Street Address'];
+                            let cleanAddress = String(address).replace(', San Francisco, CA 94114', '').replace(', San Francisco, CA 94103', '').replace(/"/g, '');
+                            let price = row['Transaction Price'] || row['Sold Price ($)'];
+                            let priceText = price ? `$${parseFloat(price).toLocaleString()}` : 'N/A';
+                            let psf = row['Price psf'] || row['Price/SqFt ($)'];
+                            let psqftText = psf ? `$${Math.round(parseFloat(psf)).toLocaleString()}/sqft` : '';
+                            
+                            let popupContent = `<div style="font-family:'Inter', sans-serif;">
+                                <strong style="color:#1e293b;">${cleanAddress}</strong><br>
+                                <span style="color:#64748b;">Price: ${priceText}</span><br>
+                                <span style="color:#1e3a8a; font-weight:600;">${psqftText}</span>
+                            </div>`;
+                            
+                            let marker = L.marker([lat, lon]).bindPopup(popupContent);
+                            markersLayer.addLayer(marker);
+                        }
+                    });
+
+                    // Auto-zoom map to fit all markers
+                    if (hasValidCoords) {
+                        window.map.fitBounds(markersLayer.getBounds(), { padding: [30, 30], maxZoom: 16 });
                     }
                 }
             });
@@ -886,7 +979,6 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
                 });
         }
 
-        // --- Other Setup Code Maintained Below ---
         function toggleMobileMenu() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('mobile-overlay');
@@ -981,9 +1073,15 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
                     toggleMobileMenu();
                 }
             }
+            
+            // Fix map rendering issue when container is initially hidden
+            if (sectionId === 'market' && window.map) {
+                setTimeout(() => { window.map.invalidateSize(); }, 100);
+            }
         }
 
         let areaChart, trendChart, compChart, incomeMixChart;
+        let map, markersLayer;
 
         const inputs = {
             retailArea: document.getElementById('input-retail-area'),
