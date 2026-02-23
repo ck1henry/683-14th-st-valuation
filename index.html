@@ -94,7 +94,7 @@
         }
     </style>
 </head>
-<body class="overflow-hidden" data-lang="en">
+<body class="overflow-hidden" data-lang="zh">
 
     <!-- PASSWORD AUTHENTICATION SCREEN -->
     <div id="auth-screen" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/90 transition-opacity duration-500 p-4">
@@ -154,10 +154,10 @@
                     <li><button onclick="navigateTo('property')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3"><i class="fas fa-building w-5 text-center"></i> 
                         <span class="en-text">Property Profile</span><span class="zh-text">物業概況</span>
                     </button></li>
-                    <li><button onclick="navigateTo('market')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3"><i class="fas fa-chart-line w-5 text-center"></i> 
+                    <li><button onclick="navigateTo('market')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3 font-medium bg-slate-800/40"><i class="fas fa-chart-line w-5 text-center text-blue-400 drop-shadow-md"></i> 
                         <span class="en-text">Market Analysis</span><span class="zh-text">市場分析</span>
                     </button></li>
-                    <li><button onclick="navigateTo('valuation')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3"><i class="fas fa-calculator w-5 text-center"></i> 
+                    <li><button onclick="navigateTo('valuation')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3 font-medium bg-slate-800/40"><i class="fas fa-calculator w-5 text-center text-blue-400 drop-shadow-md"></i> 
                         <span class="en-text">Valuation Modelling</span><span class="zh-text">估值模型</span>
                     </button></li>
                     <li><button onclick="navigateTo('formal')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3"><i class="fas fa-balance-scale w-5 text-center"></i> 
@@ -430,7 +430,7 @@
                                 <span class="en-text">Latest Transactions in Local Market</span><span class="zh-text">本地市場最新成交紀錄</span>
                             </h4>
                             <span class="text-[10px] md:text-xs bg-white border border-slate-200 px-2 py-1 rounded text-slate-500 self-start sm:self-auto text-center font-medium text-blue-700">
-                                <span class="en-text">Base Filter: $400-$1000/sf</span><span class="zh-text">基本篩選: $400-$1000/呎</span>
+                                <span class="en-text">Filtered: Multi/Single Family, $400-$1000/sf</span><span class="zh-text">已篩選：多戶型及獨立屋, $400-$1000/呎</span>
                             </span>
                         </div>
                         
@@ -487,6 +487,29 @@
                         </h3>
                         <p class="text-sm md:text-base text-slate-600 mt-2 en-text">The primary method utilised is the Investment Method (Income Capitalisation), supported by Sales Comparables. Use the interactive model below to test sensitivity.</p>
                         <p class="text-sm md:text-base text-slate-600 mt-2 zh-text">主要採用的方法為收益資本化法 (Investment Method)，並以銷售比較法作支持。您可以使用下方的互動模型來測試數值的敏感度。</p>
+                        
+                        <!-- NEW USER GUIDE -->
+                        <div class="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4 text-xs md:text-sm text-blue-800 shadow-sm">
+                            <h4 class="font-bold mb-2 flex items-center gap-2">
+                                <i class="fas fa-info-circle text-blue-600"></i>
+                                <span class="en-text">How to Use This Model</span>
+                                <span class="zh-text">模型使用指南</span>
+                            </h4>
+                            <ul class="list-disc pl-5 space-y-1.5">
+                                <li>
+                                    <span class="en-text"><strong>Adjust Assumptions:</strong> Use the sliders on the left to modify retail area, expected rents, vacancy rates, and the capitalization rate.</span>
+                                    <span class="zh-text"><strong>調整假設：</strong>使用左側滑桿微調商舖面積、預期租金、空置率及回報率。</span>
+                                </li>
+                                <li>
+                                    <span class="en-text"><strong>Real-time Calculation:</strong> The Income Approach (NOI ÷ Cap Rate) will instantly recalculate and update the charts based on your inputs.</span>
+                                    <span class="zh-text"><strong>即時計算：</strong>收益法估值 (淨營運收入 ÷ 資本化率) 將根據您的輸入即時重新計算並更新圖表。</span>
+                                </li>
+                                <li>
+                                    <span class="en-text"><strong>Sales Comp Benchmark:</strong> Adjust the "Sales Comp ($/SF)" slider to compare your income-based valuation against a theoretical sales-based benchmark in the chart.</span>
+                                    <span class="zh-text"><strong>比較基準：</strong>調整「比較法 (美元/呎)」滑桿，即可喺圖表中將收益法估值與理論上嘅銷售基準進行對比。</span>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
 
                     <!-- Interactive Valuation Tool -->
@@ -502,6 +525,17 @@
                             </p>
                             
                             <div class="space-y-5 md:space-y-6">
+                                <!-- SALES COMP INPUT -->
+                                <div>
+                                    <div class="flex justify-between mb-2">
+                                        <label class="text-xs md:text-sm font-medium text-slate-700">
+                                            <span class="en-text">Sales Comp ($/SF)</span><span class="zh-text">比較法 (美元/呎)</span>
+                                        </label>
+                                        <span class="text-xs md:text-sm font-bold text-blue-600" id="val-comp-psf">$605.00</span>
+                                    </div>
+                                    <input type="range" min="400" max="1000" step="1" value="605" class="slider-thumb" id="input-comp-psf">
+                                </div>
+                            
                                 <div>
                                     <div class="flex justify-between mb-2">
                                         <label class="text-xs md:text-sm font-medium text-slate-700">
@@ -509,7 +543,8 @@
                                         </label>
                                         <span class="text-xs md:text-sm font-bold text-blue-600" id="val-retail-area">1,200 sq ft</span>
                                     </div>
-                                    <input type="range" min="600" max="2000" step="50" value="1200" class="slider-thumb" id="input-retail-area">
+                                    <!-- Reduced step to 10 for area -->
+                                    <input type="range" min="600" max="2000" step="10" value="1200" class="slider-thumb" id="input-retail-area">
                                 </div>
 
                                 <div>
@@ -519,7 +554,8 @@
                                         </label>
                                         <span class="text-xs md:text-sm font-bold text-blue-600" id="val-retail-rent">$4.50</span>
                                     </div>
-                                    <input type="range" min="3.00" max="7.00" step="0.25" value="4.50" class="slider-thumb" id="input-retail-rent">
+                                    <!-- Reduced step to 0.05 for dollar related items -->
+                                    <input type="range" min="3.00" max="7.00" step="0.05" value="4.50" class="slider-thumb" id="input-retail-rent">
                                 </div>
 
                                 <div>
@@ -529,7 +565,8 @@
                                         </label>
                                         <span class="text-xs md:text-sm font-bold text-blue-600" id="val-resi-rent">$4.00</span>
                                     </div>
-                                    <input type="range" min="2.00" max="6.00" step="0.10" value="4.00" class="slider-thumb" id="input-resi-rent">
+                                    <!-- Reduced step to 0.05 for dollar related items -->
+                                    <input type="range" min="2.00" max="6.00" step="0.05" value="4.00" class="slider-thumb" id="input-resi-rent">
                                 </div>
 
                                 <div>
@@ -537,9 +574,10 @@
                                         <label class="text-xs md:text-sm font-medium text-slate-700">
                                             <span class="en-text">Vacancy & Credit Loss</span><span class="zh-text">空置及壞帳損失率</span>
                                         </label>
-                                        <span class="text-xs md:text-sm font-bold text-blue-600" id="val-vacancy">5%</span>
+                                        <span class="text-xs md:text-sm font-bold text-blue-600" id="val-vacancy">5.00%</span>
                                     </div>
-                                    <input type="range" min="2" max="15" step="0.5" value="5" class="slider-thumb" id="input-vacancy">
+                                    <!-- Reduced step to 0.05% for percentages -->
+                                    <input type="range" min="2" max="15" step="0.05" value="5" class="slider-thumb" id="input-vacancy">
                                 </div>
 
                                 <div>
@@ -549,7 +587,8 @@
                                         </label>
                                         <span class="text-xs md:text-sm font-bold text-blue-600" id="val-cap">5.75%</span>
                                     </div>
-                                    <input type="range" min="4.5" max="8.0" step="0.25" value="5.75" class="slider-thumb" id="input-cap">
+                                    <!-- Reduced step to 0.05% for percentages -->
+                                    <input type="range" min="4.5" max="8.0" step="0.05" value="5.75" class="slider-thumb" id="input-cap">
                                 </div>
                             </div>
 
@@ -1007,7 +1046,6 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
                 'Conditions': '狀況',
                 'Zoning': '分區',
                 'Land Use': '用途',
-                'Distance (mi)': '距離 (英里)',
                 'URL': '連結'
             };
 
@@ -1132,11 +1170,11 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
                         }
                     });
 
-                    // Build table headers dynamically
+                    // Build table headers dynamically (Filtering out Distance completely)
                     window.tableFields = results.meta.fields.filter(f => {
                         if(!f || f.trim() === '') return false;
                         let upper = f.toUpperCase();
-                        return upper !== 'LATITUDE' && upper !== 'LONGITUDE' && upper !== 'UNIT #';
+                        return upper !== 'LATITUDE' && upper !== 'LONGITUDE' && upper !== 'UNIT #' && upper !== 'DISTANCE (MI)';
                     });
                     
                     let theadHtml = '<tr>';
@@ -1279,13 +1317,15 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
         }
 
         let areaChart, trendChart, compChart, incomeMixChart;
+        let markersLayer;
 
         const inputs = {
             retailArea: document.getElementById('input-retail-area'),
             retailRent: document.getElementById('input-retail-rent'),
             resiRent: document.getElementById('input-resi-rent'),
             vacancy: document.getElementById('input-vacancy'),
-            cap: document.getElementById('input-cap')
+            cap: document.getElementById('input-cap'),
+            compPsf: document.getElementById('input-comp-psf')
         };
 
         const displays = {
@@ -1296,6 +1336,7 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
             resiRent: document.getElementById('val-resi-rent'),
             vacancy: document.getElementById('val-vacancy'),
             cap: document.getElementById('val-cap'),
+            compPsf: document.getElementById('val-comp-psf'),
             gross: document.getElementById('out-gross'),
             noi: document.getElementById('out-noi'),
             value: document.getElementById('out-value')
@@ -1310,6 +1351,7 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
             const resRent = parseFloat(inputs.resiRent.value);
             const vacRate = parseFloat(inputs.vacancy.value) / 100;
             const capRate = parseFloat(inputs.cap.value) / 100;
+            const compPsfVal = parseFloat(inputs.compPsf.value);
 
             const sqftLabel = 'sq ft';
             
@@ -1318,8 +1360,9 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
             if (displays.displayRetailArea) displays.displayRetailArea.innerText = `${rArea.toLocaleString()} ${sqftLabel}`;
             displays.retailRent.innerText = `$${rRent.toFixed(2)}`;
             displays.resiRent.innerText = `$${resRent.toFixed(2)}`;
-            displays.vacancy.innerText = `${inputs.vacancy.value}%`;
-            displays.cap.innerText = `${inputs.cap.value}%`;
+            displays.vacancy.innerText = `${parseFloat(inputs.vacancy.value).toFixed(2)}%`;
+            displays.cap.innerText = `${parseFloat(inputs.cap.value).toFixed(2)}%`;
+            if (displays.compPsf) displays.compPsf.innerText = `$${compPsfVal.toFixed(2)}`;
 
             const retailIncome = rArea * rRent * 12;
             const resiIncome = resArea * resRent * 12;
@@ -1333,13 +1376,14 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
             const totalExp = retailExp + resiExp;
 
             const NOI = EGI - totalExp;
-            const Value = NOI / capRate;
+            const incomeValue = NOI / capRate;
+            const compValue = compPsfVal * totalAreaFixed;
 
             displays.gross.innerText = `$${PGI.toLocaleString(undefined, {maximumFractionDigits: 0})}`;
             displays.noi.innerText = `$${NOI.toLocaleString(undefined, {maximumFractionDigits: 0})}`;
-            displays.value.innerText = `$${Value.toLocaleString(undefined, {maximumFractionDigits: 0})}`;
+            displays.value.innerText = `$${incomeValue.toLocaleString(undefined, {maximumFractionDigits: 0})}`;
 
-            updateComparablesChart(Value);
+            updateComparablesChart(incomeValue, compValue);
             updateIncomeMixChart(retailIncome, resiIncome);
             
             if (areaChart) {
@@ -1354,6 +1398,7 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
             inputs.resiRent.value = 4.00;
             inputs.vacancy.value = 5;
             inputs.cap.value = 5.75;
+            if (inputs.compPsf) inputs.compPsf.value = 605;
             calculateValuation();
         }
 
@@ -1387,7 +1432,7 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
                     labels: isZh ? ['收益法', '比較法'] : ['Income Method', 'Sales Comp'],
                     datasets: [{
                         label: isZh ? '估值 (美元)' : 'Estimated Value ($)',
-                        data: [0, 2430000], 
+                        data: [0, 0], 
                         backgroundColor: ['#1e3a8a', '#94a3b8']
                     }]
                 },
@@ -1418,9 +1463,12 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
             });
         }
 
-        function updateComparablesChart(incomeValue) {
+        function updateComparablesChart(incomeValue, compValue) {
             if (compChart) {
                 compChart.data.datasets[0].data[0] = incomeValue;
+                if (compValue !== undefined) {
+                    compChart.data.datasets[0].data[1] = compValue;
+                }
                 compChart.update();
             }
         }
@@ -1434,7 +1482,9 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
 
         document.addEventListener('DOMContentLoaded', () => {
             Object.values(inputs).forEach(input => {
-                input.addEventListener('input', calculateValuation);
+                if (input) {
+                    input.addEventListener('input', calculateValuation);
+                }
             });
         });
 
