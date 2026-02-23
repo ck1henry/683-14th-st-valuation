@@ -777,6 +777,28 @@
 
                             <div>
                                 <h4 class="text-yellow-500 font-bold uppercase text-[10px] md:text-xs tracking-wider mb-2">
+                                    <span class="en-text">2. Triangulating the $580/SF Sales Baseline</span><span class="zh-text">2. 鎖定 $580/平方呎 之銷售基準</span>
+                                </h4>
+                                <p class="text-xs md:text-sm leading-relaxed text-slate-300 en-text">
+                                    The $580/sq ft baseline for the Sales Comparison Approach is completely independent of the income value. It is derived by triangulating three highly relevant multi-family/unified structure transactions:
+                                    <br><br>
+                                    • <strong>178-180 Church St</strong> (4,100 sq ft) traded at $609/sf. It is remarkably similar in size but in superior condition, requiring a ~5% downward adjustment.<br>
+                                    • <strong>32 Landers St</strong> (2,600 sq ft) traded at $625/sf. It benefits from a quantum premium (smaller size) and better condition, requiring a ~7% downward adjustment.<br>
+                                    • <strong>167 Dolores St</strong> (4,896 sq ft) traded at $449/sf. It transacted in a highly distressed state, necessitating a significant ~29% upward condition adjustment to equalise it to the subject's profile.<br><br>
+                                    This matrix provides a remarkably tight grouping, robustly anchoring our sales baseline at <strong>$580 per sq ft</strong>.
+                                </p>
+                                <p class="text-xs md:text-sm leading-relaxed text-slate-300 zh-text">
+                                    銷售比較法的 $580/平方呎 基準完全獨立於收益估值。該數值乃透過三宗高度相關的多戶型/單一建築交易作交叉比對得出：
+                                    <br><br>
+                                    • <strong>178-180 Church St</strong> (4,100 平方呎) 成交價為 $609/呎。其面積極為相似但狀況較佳，需作出約 5% 的向下折讓。<br>
+                                    • <strong>32 Landers St</strong> (2,600 平方呎) 成交價為 $625/呎。因面積較小享有規模溢價且狀況較佳，需作出約 7% 的向下折讓。<br>
+                                    • <strong>167 Dolores St</strong> (4,896 平方呎) 成交價為 $449/呎。成交時狀況極度殘舊，需要約 29% 的向上狀況調整以拉近與目標物業的差距。<br><br>
+                                    此分析矩陣形成了一個極為緊密的區間，有力地將我們的銷售基準鎖定在 <strong>$580/平方呎</strong>。
+                                </p>
+                            </div>
+
+                            <div>
+                                <h4 class="text-yellow-500 font-bold uppercase text-[10px] md:text-xs tracking-wider mb-2">
                                     <span class="en-text">3. Valuation Mathematics & Reconciliation</span><span class="zh-text">3. 估值數學運算與最終核對</span>
                                 </h4>
                                 <div class="bg-slate-900 p-3 md:p-4 rounded font-mono text-[10px] md:text-xs text-green-400 border border-slate-700 en-text overflow-x-auto">
@@ -1176,10 +1198,10 @@ RECONCILED AVERAGE OPINION OF VALUE:        $2,340,000 (Rounded)</pre>
         }
 
         function processCSVAndRender() {
-            fetch('data.csv')
+            fetch('https://raw.githubusercontent.com/ck1henry/683-14th-st-valuation/main/data.csv')
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error("Local CSV file not found, falling back to embedded");
+                        throw new Error("GitHub CSV file not found, falling back to embedded");
                     }
                     return response.text();
                 })
