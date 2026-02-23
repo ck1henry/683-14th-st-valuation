@@ -360,14 +360,14 @@
                         <h3 class="text-lg md:text-xl font-bold text-slate-800 serif-font">
                             <span class="en-text">Local Market Analysis: 2026 Outlook</span><span class="zh-text">本地市場分析：2026年展望</span>
                         </h3>
-                        <p class="text-sm md:text-base text-slate-600 mt-2 en-text">The Upper Market/Castro submarket has shown resilience. Data below is populated dynamically from recent automated script pulls.</p>
-                        <p class="text-sm md:text-base text-slate-600 mt-2 zh-text">Upper Market / Castro 子市場展現了良好的韌性。以下數據是根據近期的自動化腳本提取動態生成的。</p>
+                        <p class="text-sm md:text-base text-slate-600 mt-2 en-text">The local submarket has shown resilience. Data below is populated dynamically from recent automated script pulls across the broader area.</p>
+                        <p class="text-sm md:text-base text-slate-600 mt-2 zh-text">本地子市場展現了良好的韌性。以下數據是根據近期的自動化腳本從周邊地區提取動態生成的。</p>
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
                         <div class="bg-white p-4 md:p-6 rounded-lg shadow-sm border border-slate-200">
                             <h4 class="font-bold text-slate-700 mb-4 text-sm md:text-base">
-                                <span class="en-text">7-Day Moving Average ($/Sq Ft) - 94114</span><span class="zh-text">7天移動平均呎價 (郵編 94114)</span>
+                                <span class="en-text">7-Day Moving Average ($/Sq Ft) - Local Market</span><span class="zh-text">7天移動平均呎價 (本地市場)</span>
                             </h4>
                             <div class="chart-container">
                                 <canvas id="trendChart"></canvas>
@@ -386,7 +386,7 @@
                                     <div>
                                         <div class="flex justify-between text-xs md:text-sm mb-1.5">
                                             <span class="text-slate-600">
-                                                <span class="en-text">Retail Vacancy Rate (Upper Market)</span><span class="zh-text">商舖空置率 (Upper Market)</span>
+                                                <span class="en-text">Retail Vacancy Rate (Local Submarket)</span><span class="zh-text">商舖空置率 (本地市場)</span>
                                             </span>
                                             <span class="font-semibold">8.5%</span>
                                         </div>
@@ -413,26 +413,26 @@
                                     <span class="en-text">Valuer's Commentary</span><span class="zh-text">估值師點評</span>
                                 </h4>
                                 <p class="text-xs md:text-sm text-blue-800 leading-relaxed en-text">
-                                    "Analysis of the comps reveals a sharp divergence in pricing. Demised condos/flats trade at a severe premium ($900-$1,300/sf). The subject is a non-demised, unified 3-storey building. Therefore, we heavily weight the Multi-Family and unified structure comparables (e.g., Church St and Landers St) which establish the $600-$630/sf pricing baseline for this asset class."
+                                    "Analysis of the broader local submarket reveals a sharp divergence in pricing. Demised condos/flats trade at a severe premium ($900-$1,300/sf). The subject is a non-demised, unified 3-storey building. Therefore, we heavily weight the Multi-Family and unified structure comparables which establish the $600-$630/sf pricing baseline for this asset class."
                                 </p>
                                 <p class="text-xs md:text-sm text-blue-800 leading-relaxed zh-text">
-                                    「分析可比物業後發現定價呈兩極分化。已分契的公寓/單位溢價極高 ($900-$1,300/呎)。目標物業為單一業權的三層建築。因此，我們在加權時重注於多戶型及單一結構的可比物業（如 Church St 及 Landers St），為此類資產確立了 $600-$630/呎 的定價基準。」
+                                    「分析更廣泛的本地子市場後發現定價呈兩極分化。已分契的公寓/單位溢價極高 ($900-$1,300/呎)。目標物業為單一業權的三層建築。因此，我們在加權時重注於多戶型及單一結構的可比物業，為此類資產確立了 $600-$630/呎 的定價基準。」
                                 </p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- LATEST TRANSACTIONS DATA TABLE (Populated from CSV) -->
+                    <!-- LATEST TRANSACTIONS DATA TABLE -->
                     <div class="mt-6 md:mt-8 bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
                         <div class="bg-slate-50 px-4 md:px-6 py-3 border-b border-slate-200 flex flex-col sm:flex-row justify-between sm:items-center gap-2">
                             <h4 class="font-bold text-slate-800 text-sm md:text-base">
-                                <span class="en-text">Latest Transactions in 94114</span><span class="zh-text">94114區最新成交紀錄</span>
+                                <span class="en-text">Latest Transactions in Local Market</span><span class="zh-text">本地市場最新成交紀錄</span>
                             </h4>
                             <span class="text-[10px] md:text-xs bg-white border border-slate-200 px-2 py-1 rounded text-slate-500 self-start sm:self-auto text-center font-medium text-blue-700">
                                 <span class="en-text">Filtered: Multi-Family, 2k-6k sqft, $400-$1000/sf</span><span class="zh-text">已篩選：多戶型, 2000-6000呎, $400-$1000/呎</span>
                             </span>
                         </div>
-                        <div class="overflow-x-auto max-h-[500px] overflow-y-auto relative">
+                        <div class="overflow-x-auto max-h-[400px] overflow-y-auto relative">
                             <table class="w-full text-xs md:text-sm text-left min-w-max" id="latest-tx-table">
                                 <thead id="latest-tx-head" class="text-[10px] md:text-xs text-slate-500 uppercase bg-slate-100 sticky top-0 shadow-sm z-10 border-b border-slate-200">
                                     <tr>
@@ -453,10 +453,11 @@
                                 <span class="en-text">Comparable Locations Map</span><span class="zh-text">可比較物業位置圖</span>
                             </h4>
                             <span class="text-[10px] md:text-xs bg-white border border-slate-200 px-2 py-1 rounded text-slate-500 self-start sm:self-auto text-center font-medium">
-                                <span class="en-text">Filtered Data Points</span><span class="zh-text">已篩選數據點</span>
+                                <span class="en-text">Interactive: Click markers or table rows to highlight</span><span class="zh-text">互動：點擊地圖或表格以高亮顯示</span>
                             </span>
                         </div>
-                        <div id="comps-map" style="height: 350px; width: 100%; z-index: 1;"></div>
+                        <!-- Map Container -->
+                        <div id="comps-map" style="height: 400px; width: 100%; z-index: 1;"></div>
                     </div>
                 </section>
 
@@ -662,10 +663,10 @@
                                     <span class="en-text">1. Configuration & The "Demised Premium"</span><span class="zh-text">1. 單位配置與「分契溢價」</span>
                                 </h4>
                                 <p class="text-xs md:text-sm leading-relaxed text-slate-300 en-text">
-                                    The dataset highlights a severe pricing bifurcation in the 94114 market. Individually demised Condo/Flat units command massive premiums, routinely trading between $900 - $1,300 per sq ft. The subject property, however, is a unified 3-storey structure. As such, these condo comps must be heavily discounted or excluded.
+                                    The dataset highlights a severe pricing bifurcation in the broader market. Individually demised Condo/Flat units command massive premiums, routinely trading between $900 - $1,300 per sq ft. The subject property, however, is a unified 3-storey structure. As such, these condo comps must be heavily discounted or excluded.
                                 </p>
                                 <p class="text-xs md:text-sm leading-relaxed text-slate-300 zh-text">
-                                    數據庫顯示 94114 市場的定價出現嚴重兩極化。獨立分契的公寓/單位享有極高的溢價，常以每平方呎 $900 至 $1,300 美元成交。然而，目標物業為一棟統一的三層建築。因此，這些公寓可比數據必須大幅折讓或剔除。
+                                    數據庫顯示本地市場的定價出現嚴重兩極化。獨立分契的公寓/單位享有極高的溢價，常以每平方呎 $900 至 $1,300 美元成交。然而，目標物業為一棟統一的三層建築。因此，這些公寓可比數據必須大幅折讓或剔除。
                                 </p>
                             </div>
 
@@ -724,22 +725,51 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
         </main>
     </div>
 
+    <!-- GLOBALS FOR MAP AND INTERACTION -->
     <script>
-        const rawCSVData = `Property Location,Transaction Price,Transaction Date,Property Size,Price psf,Property Type,Beds,Floor,Conditions,Zoning,Land Use,Latitude,Longitude,URL
-"639 14th St, San Francisco, CA 94114",1350639,2025-11-26,1500,900.426,Flat (Condo),2,Top floor,Built 1945; refurbished,Residential,Residential (Flat),37.7675,-122.4282,https://www.zillow.com/homedetails/639-14th-St-San-Francisco-CA-94114/64971521_zpid/
-"8 Landers St UNIT 301, San Francisco, CA 94114",1575000,2025-09-03,1227,1283.6185819070904,Flat (Condo),2,3rd floor,Built 2006; refurbished,Residential,Residential (Flat),37.7668,-122.4279,https://www.zillow.com/homedetails/8-Landers-St-UNIT-301-San-Francisco-CA-94114/79841578_zpid/
-"8 Landers St UNIT 204, San Francisco, CA 94114",1500000,2025-06-13,1199,1251.0425354462052,Flat (Condo),2,2nd floor,Built 2006; refurbished,Residential,Residential (Flat),37.7668,-122.4279,https://www.zillow.com/homedetails/8-Landers-St-UNIT-204-San-Francisco-CA-94114/79841441_zpid/
-"107 Dolores St, San Francisco, CA 94103",1530000,2024-03-22,1682,909.6313912009513,Flat (Condo),3,1st floor,Built 1999; old,Residential,Residential (Flat),37.7678,-122.4259,https://www.zillow.com/homedetails/107-Dolores-St-San-Francisco-CA-94103/2060193686_zpid/
-"178-180 Church St, San Francisco, CA 94114",2500000,2025-02-26,4100,609.7560975609756,Multi-Family,5,3 storeys,Built 1900; old,Commercial,Mixed Use,37.7671,-122.4290,https://www.zillow.com/homedetails/178-180-Church-St-San-Francisco-CA-94114/2055851807_zpid/
-"32 Landers St, San Francisco, CA 94114",1625000,2025-01-31,2600,625.0,Multi-Family,5,3 storeys,Built 1900; old,Residential,Residential (Multi Family),37.7664,-122.4278,https://www.zillow.com/homedetails/32-Landers-St-San-Francisco-CA-94114/332859027_zpid/
-"35 Dolores St APT 306, San Francisco, CA 94103",880000,2025-10-31,831,1058.9651022864019,Flat (Condo),1,3rd floor,Built 2013; fair,Residential,Residential (Flat),37.7684,-122.4257,https://www.zillow.com/homedetails/35-Dolores-St-APT-306-San-Francisco-CA-94103/124397701_zpid/
-"35 Dolores St APT 409, San Francisco, CA 94103",1150000,2025-02-14,1083,1061.865189289012,Flat (Condo),2,4th floor,Built 2013; fair,Residential,Residential (Flat),37.7684,-122.4257,https://www.zillow.com/homedetails/35-Dolores-St-APT-409-San-Francisco-CA-94103/124397937_zpid/
-"35 Dolores St APT 108, San Francisco, CA 94103",1020000,2024-05-15,936,1089.7435897435898,Flat (Condo),2,1st floor,Built 2013; fair,Residential,Residential (Flat),37.7684,-122.4257,https://www.zillow.com/homedetails/35-Dolores-St-APT-108-San-Francisco-CA-94103/124397970_zpid/
-"35 Dolores St APT 201, San Francisco, CA 94103",1090000,2024-03-22,1078,1011.1317254174397,Flat (Condo),2,2nd floor,Built 2013; fair,Residential,Residential (Flat),37.7684,-122.4257,https://www.zillow.com/homedetails/35-Dolores-St-APT-201-San-Francisco-CA-94103/124398058_zpid/
-"31 Landers St, San Francisco, CA 94114",2500000,2024-12-09,2525,990.0990099009901,Single Family,3,3 storeys,Built 1900; refurbished,Residential,Residential,37.7665,-122.4275,https://www.zillow.com/homedetails/31-Landers-St-San-Francisco-CA-94114/2099934384_zpid/
-"726-732 14th St, San Francisco, CA 94114",1750000,2023-12-07,7168,244.140625,Multi-Family,7,3 storeys,Built 1906; old,Residential,Residential,37.7672,-122.4300,https://www.zillow.com/homedetails/726-732-14th-St-San-Francisco-CA-94114/2055777419_zpid/
-"2154 Market St APT A, San Francisco, CA 94114",1330000,2025-05-14,1097,1212.3974475843208,Flat (Condo),2,1st floor,Built 1880; old,Residential,Residential (Flat),37.7666,-122.4299,https://www.zillow.com/homedetails/2154-Market-St-APT-A-San-Francisco-CA-94114/241586221_zpid/
-"1950 15th St, San Francisco, CA 94114",1685000,2025-11-17,1553,1084.9967804249839,Flat (Condo),3,1st floor,Built 1900; refurbished,Residential,Residential (Flat),37.7656,-122.4291,https://www.zillow.com/homedetails/1950-15th-St-San-Francisco-CA-94114/184817449_zpid/`;
+        window.subjectLat = 37.7675;
+        window.subjectLon = -122.4282;
+        window.compMarkers = {}; // Stores leaflet markers by index
+        
+        // Handles highlighting a table row
+        window.highlightTableRow = function(index) {
+            // Remove highlight from all
+            document.querySelectorAll('#latest-tx-body tr').forEach(tr => {
+                tr.classList.remove('bg-blue-100', 'border-blue-500');
+                tr.classList.add('hover:bg-slate-50', 'border-transparent');
+            });
+            // Add highlight to target
+            let targetRow = document.getElementById(`tx-row-${index}`);
+            if (targetRow) {
+                targetRow.classList.remove('hover:bg-slate-50', 'border-transparent');
+                targetRow.classList.add('bg-blue-100', 'border-blue-500');
+                targetRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        };
+
+        // Handles clicks from the table rows
+        window.handleDealClick = function(index) {
+            window.highlightTableRow(index);
+            let deal = window.compMarkers[index];
+            if (deal && window.map) {
+                deal.marker.openPopup();
+                // Ensure the map shows BOTH the clicked marker and the subject property
+                let bounds = L.latLngBounds([window.subjectLat, window.subjectLon], [deal.lat, deal.lon]);
+                window.map.fitBounds(bounds, { padding: [50, 50], maxZoom: 16 });
+            }
+        };
+    </script>
+
+    <!-- FALLBACK RAW CSV DATA -->
+    <script>
+        const rawCSVData = `Street Address,Unit #,Latitude,Longitude,Sold Price ($),Sold Date,SqFt,Price/SqFt ($),Property Type,Beds,Baths,Distance (mi),URL
+1950 15th St,,37.76639,-122.42788,1685000.0,2025-11-17,1553.0,1085.0,CONDO,3.0,2.0,0.05,https://www.zillow.com/homedetails/1950-15th-St-San-Francisco-CA-94114/184817449_zpid/
+66-70 Landers St,,37.76674,-122.428085,1400000.0,2025-05-27,4800.0,291.67,MULTI_FAMILY,6.0,7.0,0.06,https://www.zillow.com/homedetails/66-70-Landers-St-San-Francisco-CA-94114/332859030_zpid/
+130 Landers St APT F,Apt F,37.765743,-122.4279,1433000.0,2025-10-03,1145.0,1251.53,CONDO,2.0,2.0,0.1,https://www.zillow.com/homedetails/130-Landers-St-APT-F-San-Francisco-CA-94114/15124116_zpid/
+178-180 Church St,,37.7671,-122.4290,2500000.0,2025-02-26,4100.0,609.76,MULTI_FAMILY,5.0,0.0,0.12,https://www.zillow.com/homedetails/178-180-Church-St-San-Francisco-CA-94114/2055851807_zpid/
+32 Landers St,,37.7664,-122.4278,1625000.0,2025-01-31,2600.0,625.0,MULTI_FAMILY,5.0,0.0,0.08,https://www.zillow.com/homedetails/32-Landers-St-San-Francisco-CA-94114/332859027_zpid/
+35 Dolores St APT 306,,37.7684,-122.4257,880000.0,2025-10-31,831.0,1058.97,CONDO,1.0,1.0,0.15,https://www.zillow.com/homedetails/35-Dolores-St-APT-306-San-Francisco-CA-94103/124397701_zpid/
+31 Landers St,,37.7665,-122.4275,2500000.0,2024-12-09,2525.0,990.1,SINGLE_FAMILY,3.0,3.0,0.09,https://www.zillow.com/homedetails/31-Landers-St-San-Francisco-CA-94114/2099934384_zpid/`;
     </script>
 
     <script>
@@ -765,6 +795,7 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
                 'Conditions': '狀況',
                 'Zoning': '分區',
                 'Land Use': '用途',
+                'Distance (mi)': '距離 (英里)',
                 'Latitude': '緯度',
                 'Longitude': '經度',
                 'URL': '連結'
@@ -776,7 +807,6 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
                 dynamicTyping: true,
                 complete: function(results) {
                     
-                    // Filter at the root level so BOTH charts and maps reflect it
                     let data = results.data.filter(row => {
                         const dte = row['Sold Date'] || row['Transaction Date'];
                         const psf = row['Price/SqFt ($)'] || row['Price psf'];
@@ -812,7 +842,6 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
                     let chartLabels = [];
                     let maData = [];
                     
-                    // Moving Average
                     for(let i=0; i<sortedDates.length; i++) {
                         let startIdx = Math.max(0, i-6); 
                         let sum = 0;
@@ -826,7 +855,6 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
                         maData.push((sum/count).toFixed(2));
                     }
                     
-                    // Render Dynamic Chart
                     const ctxTrend = document.getElementById('trendChart').getContext('2d');
                     trendChart = new Chart(ctxTrend, {
                         type: 'line',
@@ -854,7 +882,6 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
                         }
                     });
 
-                    // Dynamic Headers (Filter out Latitude and Longitude)
                     let fields = results.meta.fields.filter(f => {
                         if(!f || f.trim() === '') return false;
                         let upper = f.toUpperCase();
@@ -869,7 +896,6 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
                     theadHtml += '</tr>';
                     document.getElementById('latest-tx-head').innerHTML = theadHtml;
 
-                    // Populate HTML Table (Sorted Descending)
                     let tableData = [...data].sort((a,b) => {
                         let dateA = new Date(a['Sold Date'] || a['Transaction Date']);
                         let dateB = new Date(b['Sold Date'] || b['Transaction Date']);
@@ -878,12 +904,38 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
                     
                     let tbody = document.getElementById('latest-tx-body');
                     tbody.innerHTML = ''; 
+                    window.compMarkers = {}; // Reset global markers dictionary
                     
+                    // --- Initialise Map BEFORE Loop ---
+                    if (!window.map) {
+                        window.map = L.map('comps-map').setView([window.subjectLat, window.subjectLon], 14); 
+                        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                            attribution: '&copy; OpenStreetMap contributors & CARTO'
+                        }).addTo(window.map);
+                        markersLayer = L.featureGroup().addTo(window.map);
+                    } else {
+                        markersLayer.clearLayers();
+                    }
+
+                    const subjectIcon = L.divIcon({
+                        className: 'custom-subject-icon',
+                        html: '<div style="background-color: #ca8a04; width: 24px; height: 24px; border-radius: 50%; border: 3px solid #1e3a8a; box-shadow: 0 4px 6px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;"><div style="background-color: #fff; width: 8px; height: 8px; border-radius: 50%;"></div></div>',
+                        iconSize: [24, 24],
+                        iconAnchor: [12, 12]
+                    });
+                    
+                    L.marker([window.subjectLat, window.subjectLon], { icon: subjectIcon, zIndexOffset: 1000 })
+                        .bindPopup('<div style="font-family:\'Inter\', sans-serif;"><strong style="color:#ca8a04;">Subject Property / 目標物業</strong><br><span style="color:#1e293b;">681-685 14th St</span></div>')
+                        .addTo(markersLayer);
+
+                    let hasValidCoords = false;
+
                     if (tableData.length === 0) {
                         tbody.innerHTML = `<tr><td colspan="${fields.length}" class="p-6 text-center text-slate-500 italic">No transactions match the selected filters. / 沒有符合篩選條件的交易。</td></tr>`;
                     } else {
-                        tableData.forEach(row => {
-                            let trHtml = '<tr class="hover:bg-slate-50 transition-colors">';
+                        tableData.forEach((row, index) => {
+                            // GENERATE TABLE ROW HTML
+                            let trHtml = `<tr id="tx-row-${index}" class="hover:bg-slate-50 transition-colors cursor-pointer border-l-4 border-transparent" onclick="handleDealClick(${index})">`;
                             
                             fields.forEach(field => {
                                 let val = row[field];
@@ -912,66 +964,50 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
                             
                             trHtml += '</tr>';
                             tbody.innerHTML += trHtml;
+
+                            // GENERATE MAP MARKER
+                            let lat = parseFloat(row['Latitude']);
+                            let lon = parseFloat(row['Longitude']);
+                            
+                            if (!isNaN(lat) && !isNaN(lon)) {
+                                hasValidCoords = true;
+                                let address = row['Property Location'] || row['Street Address'];
+                                let cleanAddress = String(address).replace(', San Francisco, CA 94114', '').replace(', San Francisco, CA 94103', '').replace(/"/g, '');
+                                let price = row['Transaction Price'] || row['Sold Price ($)'];
+                                let priceText = price ? `$${parseFloat(price).toLocaleString()}` : 'N/A';
+                                let psf = row['Price psf'] || row['Price/SqFt ($)'];
+                                let psqftText = psf ? `$${Math.round(parseFloat(psf)).toLocaleString()}/sqft` : '';
+                                
+                                let popupContent = `<div style="font-family:'Inter', sans-serif;">
+                                    <strong style="color:#1e293b;">${cleanAddress}</strong><br>
+                                    <span style="color:#64748b;">Price: ${priceText}</span><br>
+                                    <span style="color:#1e3a8a; font-weight:600;">${psqftText}</span>
+                                </div>`;
+                                
+                                let compMarker = L.circleMarker([lat, lon], {
+                                    radius: 8,
+                                    fillColor: "#1e3a8a",
+                                    color: "#ffffff",
+                                    weight: 2,
+                                    opacity: 1,
+                                    fillOpacity: 0.85
+                                }).bindPopup(popupContent);
+                                
+                                // Bind Map Marker click to highlight Table Row
+                                compMarker.on('click', function() {
+                                    window.highlightTableRow(index);
+                                });
+                                
+                                markersLayer.addLayer(compMarker);
+                                window.compMarkers[index] = { marker: compMarker, lat: lat, lon: lon };
+                            }
                         });
                     }
 
-                    // --- Render Map ---
-                    const subjectLat = 37.7675;
-                    const subjectLon = -122.4282;
-
-                    if (!window.map) {
-                        window.map = L.map('comps-map').setView([subjectLat, subjectLon], 15); 
-                        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-                            attribution: '&copy; OpenStreetMap contributors & CARTO'
-                        }).addTo(window.map);
-                        markersLayer = L.featureGroup().addTo(window.map);
-
-                        const subjectIcon = L.divIcon({
-                            className: 'custom-subject-icon',
-                            html: '<div style="background-color: #ca8a04; width: 24px; height: 24px; border-radius: 50%; border: 3px solid #1e3a8a; box-shadow: 0 4px 6px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;"><div style="background-color: #fff; width: 8px; height: 8px; border-radius: 50%;"></div></div>',
-                            iconSize: [24, 24],
-                            iconAnchor: [12, 12]
-                        });
-                        
-                        L.marker([subjectLat, subjectLon], { icon: subjectIcon, zIndexOffset: 1000 })
-                            .bindPopup('<div style="font-family:\'Inter\', sans-serif;"><strong style="color:#ca8a04;">Subject Property / 目標物業</strong><br><span style="color:#1e293b;">681-685 14th St</span></div>')
-                            .addTo(window.map);
-
-                    } else {
-                        markersLayer.clearLayers();
-                        window.map.setView([subjectLat, subjectLon], 15);
+                    // Auto-zoom map to fit all markers (including the subject property)
+                    if (hasValidCoords && markersLayer.getBounds().isValid()) {
+                        window.map.fitBounds(markersLayer.getBounds(), { padding: [30, 30], maxZoom: 15 });
                     }
-
-                    tableData.forEach(row => {
-                        let lat = parseFloat(row['Latitude']);
-                        let lon = parseFloat(row['Longitude']);
-                        
-                        if (!isNaN(lat) && !isNaN(lon)) {
-                            let address = row['Property Location'] || row['Street Address'];
-                            let cleanAddress = String(address).replace(', San Francisco, CA 94114', '').replace(', San Francisco, CA 94103', '').replace(/"/g, '');
-                            let price = row['Transaction Price'] || row['Sold Price ($)'];
-                            let priceText = price ? `$${parseFloat(price).toLocaleString()}` : 'N/A';
-                            let psf = row['Price psf'] || row['Price/SqFt ($)'];
-                            let psqftText = psf ? `$${Math.round(parseFloat(psf)).toLocaleString()}/sqft` : '';
-                            
-                            let popupContent = `<div style="font-family:'Inter', sans-serif;">
-                                <strong style="color:#1e293b;">${cleanAddress}</strong><br>
-                                <span style="color:#64748b;">Price: ${priceText}</span><br>
-                                <span style="color:#1e3a8a; font-weight:600;">${psqftText}</span>
-                            </div>`;
-                            
-                            let compMarker = L.circleMarker([lat, lon], {
-                                radius: 8,
-                                fillColor: "#1e3a8a",
-                                color: "#ffffff",
-                                weight: 2,
-                                opacity: 1,
-                                fillOpacity: 0.85
-                            }).bindPopup(popupContent);
-                            
-                            markersLayer.addLayer(compMarker);
-                        }
-                    });
                 }
             });
         }
@@ -1094,7 +1130,7 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
         }
 
         let areaChart, trendChart, compChart, incomeMixChart;
-        let map, markersLayer;
+        let markersLayer;
 
         const inputs = {
             retailArea: document.getElementById('input-retail-area'),
