@@ -497,56 +497,53 @@
                             </h4>
                             <ul class="list-disc pl-5 space-y-1.5">
                                 <li>
-                                    <span class="en-text"><strong>Adjust Assumptions:</strong> Use the sliders on the left to modify retail area, expected rents, vacancy rates, and the capitalization rate.</span>
-                                    <span class="zh-text"><strong>調整假設：</strong>使用左側滑桿微調商舖面積、預期租金、空置率及回報率。</span>
+                                    <span class="en-text"><strong>Adjust Assumptions:</strong> Use the sliders to modify area, expected rents, vacancy rates, cap rate, and comparable PSF.</span>
+                                    <span class="zh-text"><strong>調整假設：</strong>使用滑桿微調面積、預期租金、空置率、回報率及比較法呎價。</span>
                                 </li>
                                 <li>
-                                    <span class="en-text"><strong>Real-time Calculation:</strong> The Income Approach (NOI ÷ Cap Rate) will instantly recalculate and update the charts based on your inputs.</span>
-                                    <span class="zh-text"><strong>即時計算：</strong>收益法估值 (淨營運收入 ÷ 資本化率) 將根據您的輸入即時重新計算並更新圖表。</span>
-                                </li>
-                                <li>
-                                    <span class="en-text"><strong>Sales Comp Benchmark:</strong> Adjust the "Sales Comp ($/SF)" slider to compare your income-based valuation against a theoretical sales-based benchmark in the chart.</span>
-                                    <span class="zh-text"><strong>比較基準：</strong>調整「比較法 (美元/呎)」滑桿，即可喺圖表中將收益法估值與理論上嘅銷售基準進行對比。</span>
+                                    <span class="en-text"><strong>Real-time Calculation:</strong> Both approaches will instantly recalculate and update the final average.</span>
+                                    <span class="zh-text"><strong>即時計算：</strong>兩種估值方法將根據您的輸入即時重新計算並更新最終平均值。</span>
                                 </li>
                             </ul>
                         </div>
                     </div>
 
-                    <!-- Interactive Valuation Tool -->
-                    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 md:gap-8">
-                        
-                        <div class="bg-white p-5 md:p-6 rounded-lg shadow-sm border border-slate-200 xl:col-span-1">
-                            <h4 class="font-bold text-slate-800 mb-3 md:mb-4 flex items-center gap-2 text-sm md:text-base">
-                                <i class="fas fa-sliders-h text-blue-600"></i> 
-                                <span class="en-text">Investment Assumptions</span><span class="zh-text">投資假設調整</span>
-                            </h4>
-                            <p class="text-[10px] md:text-xs text-slate-500 mb-5 md:mb-6">
-                                <span class="en-text">Adjust inputs to see impact on Valuation.</span><span class="zh-text">滑動調整參數以查看對估值的影響。</span>
-                            </p>
-                            
-                            <div class="space-y-5 md:space-y-6">
-                                <!-- SALES COMP INPUT -->
-                                <div>
-                                    <div class="flex justify-between mb-2">
-                                        <label class="text-xs md:text-sm font-medium text-slate-700">
-                                            <span class="en-text">Sales Comp ($/SF)</span><span class="zh-text">比較法 (美元/呎)</span>
-                                        </label>
-                                        <span class="text-xs md:text-sm font-bold text-blue-600" id="val-comp-psf">$605.00</span>
-                                    </div>
-                                    <input type="range" min="400" max="1000" step="1" value="605" class="slider-thumb" id="input-comp-psf">
-                                </div>
-                            
-                                <div>
-                                    <div class="flex justify-between mb-2">
-                                        <label class="text-xs md:text-sm font-medium text-slate-700">
-                                            <span class="en-text">Retail Area (sq ft)</span><span class="zh-text">商舖面積 (平方呎)</span>
-                                        </label>
-                                        <span class="text-xs md:text-sm font-bold text-blue-600" id="val-retail-area">1,200 sq ft</span>
-                                    </div>
-                                    <!-- Reduced step to 10 for area -->
-                                    <input type="range" min="600" max="2000" step="10" value="1200" class="slider-thumb" id="input-retail-area">
-                                </div>
+                    <!-- TOP RETAIL AREA CONTROL -->
+                    <div class="bg-white p-5 md:p-6 rounded-lg shadow-sm border border-slate-200 mb-6">
+                        <div class="flex justify-between items-end mb-2">
+                            <div>
+                                <h4 class="font-bold text-slate-800 text-sm md:text-base flex items-center gap-2">
+                                    <i class="fas fa-ruler-combined text-blue-600"></i>
+                                    <span class="en-text">Space Allocation</span><span class="zh-text">空間分配</span>
+                                </h4>
+                                <p class="text-[10px] md:text-xs text-slate-500 mt-1">
+                                    <span class="en-text">Total usable area is fixed at 4,015 sq ft.</span><span class="zh-text">總實用面積固定為 4,015 平方呎。</span>
+                                </p>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-[10px] md:text-xs font-medium text-slate-500 block uppercase">
+                                    <span class="en-text">Retail Area</span><span class="zh-text">商舖面積</span>
+                                </span>
+                                <span class="text-lg md:text-xl font-bold text-blue-600" id="val-retail-area">1,200 sq ft</span>
+                            </div>
+                        </div>
+                        <input type="range" min="600" max="2000" step="10" value="1200" class="slider-thumb w-full mt-2" id="input-retail-area">
+                        <div class="flex justify-between mt-2 text-[10px] md:text-xs text-slate-500 font-medium">
+                            <span><span class="en-text">Resi Area: </span><span class="zh-text">住宅面積: </span><strong id="display-resi-area-val">2,815 sq ft</strong></span>
+                        </div>
+                    </div>
 
+                    <!-- Interactive Valuation Tool (2 Columns) -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-6">
+                        
+                        <!-- COLUMN 1: INCOME APPROACH -->
+                        <div class="bg-white p-5 md:p-6 rounded-lg shadow-sm border border-slate-200 flex flex-col">
+                            <h4 class="font-bold text-slate-800 mb-5 border-b pb-2 text-sm md:text-base flex justify-between items-center">
+                                <span><span class="en-text">1. Income Approach</span><span class="zh-text">1. 收益法</span></span>
+                                <i class="fas fa-chart-line text-blue-300"></i>
+                            </h4>
+                            
+                            <div class="space-y-5 flex-1">
                                 <div>
                                     <div class="flex justify-between mb-2">
                                         <label class="text-xs md:text-sm font-medium text-slate-700">
@@ -554,7 +551,6 @@
                                         </label>
                                         <span class="text-xs md:text-sm font-bold text-blue-600" id="val-retail-rent">$4.50</span>
                                     </div>
-                                    <!-- Reduced step to 0.05 for dollar related items -->
                                     <input type="range" min="3.00" max="7.00" step="0.05" value="4.50" class="slider-thumb" id="input-retail-rent">
                                 </div>
 
@@ -565,85 +561,111 @@
                                         </label>
                                         <span class="text-xs md:text-sm font-bold text-blue-600" id="val-resi-rent">$4.00</span>
                                     </div>
-                                    <!-- Reduced step to 0.05 for dollar related items -->
                                     <input type="range" min="2.00" max="6.00" step="0.05" value="4.00" class="slider-thumb" id="input-resi-rent">
                                 </div>
 
                                 <div>
                                     <div class="flex justify-between mb-2">
                                         <label class="text-xs md:text-sm font-medium text-slate-700">
-                                            <span class="en-text">Vacancy & Credit Loss</span><span class="zh-text">空置及壞帳損失率</span>
+                                            <span class="en-text">Vacancy & Loss</span><span class="zh-text">空置及壞帳損失率</span>
                                         </label>
                                         <span class="text-xs md:text-sm font-bold text-blue-600" id="val-vacancy">5.00%</span>
                                     </div>
-                                    <!-- Reduced step to 0.05% for percentages -->
                                     <input type="range" min="2" max="15" step="0.05" value="5" class="slider-thumb" id="input-vacancy">
                                 </div>
 
                                 <div>
                                     <div class="flex justify-between mb-2">
                                         <label class="text-xs md:text-sm font-medium text-slate-700">
-                                            <span class="en-text">Cap Rate (%)</span><span class="zh-text">資本化率 / 回報率 (%)</span>
+                                            <span class="en-text">Cap Rate (%)</span><span class="zh-text">資本化率 (%)</span>
                                         </label>
                                         <span class="text-xs md:text-sm font-bold text-blue-600" id="val-cap">5.75%</span>
                                     </div>
-                                    <!-- Reduced step to 0.05% for percentages -->
                                     <input type="range" min="4.5" max="8.0" step="0.05" value="5.75" class="slider-thumb" id="input-cap">
                                 </div>
-                            </div>
-
-                            <div class="mt-6 md:mt-8 pt-4 border-t border-slate-200">
-                                 <button onclick="resetValuation()" class="w-full py-2.5 bg-slate-100 text-slate-600 rounded hover:bg-slate-200 text-xs md:text-sm font-medium transition-colors">
-                                     <span class="en-text">Reset to Base Case</span><span class="zh-text">重設為基準情況</span>
-                                 </button>
-                            </div>
-                        </div>
-
-                        <!-- Output & Visuals -->
-                        <div class="xl:col-span-2 space-y-6">
-                            <!-- Big Numbers -->
-                            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-                                <div class="bg-white p-3 md:p-4 rounded border border-slate-200 text-center flex flex-col justify-center">
-                                    <span class="text-[10px] md:text-xs text-slate-400 uppercase mb-1">
-                                        <span class="en-text">Gross Income</span><span class="zh-text">總收入</span>
-                                    </span>
-                                    <span class="block text-base md:text-lg font-bold text-slate-700" id="out-gross">$0</span>
-                                </div>
-                                <div class="bg-white p-3 md:p-4 rounded border border-slate-200 text-center flex flex-col justify-center">
-                                    <span class="text-[10px] md:text-xs text-slate-400 uppercase mb-1">
-                                        <span class="en-text">NOI (Post-Tax)</span><span class="zh-text">淨營運收入 (扣除稅項)</span>
-                                    </span>
-                                    <span class="block text-base md:text-lg font-bold text-slate-800" id="out-noi">$0</span>
-                                </div>
-                                <div class="bg-blue-50 p-4 rounded border border-blue-200 text-center col-span-2 flex flex-col justify-center">
-                                    <span class="text-[10px] md:text-xs text-blue-500 uppercase font-bold mb-1">
-                                        <span class="en-text">Indicated Value (Income)</span><span class="zh-text">指示價值 (收益法)</span>
-                                    </span>
-                                    <span class="block text-xl md:text-2xl font-bold text-blue-900" id="out-value">$0</span>
-                                </div>
-                            </div>
-
-                            <!-- Charts -->
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                                <div class="bg-white p-4 rounded border border-slate-200">
-                                    <h5 class="text-xs md:text-sm font-bold text-slate-600 mb-2">
-                                        <span class="en-text">Method Comparison</span><span class="zh-text">估值方法比較</span>
-                                    </h5>
-                                    <div class="chart-container">
-                                        <canvas id="compChart"></canvas>
-                                    </div>
-                                </div>
-                                <div class="bg-white p-4 rounded border border-slate-200">
-                                    <h5 class="text-xs md:text-sm font-bold text-slate-600 mb-2">
-                                        <span class="en-text">Income Mix</span><span class="zh-text">收入分佈</span>
-                                    </h5>
-                                    <div class="chart-container">
+                                
+                                <div class="mt-4 hidden xl:block">
+                                    <div class="chart-container" style="height: 120px;">
                                         <canvas id="incomeMixChart"></canvas>
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="mt-6 pt-4 border-t border-slate-200 grid grid-cols-2 gap-3">
+                                <div class="bg-slate-50 p-2 rounded border border-slate-100 text-center flex flex-col justify-center">
+                                    <span class="text-[10px] text-slate-400 uppercase mb-1"><span class="en-text">Gross Inc</span><span class="zh-text">總收入</span></span>
+                                    <span class="font-bold text-slate-700 text-sm md:text-base" id="out-gross">$0</span>
+                                </div>
+                                <div class="bg-slate-50 p-2 rounded border border-slate-100 text-center flex flex-col justify-center">
+                                    <span class="text-[10px] text-slate-400 uppercase mb-1"><span class="en-text">NOI</span><span class="zh-text">淨收入</span></span>
+                                    <span class="font-bold text-slate-800 text-sm md:text-base" id="out-noi">$0</span>
+                                </div>
+                                <div class="col-span-2 bg-blue-50 p-3 rounded border border-blue-200 text-center">
+                                    <span class="text-[10px] md:text-xs text-blue-600 font-bold uppercase block mb-1"><span class="en-text">Income Value</span><span class="zh-text">收益法估值</span></span>
+                                    <span class="text-xl md:text-2xl font-bold text-blue-900" id="out-value">$0</span>
+                                </div>
+                            </div>
                         </div>
+
+                        <!-- COLUMN 2: SALES COMP APPROACH -->
+                        <div class="bg-white p-5 md:p-6 rounded-lg shadow-sm border border-slate-200 flex flex-col">
+                            <h4 class="font-bold text-slate-800 mb-5 border-b pb-2 text-sm md:text-base flex justify-between items-center">
+                                <span><span class="en-text">2. Sales Comparison</span><span class="zh-text">2. 比較法</span></span>
+                                <i class="fas fa-tags text-blue-300"></i>
+                            </h4>
+                            
+                            <div class="space-y-5 flex-1">
+                                <div>
+                                    <div class="flex justify-between mb-2">
+                                        <label class="text-xs md:text-sm font-medium text-slate-700">
+                                            <span class="en-text">Sales Comp ($/SF)</span><span class="zh-text">比較法 (美元/呎)</span>
+                                        </label>
+                                        <span class="text-xs md:text-sm font-bold text-blue-600" id="val-comp-psf">$605.00</span>
+                                    </div>
+                                    <input type="range" min="400" max="1000" step="1" value="605" class="slider-thumb" id="input-comp-psf">
+                                </div>
+                                <p class="text-[10px] md:text-xs text-slate-500 mt-2 bg-slate-50 p-3 rounded border border-slate-100">
+                                    <i class="fas fa-info-circle mr-1 text-slate-400"></i>
+                                    <span class="en-text">Applied to total property area (4,015 sq ft) to calculate Sales Comparison value.</span>
+                                    <span class="zh-text">應用於總面積 (4,015 平方呎) 以計算比較法估值。</span>
+                                </p>
+
+                                <div class="mt-4">
+                                    <h5 class="text-[10px] md:text-xs font-bold text-slate-400 uppercase mb-2 text-center"><span class="en-text">Method Gap Analysis</span><span class="zh-text">估值差異分析</span></h5>
+                                    <div class="chart-container" style="height: 180px;">
+                                        <canvas id="compChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-6 pt-4 border-t border-slate-200">
+                                <div class="bg-blue-50 p-3 rounded border border-blue-200 text-center h-full flex flex-col justify-center">
+                                    <span class="text-[10px] md:text-xs text-blue-600 font-bold uppercase block mb-1"><span class="en-text">Sales Value</span><span class="zh-text">比較法估值</span></span>
+                                    <span class="text-xl md:text-2xl font-bold text-blue-900" id="out-sales-value">$0</span>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
+
+                    <!-- RECONCILED VALUE (AVERAGE) -->
+                    <div class="bg-blue-900 rounded-lg shadow-lg border-2 border-yellow-500 p-6 md:p-8 text-center text-white mb-6 relative overflow-hidden">
+                        <i class="fas fa-balance-scale absolute opacity-10 text-6xl md:text-8xl -right-4 -bottom-4"></i>
+                        <h3 class="text-sm md:text-base font-bold text-yellow-500 uppercase tracking-widest mb-2">
+                            <span class="en-text">Indicative Value</span><span class="zh-text">指示價值</span>
+                        </h3>
+                        <p class="text-[10px] md:text-xs text-blue-200 mb-4 font-medium">
+                            <span class="en-text">Simple Average of Income & Sales Approaches</span><span class="zh-text">收益法與比較法之簡單平均值</span>
+                        </p>
+                        <div class="text-4xl md:text-5xl font-bold serif-font text-white drop-shadow-md" id="out-average-value">$0</div>
+                    </div>
+
+                    <div class="text-center">
+                        <button onclick="resetValuation()" class="px-6 py-2.5 bg-slate-200 text-slate-700 rounded-full hover:bg-slate-300 text-xs md:text-sm font-semibold transition-colors border border-slate-300 shadow-sm">
+                            <i class="fas fa-undo mr-2"></i><span class="en-text">Reset to Base Case</span><span class="zh-text">重設為基準情況</span>
+                        </button>
+                    </div>
+
                 </section>
 
                 <!-- SECTION: Formal Text -->
@@ -1332,6 +1354,7 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
             retailArea: document.getElementById('val-retail-area'),
             displayResiArea: document.getElementById('display-resi-area'),
             displayRetailArea: document.getElementById('display-retail-area'),
+            displayResiAreaVal: document.getElementById('display-resi-area-val'),
             retailRent: document.getElementById('val-retail-rent'),
             resiRent: document.getElementById('val-resi-rent'),
             vacancy: document.getElementById('val-vacancy'),
@@ -1339,7 +1362,9 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
             compPsf: document.getElementById('val-comp-psf'),
             gross: document.getElementById('out-gross'),
             noi: document.getElementById('out-noi'),
-            value: document.getElementById('out-value')
+            value: document.getElementById('out-value'),
+            salesValue: document.getElementById('out-sales-value'),
+            averageValue: document.getElementById('out-average-value')
         };
 
         const totalAreaFixed = 4015;
@@ -1358,6 +1383,8 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
             displays.retailArea.innerText = `${rArea.toLocaleString()} ${sqftLabel}`;
             if (displays.displayResiArea) displays.displayResiArea.innerText = `${resArea.toLocaleString()} ${sqftLabel}`;
             if (displays.displayRetailArea) displays.displayRetailArea.innerText = `${rArea.toLocaleString()} ${sqftLabel}`;
+            if (displays.displayResiAreaVal) displays.displayResiAreaVal.innerText = `${resArea.toLocaleString()} ${sqftLabel}`;
+            
             displays.retailRent.innerText = `$${rRent.toFixed(2)}`;
             displays.resiRent.innerText = `$${resRent.toFixed(2)}`;
             displays.vacancy.innerText = `${parseFloat(inputs.vacancy.value).toFixed(2)}%`;
@@ -1378,10 +1405,14 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
             const NOI = EGI - totalExp;
             const incomeValue = NOI / capRate;
             const compValue = compPsfVal * totalAreaFixed;
+            const avgValue = (incomeValue + compValue) / 2;
 
             displays.gross.innerText = `$${PGI.toLocaleString(undefined, {maximumFractionDigits: 0})}`;
             displays.noi.innerText = `$${NOI.toLocaleString(undefined, {maximumFractionDigits: 0})}`;
             displays.value.innerText = `$${incomeValue.toLocaleString(undefined, {maximumFractionDigits: 0})}`;
+            
+            if (displays.salesValue) displays.salesValue.innerText = `$${compValue.toLocaleString(undefined, {maximumFractionDigits: 0})}`;
+            if (displays.averageValue) displays.averageValue.innerText = `$${avgValue.toLocaleString(undefined, {maximumFractionDigits: 0})}`;
 
             updateComparablesChart(incomeValue, compValue);
             updateIncomeMixChart(retailIncome, resiIncome);
