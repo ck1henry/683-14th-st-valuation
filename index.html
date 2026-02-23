@@ -429,7 +429,7 @@
                                 <span class="en-text">Latest Transactions in Local Market</span><span class="zh-text">本地市場最新成交紀錄</span>
                             </h4>
                             <span class="text-[10px] md:text-xs bg-white border border-slate-200 px-2 py-1 rounded text-slate-500 self-start sm:self-auto text-center font-medium text-blue-700">
-                                <span class="en-text">Filtered: Multi-Family, 2k-6k sqft, $400-$1000/sf</span><span class="zh-text">已篩選：多戶型, 2000-6000呎, $400-$1000/呎</span>
+                                <span class="en-text">Filtered: Multi/Single Family, $400-$1000/sf</span><span class="zh-text">已篩選：多戶型及獨立屋, $400-$1000/呎</span>
                             </span>
                         </div>
                         <div class="overflow-x-auto max-h-[400px] overflow-y-auto relative">
@@ -729,16 +729,13 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
     <script>
         window.subjectLat = 37.7675;
         window.subjectLon = -122.4282;
-        window.compMarkers = {}; // Stores leaflet markers by index
+        window.compMarkers = {}; 
         
-        // Handles highlighting a table row
         window.highlightTableRow = function(index) {
-            // Remove highlight from all
             document.querySelectorAll('#latest-tx-body tr').forEach(tr => {
                 tr.classList.remove('bg-blue-100', 'border-blue-500');
                 tr.classList.add('hover:bg-slate-50', 'border-transparent');
             });
-            // Add highlight to target
             let targetRow = document.getElementById(`tx-row-${index}`);
             if (targetRow) {
                 targetRow.classList.remove('hover:bg-slate-50', 'border-transparent');
@@ -747,13 +744,11 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
             }
         };
 
-        // Handles clicks from the table rows
         window.handleDealClick = function(index) {
             window.highlightTableRow(index);
             let deal = window.compMarkers[index];
             if (deal && window.map) {
                 deal.marker.openPopup();
-                // Ensure the map shows BOTH the clicked marker and the subject property
                 let bounds = L.latLngBounds([window.subjectLat, window.subjectLon], [deal.lat, deal.lon]);
                 window.map.fitBounds(bounds, { padding: [50, 50], maxZoom: 16 });
             }
@@ -813,14 +808,16 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
                         
                         let typeText = String(row['Property Type'] || '').toLowerCase().replace('_', '-');
                         let isMultiFamily = typeText.includes('multi-family') || typeText.includes('multifamily');
+                        let isSingleFamily = typeText.includes('single-family') || typeText.includes('singlefamily') || typeText.includes('single family');
+                        let isValidType = isMultiFamily || isSingleFamily;
                         
-                        let sqft = parseFloat(row['Property Size'] || row['SqFt'] || 0);
-                        let isRightSize = sqft >= 2000 && sqft <= 6000;
-                        
+                        // Price filter $400 - $1000
                         let parsedPsf = parseFloat(psf || 0);
                         let isRightPrice = parsedPsf >= 400 && parsedPsf <= 1000;
                         
-                        return dte && psf && isMultiFamily && isRightSize && isRightPrice;
+                        // Removed square footage constraint as requested
+                        
+                        return dte && psf && isValidType && isRightPrice;
                     });
                     
                     data.sort((a, b) => {
@@ -904,9 +901,8 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
                     
                     let tbody = document.getElementById('latest-tx-body');
                     tbody.innerHTML = ''; 
-                    window.compMarkers = {}; // Reset global markers dictionary
+                    window.compMarkers = {}; 
                     
-                    // --- Initialise Map BEFORE Loop ---
                     if (!window.map) {
                         window.map = L.map('comps-map').setView([window.subjectLat, window.subjectLon], 14); 
                         L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
@@ -934,7 +930,6 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
                         tbody.innerHTML = `<tr><td colspan="${fields.length}" class="p-6 text-center text-slate-500 italic">No transactions match the selected filters. / 沒有符合篩選條件的交易。</td></tr>`;
                     } else {
                         tableData.forEach((row, index) => {
-                            // GENERATE TABLE ROW HTML
                             let trHtml = `<tr id="tx-row-${index}" class="hover:bg-slate-50 transition-colors cursor-pointer border-l-4 border-transparent" onclick="handleDealClick(${index})">`;
                             
                             fields.forEach(field => {
@@ -965,7 +960,6 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
                             trHtml += '</tr>';
                             tbody.innerHTML += trHtml;
 
-                            // GENERATE MAP MARKER
                             let lat = parseFloat(row['Latitude']);
                             let lon = parseFloat(row['Longitude']);
                             
@@ -993,7 +987,6 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
                                     fillOpacity: 0.85
                                 }).bindPopup(popupContent);
                                 
-                                // Bind Map Marker click to highlight Table Row
                                 compMarker.on('click', function() {
                                     window.highlightTableRow(index);
                                 });
@@ -1004,7 +997,6 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
                         });
                     }
 
-                    // Auto-zoom map to fit all markers (including the subject property)
                     if (hasValidCoords && markersLayer.getBounds().isValid()) {
                         window.map.fitBounds(markersLayer.getBounds(), { padding: [30, 30], maxZoom: 15 });
                     }
