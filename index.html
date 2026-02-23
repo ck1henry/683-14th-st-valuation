@@ -373,7 +373,7 @@
                                 <canvas id="trendChart"></canvas>
                             </div>
                             <p class="text-[10px] md:text-xs text-slate-500 mt-3 text-center">
-                                <span class="en-text">Source: Real-time Automated Data Pull (Github Actions)</span><span class="zh-text">數據來源：實時自動化數據提取</span>
+                                <span class="en-text">Source: Real-time Automated Data Pull (Filtered Data)</span><span class="zh-text">數據來源：實時自動化數據提取 (已篩選數據)</span>
                             </p>
                         </div>
 
@@ -429,7 +429,7 @@
                                 <span class="en-text">Latest Transactions in 94114</span><span class="zh-text">94114區最新成交紀錄</span>
                             </h4>
                             <span class="text-[10px] md:text-xs bg-white border border-slate-200 px-2 py-1 rounded text-slate-500 self-start sm:self-auto text-center font-medium text-blue-700">
-                                <span class="en-text">Filtered: Multi-Family, 2k-6k sqft, >$400/sf</span><span class="zh-text">已篩選：多戶型, 2000-6000呎, >$400/呎</span>
+                                <span class="en-text">Filtered: Multi-Family, 2k-6k sqft, $400-$1000/sf</span><span class="zh-text">已篩選：多戶型, 2000-6000呎, $400-$1000/呎</span>
                             </span>
                         </div>
                         <div class="overflow-x-auto max-h-[500px] overflow-y-auto relative">
@@ -456,7 +456,6 @@
                                 <span class="en-text">Filtered Data Points</span><span class="zh-text">已篩選數據點</span>
                             </span>
                         </div>
-                        <!-- Map Container -->
                         <div id="comps-map" style="height: 350px; width: 100%; z-index: 1;"></div>
                     </div>
                 </section>
@@ -467,8 +466,8 @@
                         <h3 class="text-lg md:text-xl font-bold text-slate-800 serif-font">
                             <span class="en-text">Valuation Approaches</span><span class="zh-text">估值方法</span>
                         </h3>
-                        <p class="text-sm md:text-base text-slate-600 mt-2 en-text">The primary method utilised is the Investment Method (Income Capitalisation), supported by Sales Comparables. Use the interactive model below to test sensitivity.</p>
-                        <p class="text-sm md:text-base text-slate-600 mt-2 zh-text">主要採用的方法為收益資本化法 (Investment Method)，並以銷售比較法作支持。您可以使用下方的互動模型來測試數值的敏感度。</p>
+                        <p class="text-sm md:text-base text-slate-600 mt-2 en-text">Two primary methods were utilised: The Investment Method (Income Capitalisation) and the Comparable Method. Use the interactive model below to test sensitivity.</p>
+                        <p class="text-sm md:text-base text-slate-600 mt-2 zh-text">我們主要採用了兩種方法：收益資本化法 (Investment Method) 及 銷售比較法 (Comparable Method)。您可以使用下方的互動模型來測試數值的敏感度。</p>
                     </div>
 
                     <!-- Interactive Valuation Tool -->
@@ -725,30 +724,28 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
         </main>
     </div>
 
-    <!-- FALLBACK RAW CSV DATA -->
     <script>
-        const rawCSVData = `Property Location,Transaction Price,Transaction Date,Property Size,Price psf,Property Type,Beds,Floor,Conditions,Zoning,Land Use,
-"639 14th St, San Francisco, CA 94114",1350639,2025-11-26,1500,900.426,Flat (Condo),2,Top floor,Built 1945; refurbished,Residential,Residential (Flat),https://www.zillow.com/homedetails/639-14th-St-San-Francisco-CA-94114/64971521_zpid/
-"8 Landers St UNIT 301, San Francisco, CA 94114",1575000,2025-09-03,1227,1283.6185819070904,Flat (Condo),2,3rd floor,Built 2006; refurbished,Residential,Residential (Flat),https://www.zillow.com/homedetails/8-Landers-St-UNIT-301-San-Francisco-CA-94114/79841578_zpid/
-"8 Landers St UNIT 204, San Francisco, CA 94114",1500000,2025-06-13,1199,1251.0425354462052,Flat (Condo),2,2nd floor,Built 2006; refurbished,Residential,Residential (Flat),https://www.zillow.com/homedetails/8-Landers-St-UNIT-204-San-Francisco-CA-94114/79841441_zpid/
-"107 Dolores St, San Francisco, CA 94103",1530000,2024-03-22,1682,909.6313912009513,Flat (Condo),3,1st floor,Built 1999; old,Residential,Residential (Flat),https://www.zillow.com/homedetails/107-Dolores-St-San-Francisco-CA-94103/2060193686_zpid/
-"178-180 Church St, San Francisco, CA 94114",2500000,2025-02-26,4100,609.7560975609756,Multi-Family,5,3 storeys,Built 1900; old,Commercial,Mixed Use,https://www.zillow.com/homedetails/178-180-Church-St-San-Francisco-CA-94114/2055851807_zpid/
-"32 Landers St, San Francisco, CA 94114",1625000,2025-01-31,2600,625.0,Multi-Family,5,3 storeys,Built 1900; old,Residential,Residential (Multi Family),https://www.zillow.com/homedetails/32-Landers-St-San-Francisco-CA-94114/332859027_zpid/
-"35 Dolores St APT 306, San Francisco, CA 94103",880000,2025-10-31,831,1058.9651022864019,Flat (Condo),1,3rd floor,Built 2013; fair,Residential,Residential (Flat),https://www.zillow.com/homedetails/35-Dolores-St-APT-306-San-Francisco-CA-94103/124397701_zpid/
-"35 Dolores St APT 409, San Francisco, CA 94103",1150000,2025-02-14,1083,1061.865189289012,Flat (Condo),2,4th floor,Built 2013; fair,Residential,Residential (Flat),https://www.zillow.com/homedetails/35-Dolores-St-APT-409-San-Francisco-CA-94103/124397937_zpid/
-"35 Dolores St APT 108, San Francisco, CA 94103",1020000,2024-05-15,936,1089.7435897435898,Flat (Condo),2,1st floor,Built 2013; fair,Residential,Residential (Flat),https://www.zillow.com/homedetails/35-Dolores-St-APT-108-San-Francisco-CA-94103/124397970_zpid/
-"35 Dolores St APT 201, San Francisco, CA 94103",1090000,2024-03-22,1078,1011.1317254174397,Flat (Condo),2,2nd floor,Built 2013; fair,Residential,Residential (Flat),https://www.zillow.com/homedetails/35-Dolores-St-APT-201-San-Francisco-CA-94103/124398058_zpid/
-"31 Landers St, San Francisco, CA 94114",2500000,2024-12-09,2525,990.0990099009901,Single Family,3,3 storeys,Built 1900; refurbished,Residential,Residential,https://www.zillow.com/homedetails/31-Landers-St-San-Francisco-CA-94114/2099934384_zpid/
-"726-732 14th St, San Francisco, CA 94114",1750000,2023-12-07,7168,244.140625,Multi-Family,7,3 storeys,Built 1906; old,Residential,Residential,https://www.zillow.com/homedetails/726-732-14th-St-San-Francisco-CA-94114/2055777419_zpid/
-"2154 Market St APT A, San Francisco, CA 94114",1330000,2025-05-14,1097,1212.3974475843208,Flat (Condo),2,1st floor,Built 1880; old,Residential,Residential (Flat),https://www.zillow.com/homedetails/2154-Market-St-APT-A-San-Francisco-CA-94114/241586221_zpid/
-"1950 15th St, San Francisco, CA 94114",1685000,2025-11-17,1553,1084.9967804249839,Flat (Condo),3,1st floor,Built 1900; refurbished,Residential,Residential (Flat),https://www.zillow.com/homedetails/1950-15th-St-San-Francisco-CA-94114/184817449_zpid/`;
+        const rawCSVData = `Property Location,Transaction Price,Transaction Date,Property Size,Price psf,Property Type,Beds,Floor,Conditions,Zoning,Land Use,Latitude,Longitude,URL
+"639 14th St, San Francisco, CA 94114",1350639,2025-11-26,1500,900.426,Flat (Condo),2,Top floor,Built 1945; refurbished,Residential,Residential (Flat),37.7675,-122.4282,https://www.zillow.com/homedetails/639-14th-St-San-Francisco-CA-94114/64971521_zpid/
+"8 Landers St UNIT 301, San Francisco, CA 94114",1575000,2025-09-03,1227,1283.6185819070904,Flat (Condo),2,3rd floor,Built 2006; refurbished,Residential,Residential (Flat),37.7668,-122.4279,https://www.zillow.com/homedetails/8-Landers-St-UNIT-301-San-Francisco-CA-94114/79841578_zpid/
+"8 Landers St UNIT 204, San Francisco, CA 94114",1500000,2025-06-13,1199,1251.0425354462052,Flat (Condo),2,2nd floor,Built 2006; refurbished,Residential,Residential (Flat),37.7668,-122.4279,https://www.zillow.com/homedetails/8-Landers-St-UNIT-204-San-Francisco-CA-94114/79841441_zpid/
+"107 Dolores St, San Francisco, CA 94103",1530000,2024-03-22,1682,909.6313912009513,Flat (Condo),3,1st floor,Built 1999; old,Residential,Residential (Flat),37.7678,-122.4259,https://www.zillow.com/homedetails/107-Dolores-St-San-Francisco-CA-94103/2060193686_zpid/
+"178-180 Church St, San Francisco, CA 94114",2500000,2025-02-26,4100,609.7560975609756,Multi-Family,5,3 storeys,Built 1900; old,Commercial,Mixed Use,37.7671,-122.4290,https://www.zillow.com/homedetails/178-180-Church-St-San-Francisco-CA-94114/2055851807_zpid/
+"32 Landers St, San Francisco, CA 94114",1625000,2025-01-31,2600,625.0,Multi-Family,5,3 storeys,Built 1900; old,Residential,Residential (Multi Family),37.7664,-122.4278,https://www.zillow.com/homedetails/32-Landers-St-San-Francisco-CA-94114/332859027_zpid/
+"35 Dolores St APT 306, San Francisco, CA 94103",880000,2025-10-31,831,1058.9651022864019,Flat (Condo),1,3rd floor,Built 2013; fair,Residential,Residential (Flat),37.7684,-122.4257,https://www.zillow.com/homedetails/35-Dolores-St-APT-306-San-Francisco-CA-94103/124397701_zpid/
+"35 Dolores St APT 409, San Francisco, CA 94103",1150000,2025-02-14,1083,1061.865189289012,Flat (Condo),2,4th floor,Built 2013; fair,Residential,Residential (Flat),37.7684,-122.4257,https://www.zillow.com/homedetails/35-Dolores-St-APT-409-San-Francisco-CA-94103/124397937_zpid/
+"35 Dolores St APT 108, San Francisco, CA 94103",1020000,2024-05-15,936,1089.7435897435898,Flat (Condo),2,1st floor,Built 2013; fair,Residential,Residential (Flat),37.7684,-122.4257,https://www.zillow.com/homedetails/35-Dolores-St-APT-108-San-Francisco-CA-94103/124397970_zpid/
+"35 Dolores St APT 201, San Francisco, CA 94103",1090000,2024-03-22,1078,1011.1317254174397,Flat (Condo),2,2nd floor,Built 2013; fair,Residential,Residential (Flat),37.7684,-122.4257,https://www.zillow.com/homedetails/35-Dolores-St-APT-201-San-Francisco-CA-94103/124398058_zpid/
+"31 Landers St, San Francisco, CA 94114",2500000,2024-12-09,2525,990.0990099009901,Single Family,3,3 storeys,Built 1900; refurbished,Residential,Residential,37.7665,-122.4275,https://www.zillow.com/homedetails/31-Landers-St-San-Francisco-CA-94114/2099934384_zpid/
+"726-732 14th St, San Francisco, CA 94114",1750000,2023-12-07,7168,244.140625,Multi-Family,7,3 storeys,Built 1906; old,Residential,Residential,37.7672,-122.4300,https://www.zillow.com/homedetails/726-732-14th-St-San-Francisco-CA-94114/2055777419_zpid/
+"2154 Market St APT A, San Francisco, CA 94114",1330000,2025-05-14,1097,1212.3974475843208,Flat (Condo),2,1st floor,Built 1880; old,Residential,Residential (Flat),37.7666,-122.4299,https://www.zillow.com/homedetails/2154-Market-St-APT-A-San-Francisco-CA-94114/241586221_zpid/
+"1950 15th St, San Francisco, CA 94114",1685000,2025-11-17,1553,1084.9967804249839,Flat (Condo),3,1st floor,Built 1900; refurbished,Residential,Residential (Flat),37.7656,-122.4291,https://www.zillow.com/homedetails/1950-15th-St-San-Francisco-CA-94114/184817449_zpid/`;
     </script>
 
     <script>
         function parseAndRenderData(csvText) {
             const isZh = document.body.getAttribute('data-lang') === 'zh';
             
-            // Translation dictionary for dynamic CSV columns
             const translationDict = {
                 'Property Location': '物業地址',
                 'Street Address': '物業地址',
@@ -779,6 +776,7 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
                 dynamicTyping: true,
                 complete: function(results) {
                     
+                    // Filter at the root level so BOTH charts and maps reflect it
                     let data = results.data.filter(row => {
                         const dte = row['Sold Date'] || row['Transaction Date'];
                         const psf = row['Price/SqFt ($)'] || row['Price psf'];
@@ -790,7 +788,7 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
                         let isRightSize = sqft >= 2000 && sqft <= 6000;
                         
                         let parsedPsf = parseFloat(psf || 0);
-                        let isRightPrice = parsedPsf >= 400;
+                        let isRightPrice = parsedPsf >= 400 && parsedPsf <= 1000;
                         
                         return dte && psf && isMultiFamily && isRightSize && isRightPrice;
                     });
@@ -871,11 +869,11 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
                     theadHtml += '</tr>';
                     document.getElementById('latest-tx-head').innerHTML = theadHtml;
 
-                    // Populate HTML Table (already filtered above)
+                    // Populate HTML Table (Sorted Descending)
                     let tableData = [...data].sort((a,b) => {
                         let dateA = new Date(a['Sold Date'] || a['Transaction Date']);
                         let dateB = new Date(b['Sold Date'] || b['Transaction Date']);
-                        return dateB - dateA; // Sort descending
+                        return dateB - dateA; 
                     });
                     
                     let tbody = document.getElementById('latest-tx-body');
@@ -922,14 +920,12 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
                     const subjectLon = -122.4282;
 
                     if (!window.map) {
-                        // Set center to Subject Property
                         window.map = L.map('comps-map').setView([subjectLat, subjectLon], 15); 
                         L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
                             attribution: '&copy; OpenStreetMap contributors & CARTO'
                         }).addTo(window.map);
                         markersLayer = L.featureGroup().addTo(window.map);
 
-                        // Custom Marker for Subject Property
                         const subjectIcon = L.divIcon({
                             className: 'custom-subject-icon',
                             html: '<div style="background-color: #ca8a04; width: 24px; height: 24px; border-radius: 50%; border: 3px solid #1e3a8a; box-shadow: 0 4px 6px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;"><div style="background-color: #fff; width: 8px; height: 8px; border-radius: 50%;"></div></div>',
@@ -943,7 +939,6 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
 
                     } else {
                         markersLayer.clearLayers();
-                        // Reset center to Subject Property on language toggle or re-render
                         window.map.setView([subjectLat, subjectLon], 15);
                     }
 
@@ -965,7 +960,6 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
                                 <span style="color:#1e3a8a; font-weight:600;">${psqftText}</span>
                             </div>`;
                             
-                            // Draw smaller blue circle markers for the comparables
                             let compMarker = L.circleMarker([lat, lon], {
                                 radius: 8,
                                 fillColor: "#1e3a8a",
@@ -978,8 +972,6 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
                             markersLayer.addLayer(compMarker);
                         }
                     });
-                    
-                    // Note: Removed fitBounds() so the map strictly stays centered on the Subject Property
                 }
             });
         }
@@ -1096,7 +1088,6 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
                 }
             }
             
-            // Fix map rendering issue when container is initially hidden
             if (sectionId === 'market' && window.map) {
                 setTimeout(() => { window.map.invalidateSize(); }, 100);
             }
