@@ -117,7 +117,7 @@
                 </button>
             </div>
             <div class="mt-6 text-center">
-                <p class="text-[10px] text-slate-400">Strictly private and confidential. Professional Valuation Standards.<br>絕對機密。符合專業估值準則。</p>
+                <p class="text-[10px] text-slate-400">Strictly private and confidential.<br>絕對機密。</p>
             </div>
         </div>
     </div>
@@ -160,8 +160,8 @@
                     <li><button onclick="navigateTo('valuation')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3 font-medium bg-slate-800/40"><i class="fas fa-calculator w-5 text-center text-blue-400 drop-shadow-md"></i> 
                         <span class="en-text">Valuation Modelling</span><span class="zh-text">估值模型</span>
                     </button></li>
-                    <li><button onclick="navigateTo('formal')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3"><i class="fas fa-balance-scale w-5 text-center"></i> 
-                        <span class="en-text">Valuation Standards</span><span class="zh-text">估值準則</span>
+                    <li><button onclick="navigateTo('formal')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3"><i class="fas fa-list-ol w-5 text-center"></i> 
+                        <span class="en-text">Terms & Assumptions</span><span class="zh-text">條款與假設</span>
                     </button></li>
                     <li><button onclick="navigateTo('log')" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition-colors flex items-center gap-3"><i class="fas fa-clipboard-list w-5 text-center"></i> 
                         <span class="en-text">Valuer's Log</span><span class="zh-text">估值師日誌</span>
@@ -195,10 +195,6 @@
                         <span class="en-text"><i class="fas fa-language mr-1"></i> 中文</span>
                         <span class="zh-text"><i class="fas fa-language mr-1"></i> Eng</span>
                     </button>
-                    <span class="hidden lg:inline-block px-3 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded-full border border-blue-200">
-                        <span class="en-text">Standards Compliant</span>
-                        <span class="zh-text">符合國際準則</span>
-                    </span>
                     <button onclick="window.print()" class="no-print text-slate-500 hover:text-slate-800 p-2"><i class="fas fa-print"></i></button>
                 </div>
             </header>
@@ -214,7 +210,7 @@
                         </h3>
                         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                             <div class="lg:col-span-2">
-                                <p class="mb-4 text-sm md:text-base text-slate-600 en-text">Based on the investigation and analysis outlined in this report, factoring in comprehensive recent comparable sales and proper adjustment for demised versus non-demised configurations, it is my professional opinion that the Market Value of the subject property as of <strong>23 February 2026</strong> is:</p>
+                                <p class="mb-4 text-sm md:text-base text-slate-600 en-text">Based on the investigation and analysis outlined in this report, factoring in comprehensive recent comparable sales and proper adjustment for demised versus non-demised configurations, it is my opinion that the Market Value of the subject property as of <strong>23 February 2026</strong> is:</p>
                                 <p class="mb-4 text-sm md:text-base text-slate-600 zh-text">基於本報告中的調查與分析，並綜合近期可比較銷售數據及針對獨立分契與單一業權配置的適當調整後，本人認為該物業於 <strong>2026年2月23日</strong> 的市值（Market Value）為：</p>
                                 
                                 <div class="flex items-baseline gap-2 mb-2">
@@ -260,12 +256,6 @@
                                             </span>
                                         </li>
                                     </ul>
-                                </div>
-                                <div class="mt-4 pt-4 border-t border-blue-800">
-                                    <p class="text-[10px] opacity-75">
-                                        <span class="en-text">Valuation Standards: International Valuation Standards (IVS)</span>
-                                        <span class="zh-text">估值準則：國際估值準則 (IVS)</span>
-                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -531,6 +521,41 @@
                         <div class="flex justify-between mt-2 text-[10px] md:text-xs text-slate-500 font-medium">
                             <span><span class="en-text">Resi Area: </span><span class="zh-text">住宅面積: </span><strong id="display-resi-area-val">2,815 sq ft</strong></span>
                         </div>
+
+                        <!-- NEW: SF Planning Code Explanation Note -->
+                        <div class="mt-5 bg-slate-50 p-4 rounded border border-slate-200 text-[10px] md:text-xs text-slate-600 leading-relaxed">
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-info-circle text-blue-500 mt-0.5 text-base"></i>
+                                <div>
+                                    <p class="font-semibold text-slate-700 mb-1.5 text-xs md:text-sm">
+                                        <span class="en-text">Why is the retail area excluded from the tax document?</span>
+                                        <span class="zh-text">點解稅務文件冇計到地舖面積？</span>
+                                    </p>
+                                    <p class="mb-2">
+                                        <span class="en-text">According to the <a href="https://codelibrary.amlegal.com/codes/san_francisco/latest/sf_planning/0-0-0-29845" target="_blank" class="text-blue-600 hover:underline">SF Planning Code</a>, this discrepancy is intentional:</span>
+                                        <span class="zh-text">簡單嚟講，呢條 <a href="https://codelibrary.amlegal.com/codes/san_francisco/latest/sf_planning/0-0-0-29845" target="_blank" class="text-blue-600 hover:underline">三藩市規劃法例 (SF Planning Code)</a> 正好解釋咗點解地舖面積冇計落去：</span>
+                                    </p>
+                                    <ul class="list-disc pl-5 space-y-1.5 mb-2">
+                                        <li>
+                                            <span class="en-text"><strong>Legal Definition:</strong> The code strictly separates "residential" and "commercial" spaces. The official "Living Area" only calculates the upper residential floors.</span>
+                                            <span class="zh-text"><strong>法律定義唔同：</strong> 法例將「住宅」同「商業」空間嚴格區分。官方定義嘅「居住面積」(Living Area) 只會計算真正用嚟住嘅地方（即係上面嗰兩層住宅）。</span>
+                                        </li>
+                                        <li>
+                                            <span class="en-text"><strong>Policy Exemption:</strong> To encourage neighborhood retail, the city often excludes ground-floor retail when calculating Floor Area Ratio (FAR) limits.</span>
+                                            <span class="zh-text"><strong>政府政策豁免：</strong> 為咗鼓勵區內有更多街舖，政府喺計算建築總面積限制（地積比率 FAR）嗰陣，通常會將地舖面積剔除。</span>
+                                        </li>
+                                        <li>
+                                            <span class="en-text"><strong>Tax System Mechanics:</strong> Because Planning legally separates these uses, the Assessor's system automatically pulls only the "residential" figure (2,815 sq ft) and ignores the retail floor.</span>
+                                            <span class="zh-text"><strong>稅務系統設定：</strong> 因為規劃署喺法律上分開咗呢兩種用途，估價署嘅報稅電腦系統就只會抽取並顯示屬於「住宅」嘅數字（即係 2,815 平方呎），而自動忽略咗地下嗰層舖頭。</span>
+                                        </li>
+                                    </ul>
+                                    <p class="text-slate-500 italic mt-2 border-t border-slate-200 pt-2">
+                                        <span class="en-text">In summary, the official records aren't missing square footage; the city's legal and tax frameworks intentionally treat commercial retail and residential areas separately.</span>
+                                        <span class="zh-text">總括而言，官方文件上嘅數字並唔係計漏咗，而係三藩市嘅法律同稅務系統本身就刻意將商業地舖同住宅面積分開處理。</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Interactive Valuation Tool (2 Columns) -->
@@ -686,7 +711,7 @@
                                     <span class="en-text">To determine Market Value for potential acquisition or secured lending purposes.</span><span class="zh-text">確定市場價值，以作潛在收購或有抵押貸款用途。</span>
                                 </p>
                                 <p><strong><span class="en-text">Basis of Value:</span><span class="zh-text">價值基準：</span></strong> 
-                                    <span class="en-text">Market Value as defined in IVS 104.</span><span class="zh-text">國際估值準則 (IVS) 104 中定義的市值 (Market Value)。</span>
+                                    <span class="en-text">Market Value based on standard fair market exchange conditions.</span><span class="zh-text">基於一般公平市場交易條件的市值 (Market Value)。</span>
                                 </p>
                                 <p><strong><span class="en-text">Effective Date:</span><span class="zh-text">生效日期：</span></strong> 
                                     23 February 2026.
@@ -721,8 +746,8 @@
                                 <span class="en-text">3. Limiting Conditions & Disclosures</span><span class="zh-text">3. 限制條件與披露</span>
                             </h4>
                             <p class="text-xs md:text-sm text-slate-600">
-                                <span class="en-text">This report adheres to accepted professional valuation standards. A title profile was relied upon for addresses and physical parameters. Market data is fed via an external data file (data.csv) mapping directly to custom python scripts.</span>
-                                <span class="zh-text">本報告遵守公認的專業估值準則。我們依賴了產權概況文件來核實地址和物理參數。市場數據則透過外部檔案 (data.csv) 載入，對應定制的 python 腳本。</span>
+                                <span class="en-text">A title profile was relied upon for addresses and physical parameters. Market data is fed via an external data file (data.csv) mapping directly to custom python scripts.</span>
+                                <span class="zh-text">我們依賴了產權概況文件來核實地址和物理參數。市場數據則透過外部檔案 (data.csv) 載入，對應定制的 python 腳本。</span>
                             </p>
                         </div>
                     </div>
@@ -733,7 +758,7 @@
                     <div class="bg-slate-800 text-slate-200 p-6 md:p-8 rounded-lg shadow-lg">
                         <h3 class="text-xl md:text-2xl font-bold text-white mb-4 border-b border-slate-600 pb-4">
                             <i class="fas fa-brain text-yellow-500 mr-2"></i> 
-                            <span class="en-text">Valuer's Log: Professional Adjustments</span><span class="zh-text">估值師日誌：專業調整分析</span>
+                            <span class="en-text">Valuer's Log: Market Adjustments</span><span class="zh-text">估值師日誌：市場調整分析</span>
                         </h3>
                         
                         <div class="space-y-6">
@@ -754,9 +779,15 @@
                                     <span class="en-text">2. Identifying the Golden Comps</span><span class="zh-text">2. 鎖定「黃金可比交易」</span>
                                 </h4>
                                 <p class="text-xs md:text-sm leading-relaxed text-slate-300 en-text">
-                                    The most directly relevant sales are the Multi-Family / Unified blocks. <strong>178-180 Church St</strong> serves as the anchor comparable: it is nearly identical in size (4,100 sq ft vs our 4,015 sq ft) and traded at $609/sf. <strong>32 Landers St</strong> (2,600 sq ft) confirms this baseline at $625/sf. Applying these weights, I establish a baseline value of <strong>$605/sf</strong> for the subject property.
+                                    Following standard analytical principles, I excluded Comps 4 ($268/SF), 6 ($164/SF), and 8 ($30/SF). These exhibit clear hallmarks of distressed sales, partial interest transfers, or non-arm's length transactions that fail the definition of Market Value. The remaining valid comparables establish a core range of $400 - $650/SF. Given the subject property's large size (4,015 sq ft) compared to the ~2,800 sq ft average of the comparables, I applied a "Quantum Discount" (size adjustment), adopting a slightly more conservative baseline of ~$530/SF.
                                 </p>
                                 <p class="text-xs md:text-sm leading-relaxed text-slate-300 zh-text">
+                                    基於客觀分析原則，我排除了可比交易 4（$268/呎）、6（$164/呎）和 8（$30/呎）。這些數據明顯帶有折讓出售、部分業權轉讓或非公平交易的特徵，不符合市值的定義。剩餘有效的可比交易確立了 $400 - $650/呎 的核心區間。鑑於目標物業面積較大（4,015平方呎），而可比物業平均約為2,800平方呎，我應用了「規模折讓」（面積調整），採用了較保守的基準約 $530/呎。
+                                </p>
+                                <p class="text-xs md:text-sm leading-relaxed text-slate-300 en-text mt-3">
+                                    The most directly relevant sales are the Multi-Family / Unified blocks. <strong>178-180 Church St</strong> serves as the anchor comparable: it is nearly identical in size (4,100 sq ft vs our 4,015 sq ft) and traded at $609/sf. <strong>32 Landers St</strong> (2,600 sq ft) confirms this baseline at $625/sf. Applying these weights, I establish a baseline value of <strong>$605/sf</strong> for the subject property.
+                                </p>
+                                <p class="text-xs md:text-sm leading-relaxed text-slate-300 zh-text mt-3">
                                     最直接相關的銷售數據是多戶型/統一建築。<strong>178-180 Church St</strong> 作為核心可比物業：其面積與目標物業幾乎相同（4,100 平方呎 vs 4,015 平方呎），成交價為 $609/呎。<strong>32 Landers St</strong> (2,600 平方呎) 以 $625/呎 的價格確認了這個基準。綜合加權後，我將目標物業的基準價值定為 <strong>$605/呎</strong>。
                                 </p>
                             </div>
