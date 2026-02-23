@@ -216,11 +216,11 @@
                                 <p class="mb-4 text-sm md:text-base text-slate-600 zh-text">基於本報告中的調查與分析，結合針對收益法之獨立市場租金評估，以及嚴謹的多戶型銷售比較法交叉比對，本人認為該物業於 <strong>2026年2月23日</strong> 的市值（Market Value）為：</p>
                                 
                                 <div class="flex items-baseline gap-2 mb-2">
-                                    <span class="text-3xl md:text-4xl font-bold text-blue-900 serif-font">$2,340,000</span>
+                                    <span class="text-3xl md:text-4xl font-bold text-blue-900 serif-font">$2,290,000</span>
                                 </div>
                                 <p class="text-xs md:text-sm text-slate-500 mb-6">
-                                    <span class="en-text">Two Million Three Hundred and Forty Thousand USD</span>
-                                    <span class="zh-text">二百三十四萬美元</span>
+                                    <span class="en-text">Two Million Two Hundred and Ninety Thousand USD</span>
+                                    <span class="zh-text">二百二十九萬美元</span>
                                 </p>
                                 
                                 <div class="grid grid-cols-2 gap-3 md:gap-4 text-xs md:text-sm">
@@ -228,7 +228,7 @@
                                         <span class="block text-slate-400 text-[10px] md:text-xs uppercase tracking-wider mb-1">
                                             <span class="en-text">Price Per Sq Ft</span><span class="zh-text">平均呎價</span>
                                         </span>
-                                        <span class="font-semibold text-slate-700">$580 PSF</span>
+                                        <span class="font-semibold text-slate-700">$550 PSF</span>
                                     </div>
                                     <div class="bg-slate-50 p-3 rounded border border-slate-100">
                                         <span class="block text-slate-400 text-[10px] md:text-xs uppercase tracking-wider mb-1">
@@ -352,8 +352,8 @@
                         <h3 class="text-lg md:text-xl font-bold text-slate-800 serif-font">
                             <span class="en-text">Local Market Analysis: 2026 Outlook</span><span class="zh-text">本地市場分析：2026年展望</span>
                         </h3>
-                        <p class="text-sm md:text-base text-slate-600 mt-2 en-text">The local submarket has shown resilience. Data below is populated dynamically from recent automated script pulls across the broader area.</p>
-                        <p class="text-sm md:text-base text-slate-600 mt-2 zh-text">本地子市場展現了良好的韌性。以下數據是根據近期的自動化腳本從周邊地區提取動態生成的。</p>
+                        <p class="text-sm md:text-base text-slate-600 mt-2 en-text">The local submarket has shown resilience. Data below is populated dynamically from recent automated script pulls from Zillow across the broader area.</p>
+                        <p class="text-sm md:text-base text-slate-600 mt-2 zh-text">本地子市場展現了良好的韌性。以下數據是根據近期的自動化腳本從 Zillow 擷取周邊地區數據而動態生成的。</p>
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
@@ -366,7 +366,7 @@
                                 <canvas id="trendChart"></canvas>
                             </div>
                             <p class="text-[10px] md:text-xs text-slate-500 mt-3 text-center">
-                                <span class="en-text">Source: Real-time Automated Data Pull (Filtered Data)</span><span class="zh-text">數據來源：實時自動化數據提取 (已篩選數據)</span>
+                                <span class="en-text">Source: Real-time Zillow Data Pull (Filtered Data)</span><span class="zh-text">數據來源：實時 Zillow 自動化數據擷取 (已篩選數據)</span>
                             </p>
                         </div>
 
@@ -406,10 +406,10 @@
                                     <span class="en-text">Valuer's Commentary</span><span class="zh-text">估值師點評</span>
                                 </h4>
                                 <p class="text-xs md:text-sm text-blue-800 leading-relaxed en-text">
-                                    "Analysis of the local submarket indicates a strong baseline. We heavily weight unified structure and relevant comparables which establish the ~$580/sf pricing baseline for an unmodernised asset of this class."
+                                    "Analysis of the local submarket indicates a strong baseline. We heavily weight unified structure and relevant comparables which establish the ~$550/sf pricing baseline for an unmodernised asset of this class."
                                 </p>
                                 <p class="text-xs md:text-sm text-blue-800 leading-relaxed zh-text">
-                                    「分析本地子市場後顯示擁有穩固的基準。我們在加權時重注於單一結構的可比物業，為此類未翻新資產確立了約 $580/呎 的定價基準。」
+                                    「分析本地子市場後顯示擁有穩固的基準。我們在加權時重注於單一結構的可比物業，為此類未翻新資產確立了約 $550/呎 的定價基準。」
                                 </p>
                             </div>
                         </div>
@@ -422,7 +422,7 @@
                                 <span class="en-text">Latest Transactions in Local Market</span><span class="zh-text">本地市場最新成交紀錄</span>
                             </h4>
                             <span class="text-[10px] md:text-xs bg-white border border-slate-200 px-2 py-1 rounded text-slate-500 self-start sm:self-auto text-center font-medium text-blue-700">
-                                <span class="en-text">Filtered: Relevant Context, $400-$1000/sf</span><span class="zh-text">已篩選：相關市場環境, $400-$1000/呎</span>
+                                <span class="en-text">Filtered: Multifamily, $400-$800/sf</span><span class="zh-text">已篩選：多戶型物業, $400-$800/呎</span>
                             </span>
                         </div>
 
@@ -563,9 +563,19 @@
                                         <label class="text-xs md:text-sm font-medium text-slate-700">
                                             <span class="en-text">Retail Rent ($/SF/Mo)</span><span class="zh-text">商舖租金 (美元/呎/月)</span>
                                         </label>
-                                        <span class="text-xs md:text-sm font-bold text-blue-600" id="val-retail-rent">$4.50</span>
+                                        <span class="text-xs md:text-sm font-bold text-blue-600" id="val-retail-rent">$3.00</span>
                                     </div>
-                                    <input type="range" min="3.00" max="7.00" step="0.05" value="4.50" class="slider-thumb" id="input-retail-rent">
+                                    <input type="range" min="1.50" max="6.00" step="0.05" value="3.00" class="slider-thumb" id="input-retail-rent">
+                                </div>
+
+                                <div>
+                                    <div class="flex justify-between mb-2">
+                                        <label class="text-xs md:text-sm font-medium text-slate-700">
+                                            <span class="en-text">Resi Rent ($/SF/Mo)</span><span class="zh-text">住宅租金 (美元/呎/月)</span>
+                                        </label>
+                                        <span class="text-xs md:text-sm font-bold text-blue-600" id="val-resi-rent">$4.80</span>
+                                    </div>
+                                    <input type="range" min="3.00" max="8.00" step="0.05" value="4.80" class="slider-thumb" id="input-resi-rent">
                                 </div>
 
                                 <div>
@@ -634,9 +644,9 @@
                                         <label class="text-xs md:text-sm font-medium text-slate-700">
                                             <span class="en-text">Sales Comp Baseline ($/SF)</span><span class="zh-text">比較法基準 (美元/呎)</span>
                                         </label>
-                                        <span class="text-xs md:text-sm font-bold text-blue-600" id="val-comp-psf">$580.00</span>
+                                        <span class="text-xs md:text-sm font-bold text-blue-600" id="val-comp-psf">$550.00</span>
                                     </div>
-                                    <input type="range" min="400" max="1000" step="1" value="580" class="slider-thumb" id="input-comp-psf">
+                                    <input type="range" min="400" max="1000" step="1" value="550" class="slider-thumb" id="input-comp-psf">
                                 </div>
                                 
                                 <!-- CONDITION ADJUSTMENT SLIDER -->
@@ -747,8 +757,8 @@
                                 <span class="en-text">3. Limiting Conditions & Disclosures</span><span class="zh-text">3. 限制條件與披露</span>
                             </h4>
                             <p class="text-xs md:text-sm text-slate-600">
-                                <span class="en-text">A title profile was relied upon for addresses and physical parameters. Market data is fed via an external data file (data.csv) mapping directly to custom python scripts.</span>
-                                <span class="zh-text">我們依賴了產權概況文件來核實地址和物理參數。市場數據則透過外部檔案 (data.csv) 載入，對應定制的 python 腳本。</span>
+                                <span class="en-text">A title profile was relied upon for addresses and physical parameters. Market data is sourced from Zillow via an external data file (data.csv) mapping directly to custom python scripts.</span>
+                                <span class="zh-text">我們依賴了產權概況文件來核實地址和物理參數。市場數據源自 Zillow，並透過外部檔案 (data.csv) 載入，直接對應定制的 python 腳本。</span>
                             </p>
                         </div>
                     </div>
@@ -768,74 +778,52 @@
                                     <span class="en-text">1. Independent Income Approach (Market Rents)</span><span class="zh-text">1. 獨立收益法 (基於市場租金)</span>
                                 </h4>
                                 <p class="text-xs md:text-sm leading-relaxed text-slate-300 en-text">
-                                    The Investment Method has been assessed entirely independently of the sales comparables, strictly utilising prevailing market rental evidence. The property operates as a mixed-use unified structure. Based on local submarket leasing data, we apply a stabilised market rent of <strong>$4.50/sq ft</strong> for the ground-floor retail unit and a conservative <strong>$3.80/sq ft</strong> for the unrenovated upper residential floors. Operating expenses are blended (5% for retail NNN, 35% for residential gross). At a market-led 5.75% capitalisation rate, this yields an underlying income value of approximately $2.35M.
+                                    The Investment Method has been assessed entirely independently of the sales comparables, strictly utilising prevailing market rental evidence. The property operates as a mixed-use unified structure. Based on local submarket leasing data, we apply a stabilised market rent of <strong>$3.00/sq ft</strong> for the ground-floor retail unit and a conservative <strong>$4.80/sq ft</strong> for the unrenovated upper residential floors. Operating expenses are blended (5% for retail NNN, 35% for residential gross). At a market-led 5.75% capitalisation rate, this yields an underlying income value of approximately $2.37M.
                                 </p>
                                 <p class="text-xs md:text-sm leading-relaxed text-slate-300 zh-text">
-                                    收益法之評估完全獨立於銷售可比數據，嚴格採用現行市場租金證據。該物業作為住商混合之單一建築營運。根據本地子市場租賃數據，我們對地下商舖採用穩定的 <strong>$4.50/平方呎</strong> 市場租金，而針對未經翻新的樓上住宅樓層則保守估算為 <strong>$3.80/平方呎</strong>。營運開支採用混合計算（商舖 5%，住宅 35%）。以市場主導的 5.75% 資本化率計算，得出之基礎收益估值約為 235 萬美元。
+                                    收益法之評估完全獨立於銷售可比數據，嚴格採用現行市場租金證據。該物業作為住商混合之單一建築營運。根據本地子市場租賃數據，我們對地下商舖採用穩定的 <strong>$3.00/平方呎</strong> 市場租金，而針對未經翻新的樓上住宅樓層則保守估算為 <strong>$4.80/平方呎</strong>。營運開支採用混合計算（商舖 5%，住宅 35%）。以市場主導的 5.75% 資本化率計算，得出之基礎收益估值約為 237 萬美元。
                                 </p>
                             </div>
 
                             <div>
                                 <h4 class="text-yellow-500 font-bold uppercase text-[10px] md:text-xs tracking-wider mb-2">
-                                    <span class="en-text">2. Triangulating the $580/SF Sales Baseline</span><span class="zh-text">2. 鎖定 $580/平方呎 之銷售基準</span>
-                                </h4>
-                                <p class="text-xs md:text-sm leading-relaxed text-slate-300 en-text">
-                                    The $580/sq ft baseline for the Sales Comparison Approach is completely independent of the income value. It is derived by triangulating three highly relevant multi-family/unified structure transactions:
-                                    <br><br>
-                                    • <strong>178-180 Church St</strong> (4,100 sq ft) traded at $609/sf. It is remarkably similar in size but in superior condition, requiring a ~5% downward adjustment.<br>
-                                    • <strong>32 Landers St</strong> (2,600 sq ft) traded at $625/sf. It benefits from a quantum premium (smaller size) and better condition, requiring a ~7% downward adjustment.<br>
-                                    • <strong>167 Dolores St</strong> (4,896 sq ft) traded at $449/sf. It transacted in a highly distressed state, necessitating a significant ~29% upward condition adjustment to equalise it to the subject's profile.<br><br>
-                                    This matrix provides a remarkably tight grouping, robustly anchoring our sales baseline at <strong>$580 per sq ft</strong>.
-                                </p>
-                                <p class="text-xs md:text-sm leading-relaxed text-slate-300 zh-text">
-                                    銷售比較法的 $580/平方呎 基準完全獨立於收益估值。該數值乃透過三宗高度相關的多戶型/單一建築交易作交叉比對得出：
-                                    <br><br>
-                                    • <strong>178-180 Church St</strong> (4,100 平方呎) 成交價為 $609/呎。其面積極為相似但狀況較佳，需作出約 5% 的向下折讓。<br>
-                                    • <strong>32 Landers St</strong> (2,600 平方呎) 成交價為 $625/呎。因面積較小享有規模溢價且狀況較佳，需作出約 7% 的向下折讓。<br>
-                                    • <strong>167 Dolores St</strong> (4,896 平方呎) 成交價為 $449/呎。成交時狀況極度殘舊，需要約 29% 的向上狀況調整以拉近與目標物業的差距。<br><br>
-                                    此分析矩陣形成了一個極為緊密的區間，有力地將我們的銷售基準鎖定在 <strong>$580/平方呎</strong>。
-                                </p>
-                            </div>
-
-                            <div>
-                                <h4 class="text-yellow-500 font-bold uppercase text-[10px] md:text-xs tracking-wider mb-2">
-                                    <span class="en-text">3. Valuation Mathematics & Reconciliation</span><span class="zh-text">3. 估值數學運算與最終核對</span>
+                                    <span class="en-text">2. Valuation Mathematics & Reconciliation</span><span class="zh-text">2. 估值數學運算與最終核對</span>
                                 </h4>
                                 <div class="bg-slate-900 p-3 md:p-4 rounded font-mono text-[10px] md:text-xs text-green-400 border border-slate-700 en-text overflow-x-auto">
                                     <pre class="whitespace-pre">
-Retail Income: 1,200 sq ft * $4.50/mo * 12 = $64,800/yr
-Resi Portion:  2,815 sq ft * $3.80/mo * 12 = $128,364/yr
+Retail Income: 1,200 sq ft * $3.00/mo * 12 = $43,200/yr
+Resi Portion:  2,815 sq ft * $4.80/mo * 12 = $162,144/yr
 ------------------------------------------------------------
-Potential Gross Income (PGI):               $193,164
-Vacancy & Credit Loss (5%):                 ($9,658)
-Effective Gross Income (EGI):               $183,506
-Expenses (Retail 5%, Resi 35% blended):     ($48,167)
-Net Operating Income (NOI):                 $135,339
+Potential Gross Income (PGI):               $205,344
+Vacancy & Credit Loss (5%):                 ($10,267)
+Effective Gross Income (EGI):               $195,077
+Expenses (Retail 5%, Resi 35% blended):     ($58,910)
+Net Operating Income (NOI):                 $136,167
 ------------------------------------------------------------
 Cap Rate Selection:                         5.75% 
-Income Value = NOI / Cap Rate =             $2,353,721
+Income Value = NOI / Cap Rate =             $2,368,122
 
-Sales Comp Value: 4,015 sq ft * $580/sq ft =$2,328,700
+Sales Comp Value: 4,015 sq ft * $550/sq ft =$2,208,250
 ------------------------------------------------------------
-RECONCILED AVERAGE OPINION OF VALUE:        $2,340,000 (Rounded)</pre>
+RECONCILED AVERAGE OPINION OF VALUE:        $2,290,000 (Rounded)</pre>
                                 </div>
                                 <div class="bg-slate-900 p-3 md:p-4 rounded font-mono text-[10px] md:text-xs text-green-400 border border-slate-700 zh-text mt-2 overflow-x-auto">
                                     <pre class="whitespace-pre">
-商舖租金收入: 1,200 呎 * $4.50/月 * 12 = $64,800/年 
-住宅部分收入: 2,815 呎 * $3.80/月 * 12 = $128,364/年 
+商舖租金收入: 1,200 呎 * $3.00/月 * 12 = $43,200/年 
+住宅部分收入: 2,815 呎 * $4.80/月 * 12 = $162,144/年 
 ------------------------------------------------------------
-潛在總收入 (PGI):                           $193,164
-空置及壞帳損失 (5%):                        ($9,658)
-有效總收入 (EGI):                           $183,506
-營運開支 (商舖 5%, 住宅 35% 混合):          ($48,167)
-淨營運收入 (NOI):                           $135,339
+潛在總收入 (PGI):                           $205,344
+空置及壞帳損失 (5%):                        ($10,267)
+有效總收入 (EGI):                           $195,077
+營運開支 (商舖 5%, 住宅 35% 混合):          ($58,910)
+淨營運收入 (NOI):                           $136,167
 ------------------------------------------------------------
 資本化率選擇:                               5.75% 
-收益法估值 = NOI / 回報率 =                 $2,353,721
+收益法估值 = NOI / 回報率 =                 $2,368,122
 
-比較法估值: 4,015 呎 * $580/平方呎 =        $2,328,700
+比較法估值: 4,015 呎 * $550/平方呎 =        $2,208,250
 ------------------------------------------------------------
-綜合平均估值意見 (經四捨五入):              $2,340,000</pre>
+綜合平均估值意見 (經四捨五入):              $2,290,000</pre>
                                 </div>
                             </div>
                         </div>
@@ -1080,15 +1068,17 @@ RECONCILED AVERAGE OPINION OF VALUE:        $2,340,000 (Rounded)</pre>
                 dynamicTyping: true,
                 complete: function(results) {
                     
-                    // Unified Filtering (No Property Type filter)
+                    // Unified Filtering (Multifamily & Price)
                     let data = results.data.filter(row => {
                         const dte = row['Sold Date'] || row['Transaction Date'];
                         const psf = row['Price/SqFt ($)'] || row['Price psf'];
+                        const propType = String(row['Property Type'] || '').toUpperCase();
                         
                         let parsedPsf = parseFloat(psf || 0);
-                        let isRightPrice = parsedPsf >= 400 && parsedPsf <= 1000;
+                        let isRightPrice = parsedPsf >= 400 && parsedPsf <= 800;
+                        let isMultiFamily = propType.includes('MULTI');
                         
-                        return dte && psf && isRightPrice;
+                        return dte && psf && isRightPrice && isMultiFamily;
                     });
                     
                     data.sort((a, b) => {
@@ -1426,11 +1416,11 @@ RECONCILED AVERAGE OPINION OF VALUE:        $2,340,000 (Rounded)</pre>
 
         function resetValuation() {
             inputs.retailArea.value = 1200;
-            inputs.retailRent.value = 4.50;
-            inputs.resiRent.value = 3.80; // Reset to updated base case
+            inputs.retailRent.value = 3.00;
+            inputs.resiRent.value = 4.80; // Reset to updated base case
             inputs.vacancy.value = 5;
             inputs.cap.value = 5.75;
-            if (inputs.compPsf) inputs.compPsf.value = 580; // Reset to updated base case
+            if (inputs.compPsf) inputs.compPsf.value = 550; // Reset to updated base case
             if (inputs.condAdj) inputs.condAdj.value = 0; // Reset slider to midpoint
             calculateValuation();
         }
