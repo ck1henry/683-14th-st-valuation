@@ -53,6 +53,7 @@ XPATH / SELECTOR CHEATSHEET — Zoning & Land Use
 """
 
 import json
+import math
 import random
 import re
 import time
@@ -64,9 +65,17 @@ from bs4 import BeautifulSoup
 
 # ─── Configuration ────────────────────────────────────────────────────────────
 
-BASE_URL  = "https://www.zillow.com/san-francisco-ca-94114/sold/"
-MAX_PAGES = 30      # 94114 sold: ~1,193 listings / ~41 per page = 30 pages
-OUTPUT    = "94114_Sold_Comps.xlsx"
+# Center property — all results are filtered to within RADIUS_MILES of this point
+CENTER_LAT   = 37.7665    # 683 14th St, San Francisco
+CENTER_LON   = -122.4270
+RADIUS_MILES = 0.5        # adjust as needed (0.25 / 0.5 / 1.0)
+
+# ZIP codes whose sold listings overlap the search radius.
+# Each is searched independently; duplicates across ZIPs are removed.
+SEARCH_ZIPS = ["94114", "94117", "94110", "94131"]
+
+MAX_PAGES_PER_ZIP = 10
+OUTPUT            = "683_14th_St_Comps.xlsx"
 
 
 USER_AGENTS = [
@@ -76,6 +85,16 @@ USER_AGENTS = [
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
 ]
+
+# ─── Distance helper ──────────────────────────────────────────────────────────
+
+def _haversine(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+    """Great-circle distance in miles between two lat/lon points."""
+    R = 3958.8
+    lat1, lon1, lat2, lon2 = map(math.radians, [lat1, lon1, lat2, lon2])
+    a = (math.sin((lat2 - lat1) / 2) ** 2
+         + math.cos(lat1) * math.cos(lat2) * math.sin((lon2 - lon1) / 2) ** 2)
+    return 2 * R * math.asin(math.sqrt(a))
 
 # ─── Generic helpers ──────────────────────────────────────────────────────────
 
@@ -230,6 +249,7 @@ def _seed_to_row(seed: dict, url: str) -> dict:
         "Property Type":  seed.get("Property Type"),
         "Beds":           seed.get("Beds"),
         "Baths":          seed.get("Baths"),
+        "Distance (mi)":  seed.get("Distance (mi)"),
         "URL":            url,
     }
 
@@ -237,8 +257,8 @@ def _seed_to_row(seed: dict, url: str) -> dict:
 
 def collect_listings() -> list[tuple[str, dict]]:
     """
-    Fetch all search-results pages with plain HTTP requests and return
-    (detail_url, seed_data) pairs.  No browser or CAPTCHA involved.
+    Search each ZIP in SEARCH_ZIPS, keep only listings within RADIUS_MILES
+    of the center property, and attach a Distance (mi) field to each seed.
     """
     session = requests.Session()
     session.headers.update({
@@ -256,35 +276,49 @@ def collect_listings() -> list[tuple[str, dict]]:
 
     all_items: list[tuple[str, dict]] = []
 
-    for page_num in range(1, MAX_PAGES + 1):
-        target = BASE_URL if page_num == 1 else f"{BASE_URL}{page_num}_p/"
-        print(f"  [page {page_num}] {target}")
+    for zip_code in SEARCH_ZIPS:
+        base = f"https://www.zillow.com/san-francisco-ca-{zip_code}/sold/"
+        print(f"\n── ZIP {zip_code} ──────────────────────────────────────────")
 
-        try:
-            resp = session.get(target, timeout=30)
-            html = resp.text
-        except requests.RequestException as exc:
-            print(f"  Request error: {exc} — stopping.")
-            break
+        for page_num in range(1, MAX_PAGES_PER_ZIP + 1):
+            target = base if page_num == 1 else f"{base}{page_num}_p/"
+            print(f"  [page {page_num}] {target}")
 
-        if _is_blocked(html):
-            print(f"  Blocked on page {page_num} — stopping.")
-            break
+            try:
+                resp = session.get(target, timeout=30)
+                html = resp.text
+            except requests.RequestException as exc:
+                print(f"  Request error: {exc} — stopping ZIP.")
+                break
 
-        nd = _parse_next_data(html)
-        soup = BeautifulSoup(html, "html.parser")
-        title = soup.find("title")
-        print(f"    title: {title.get_text(strip=True) if title else '(none)'}  __NEXT_DATA__: {bool(nd)}")
+            if _is_blocked(html):
+                print(f"  Blocked on page {page_num} — stopping ZIP.")
+                break
 
-        page_items = _urls_from_next_data(nd)
-        if not page_items:
-            print(f"  No listings on page {page_num} — stopping.")
-            break
+            nd = _parse_next_data(html)
+            soup = BeautifulSoup(html, "html.parser")
+            title = soup.find("title")
+            print(f"    title: {title.get_text(strip=True) if title else '(none)'}  __NEXT_DATA__: {bool(nd)}")
 
-        all_items.extend(page_items)
-        print(f"  +{len(page_items)} listings  (running total: {len(all_items)})")
+            page_items = _urls_from_next_data(nd)
+            if not page_items:
+                print(f"  No listings on page {page_num} — stopping ZIP.")
+                break
 
-        time.sleep(random.uniform(3, 7))   # polite delay between pages
+            # Filter by radius and attach distance
+            nearby = []
+            for u, d in page_items:
+                lat, lon = d.get("Latitude"), d.get("Longitude")
+                if lat and lon:
+                    dist = round(_haversine(CENTER_LAT, CENTER_LON, lat, lon), 2)
+                    if dist <= RADIUS_MILES:
+                        d["Distance (mi)"] = dist
+                        nearby.append((u, d))
+
+            all_items.extend(nearby)
+            print(f"  +{len(nearby)} within {RADIUS_MILES} mi  (running total: {len(all_items)})")
+
+            time.sleep(random.uniform(3, 7))
 
     seen: set[str] = set()
     return [(u, d) for u, d in all_items if not (u in seen or seen.add(u))]  # type: ignore[func-returns-value]
@@ -298,8 +332,10 @@ def export_to_excel(rows: list[dict], filename: str = OUTPUT) -> None:
 
     df = pd.DataFrame(rows)
 
-    for col in ("Sold Price ($)", "SqFt", "Latitude", "Longitude", "Beds", "Baths"):
+    for col in ("Sold Price ($)", "SqFt", "Latitude", "Longitude", "Beds", "Baths", "Distance (mi)"):
         df[col] = pd.to_numeric(df[col], errors="coerce")
+
+    df = df.sort_values("Distance (mi)")
 
     # Drop rows with missing or zero SqFt
     before = len(df)
