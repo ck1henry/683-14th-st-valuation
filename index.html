@@ -918,24 +918,40 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
                     }
 
                     // --- Render Map ---
+                    const subjectLat = 37.7675;
+                    const subjectLon = -122.4282;
+
                     if (!window.map) {
-                        window.map = L.map('comps-map').setView([37.764, -122.433], 14); // Default SF Castro/Upper Market
+                        // Set center to Subject Property
+                        window.map = L.map('comps-map').setView([subjectLat, subjectLon], 15); 
                         L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
                             attribution: '&copy; OpenStreetMap contributors & CARTO'
                         }).addTo(window.map);
                         markersLayer = L.featureGroup().addTo(window.map);
+
+                        // Custom Marker for Subject Property
+                        const subjectIcon = L.divIcon({
+                            className: 'custom-subject-icon',
+                            html: '<div style="background-color: #ca8a04; width: 24px; height: 24px; border-radius: 50%; border: 3px solid #1e3a8a; box-shadow: 0 4px 6px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;"><div style="background-color: #fff; width: 8px; height: 8px; border-radius: 50%;"></div></div>',
+                            iconSize: [24, 24],
+                            iconAnchor: [12, 12]
+                        });
+                        
+                        L.marker([subjectLat, subjectLon], { icon: subjectIcon, zIndexOffset: 1000 })
+                            .bindPopup('<div style="font-family:\'Inter\', sans-serif;"><strong style="color:#ca8a04;">Subject Property / 目標物業</strong><br><span style="color:#1e293b;">681-685 14th St</span></div>')
+                            .addTo(window.map);
+
                     } else {
                         markersLayer.clearLayers();
+                        // Reset center to Subject Property on language toggle or re-render
+                        window.map.setView([subjectLat, subjectLon], 15);
                     }
-
-                    let hasValidCoords = false;
 
                     tableData.forEach(row => {
                         let lat = parseFloat(row['Latitude']);
                         let lon = parseFloat(row['Longitude']);
                         
                         if (!isNaN(lat) && !isNaN(lon)) {
-                            hasValidCoords = true;
                             let address = row['Property Location'] || row['Street Address'];
                             let cleanAddress = String(address).replace(', San Francisco, CA 94114', '').replace(', San Francisco, CA 94103', '').replace(/"/g, '');
                             let price = row['Transaction Price'] || row['Sold Price ($)'];
@@ -949,15 +965,21 @@ ROUNDED OPINION OF VALUE:                   $2,430,000</pre>
                                 <span style="color:#1e3a8a; font-weight:600;">${psqftText}</span>
                             </div>`;
                             
-                            let marker = L.marker([lat, lon]).bindPopup(popupContent);
-                            markersLayer.addLayer(marker);
+                            // Draw smaller blue circle markers for the comparables
+                            let compMarker = L.circleMarker([lat, lon], {
+                                radius: 8,
+                                fillColor: "#1e3a8a",
+                                color: "#ffffff",
+                                weight: 2,
+                                opacity: 1,
+                                fillOpacity: 0.85
+                            }).bindPopup(popupContent);
+                            
+                            markersLayer.addLayer(compMarker);
                         }
                     });
-
-                    // Auto-zoom map to fit all markers
-                    if (hasValidCoords) {
-                        window.map.fitBounds(markersLayer.getBounds(), { padding: [30, 30], maxZoom: 16 });
-                    }
+                    
+                    // Note: Removed fitBounds() so the map strictly stays centered on the Subject Property
                 }
             });
         }
